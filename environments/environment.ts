@@ -4,6 +4,8 @@
 
 export const environment = {
   production: false,
+  baseUrlApi: 'http://localhost:3333',
+  baseUrlFront: 'http://localhost:4200',
 };
 
 /*

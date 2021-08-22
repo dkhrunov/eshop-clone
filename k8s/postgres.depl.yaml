@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-depl
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "123456"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+spec:
+  type: NodePort
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+      nodePort: 30432
