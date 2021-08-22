@@ -40,6 +40,13 @@
                   "domain:user",
                   "domain:shared"
                 ]
+              },
+              {
+                "sourceTag": "domain:order",
+                "onlyDependOnLibsWithTags": [
+                  "domain:order",
+                  "domain:shared"
+                ]
               }
             ]
           }

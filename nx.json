@@ -37,6 +37,15 @@
     "api": {
       "tags": []
     },
+    "order-api": {
+      "tags": []
+    },
+    "order-domain": {
+      "tags": ["domain:order", "type:domain-logic"]
+    },
+    "order-entities": {
+      "tags": []
+    },
     "product-api": {
       "tags": []
     },
@@ -45,6 +54,9 @@
     },
     "product-entities": {
       "tags": []
+    },
+    "shared-util-helpers": {
+      "tags": ["domain:shared", "type:util"]
     },
     "shop": {
       "tags": []
