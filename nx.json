@@ -37,12 +37,30 @@
     "api": {
       "tags": []
     },
+    "product-api": {
+      "tags": []
+    },
+    "product-domain": {
+      "tags": ["domain:product", "type:domain-logic"]
+    },
+    "product-entities": {
+      "tags": []
+    },
     "shop": {
       "tags": []
     },
     "shop-e2e": {
       "tags": [],
       "implicitDependencies": ["shop"]
+    },
+    "user-api": {
+      "tags": []
+    },
+    "user-domain": {
+      "tags": ["domain:user", "type:domain-logic"]
+    },
+    "user-entities": {
+      "tags": []
     }
   }
 }

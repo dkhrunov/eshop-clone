@@ -14,7 +14,14 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@esc/product/api": ["libs/product/api/src/index.ts"],
+      "@esc/product/domain": ["libs/product/domain/src/index.ts"],
+      "@esc/product/entities": ["libs/product/entities/src/index.ts"],
+      "@esc/user/api": ["libs/user/api/src/index.ts"],
+      "@esc/user/domain": ["libs/user/domain/src/index.ts"],
+      "@esc/user/entities": ["libs/user/entities/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

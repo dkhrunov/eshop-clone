@@ -162,6 +162,73 @@
         }
       }
     },
+    "product-api": {
+      "root": "libs/product/api",
+      "sourceRoot": "libs/product/api/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/product/api/**/*.ts"]
+          }
+        }
+      }
+    },
+    "product-domain": {
+      "projectType": "library",
+      "root": "libs/product/domain",
+      "sourceRoot": "libs/product/domain/src",
+      "prefix": "product",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:ng-packagr-lite",
+          "outputs": ["dist/libs/product/domain"],
+          "options": {
+            "project": "libs/product/domain/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/product/domain/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/product/domain/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/product/domain"],
+          "options": {
+            "jestConfig": "libs/product/domain/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/product/domain/src/**/*.ts",
+              "libs/product/domain/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "product-entities": {
+      "root": "libs/product/entities",
+      "sourceRoot": "libs/product/entities/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/product/entities/**/*.ts"]
+          }
+        }
+      }
+    },
     "shop": {
       "projectType": "application",
       "root": "apps/shop",
@@ -277,6 +344,73 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["apps/shop-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    },
+    "user-api": {
+      "root": "libs/user/api",
+      "sourceRoot": "libs/user/api/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/user/api/**/*.ts"]
+          }
+        }
+      }
+    },
+    "user-domain": {
+      "projectType": "library",
+      "root": "libs/user/domain",
+      "sourceRoot": "libs/user/domain/src",
+      "prefix": "user",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:ng-packagr-lite",
+          "outputs": ["dist/libs/user/domain"],
+          "options": {
+            "project": "libs/user/domain/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/user/domain/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/user/domain/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/user/domain"],
+          "options": {
+            "jestConfig": "libs/user/domain/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/user/domain/src/**/*.ts",
+              "libs/user/domain/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "user-entities": {
+      "root": "libs/user/entities",
+      "sourceRoot": "libs/user/entities/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/user/entities/**/*.ts"]
           }
         }
       }
