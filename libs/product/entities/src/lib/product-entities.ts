@@ -1,4 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
 
 @Entity()
@@ -9,11 +14,37 @@ export class ProductEntity {
   @Column()
   name!: string;
 
+  // @Column()
+  // description!: string;
+
+  // @Column()
+  // richDescription!: string;
+
   @Column()
   image!: string;
 
-  @Column()
-  countInStock!: number;
+  // @Column()
+  // images!: string[];
+
+  // @Column()
+  // brand!: string;
+
+  // @Column()
+  // price!: number;
+
+  // @Column()
+  // // category!: CategoryEntity;
+  // @Column()
+  // countInStock!: number;
+
+  // @Column()
+  // rating!: number;
+
+  // @Column()
+  // isFeatured!: boolean;
+
+  // @CreateDateColumn()
+  // dateCreated!: Date;
 }
 
 export class CreateProductDto {

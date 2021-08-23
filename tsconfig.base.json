@@ -21,6 +21,7 @@
       "@esc/product/api": ["libs/product/api/src/index.ts"],
       "@esc/product/domain": ["libs/product/domain/src/index.ts"],
       "@esc/product/entities": ["libs/product/entities/src/index.ts"],
+      "@esc/shared/ui-components": ["libs/shared/ui-components/src/index.ts"],
       "@esc/shared/util-helpers": ["libs/shared/util-helpers/src/index.ts"],
       "@esc/user/api": ["libs/user/api/src/index.ts"],
       "@esc/user/domain": ["libs/user/domain/src/index.ts"],
