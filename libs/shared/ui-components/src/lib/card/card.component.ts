@@ -5,7 +5,6 @@ import {
   differenceInMonths,
   differenceInWeeks,
   differenceInYears,
-  parse,
 } from 'date-fns';
 
 export interface ICard {
@@ -13,7 +12,7 @@ export interface ICard {
   title: string;
   channelName: string;
   views: number;
-  published: string;
+  published: Date;
   avatar: string;
   durationInSeconds: number;
 }
@@ -44,30 +43,15 @@ export class CardComponent {
   }
 
   get timeAgo(): string {
-    const years = differenceInYears(
-      new Date(),
-      parse(this.data.published, 'MM/dd/yyyy', new Date())
-    );
+    const years = differenceInYears(new Date(), this.data.published);
 
-    const months = differenceInMonths(
-      new Date(),
-      parse(this.data.published, 'MM/dd/yyyy', new Date())
-    );
+    const months = differenceInMonths(new Date(), this.data.published);
 
-    const weeks = differenceInWeeks(
-      new Date(),
-      parse(this.data.published, 'MM/dd/yyyy', new Date())
-    );
+    const weeks = differenceInWeeks(new Date(), this.data.published);
 
-    const days = differenceInDays(
-      new Date(),
-      parse(this.data.published, 'MM/dd/yyyy', new Date())
-    );
+    const days = differenceInDays(new Date(), this.data.published);
 
-    const hours = differenceInHours(
-      new Date(),
-      parse(this.data.published, 'MM/dd/yyyy', new Date())
-    );
+    const hours = differenceInHours(new Date(), this.data.published);
 
     let result = `${years} years`;
 

@@ -18,8 +18,7 @@ export const generateCard = () => {
     published: generateRandom().date({
       max: new Date(),
       min: sub(new Date(), { years: 3 }),
-      string: true,
-    }) as string,
+    }) as Date,
     durationInSeconds: generateRandom().integer({ min: 0, max: 9000 }),
     avatar: generateRandom().avatar({ protocol: 'http' }),
   };
