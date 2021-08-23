@@ -1,1 +1,30 @@
-<p>card works!</p>
+<div class="cover">
+  <span class="duration">{{ duration }}</span>
+
+  <div class="buttons">
+    <button>
+      <i class="far fa-clock"></i>
+    </button>
+
+    <button>
+      <i class="fas fa-tasks"></i>
+    </button>
+  </div>
+
+  <img loading="lazy" [src]="data.cover" [alt]="data.title" />
+</div>
+
+<div class="title">
+  <img [src]="data.avatar" />
+  <h3>{{ data.title }}</h3>
+</div>
+
+<div class="channel">
+  <p>{{ data.channelName }}</p>
+</div>
+
+<div class="stats">
+  <span>{{ data.views }} views</span>
+  <span class="circle">&#9679;</span>
+  <span>{{ timeAgo }} ago</span>
+</div>

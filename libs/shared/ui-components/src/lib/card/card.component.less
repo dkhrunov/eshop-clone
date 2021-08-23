@@ -1,3 +1,70 @@
 :host {
-  display: block;
+  @apply grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 200px auto auto auto;
+  grid-template-areas:
+    'image'
+    'title'
+    'channel'
+    'stats';
+
+  .cover {
+    @apply overflow-hidden grid relative;
+
+    img {
+      @apply w-full object-cover z-10;
+      grid-area: image;
+      grid-column: 1 / -1;
+      grid-row: 1 / -1;
+    }
+
+    .buttons {
+      @apply absolute top-0 right-0 z-40 text-white mt-2 mr-2 grid-flow-row hidden gap-2;
+
+      button {
+        @apply rounded bg-gray-900 px-2 py-1;
+
+        i {
+          @apply text-xl;
+        }
+      }
+    }
+
+    .duration {
+      @apply bg-gray-900 text-sm rounded inline-block z-40 text-white self-end justify-self-end mb-10 mr-2 px-2 select-none;
+      grid-column: 1 / -1;
+      grid-row: 1 / -1;
+    }
+
+    &:hover {
+      .buttons {
+        @apply grid;
+      }
+    }
+  }
+
+  .title {
+    @apply grid mt-3 items-center;
+    grid-template-columns: auto 1fr;
+
+    img {
+      @apply rounded-full w-10 h-10 mr-2;
+    }
+
+    h3 {
+      @apply font-semibold;
+    }
+  }
+
+  .channel {
+    @apply ml-12  text-sm font-thin;
+  }
+
+  .stats {
+    @apply ml-12 inline-grid grid-flow-col items-center text-sm font-thin justify-start gap-2;
+
+    .circle {
+      @apply text-xs text-gray-400;
+    }
+  }
 }
