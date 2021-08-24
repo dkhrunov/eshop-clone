@@ -1,4 +1,10 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  HostBinding,
+  HostListener,
+} from '@angular/core';
 import {
   differenceInDays,
   differenceInHours,
@@ -11,6 +17,7 @@ export interface ICard {
   cover: string;
   title: string;
   channelName: string;
+  channelVerified: boolean;
   views: number;
   published: Date;
   avatar: string;
@@ -25,6 +32,17 @@ export interface ICard {
 })
 export class CardComponent {
   @Input() data!: ICard;
+
+  @HostBinding('class.horizontal')
+  @Input()
+  horizontal = false;
+
+  menuIsOpen = false;
+
+  // @HostListener('document:blur')
+  // closeMenu(): void {
+  //   this.menuIsOpen = false;
+  // }
 
   get duration(): string {
     const hours = Math.floor(this.data.durationInSeconds / 3600);
