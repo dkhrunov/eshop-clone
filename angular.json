@@ -374,6 +374,51 @@
         }
       }
     },
+    "shared-ui-pipes": {
+      "projectType": "library",
+      "root": "libs/shared/ui-pipes",
+      "sourceRoot": "libs/shared/ui-pipes/src",
+      "prefix": "pipes",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:ng-packagr-lite",
+          "outputs": [
+            "dist/libs/shared/ui-pipes"
+          ],
+          "options": {
+            "project": "libs/shared/ui-pipes/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/shared/ui-pipes/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/shared/ui-pipes/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/shared/ui-pipes"
+          ],
+          "options": {
+            "jestConfig": "libs/shared/ui-pipes/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/ui-pipes/src/**/*.ts",
+              "libs/shared/ui-pipes/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "shared-util-helpers": {
       "projectType": "library",
       "root": "libs/shared/util-helpers",

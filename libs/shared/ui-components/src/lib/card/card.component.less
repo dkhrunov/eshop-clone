@@ -61,11 +61,11 @@
     grid-area: title;
 
     img {
-      @apply rounded-full w-10 h-10 mr-2;
+      @apply rounded-full w-10 h-10 mr-2 object-cover;
     }
 
     h3 {
-      @apply font-semibold;
+      @apply font-semibold line-clamp-2;
     }
 
     i {
@@ -133,10 +133,6 @@
     .title {
       @apply text-xs mt-0;
 
-      h3 {
-        @apply line-clamp-2;
-      }
-
       button {
         @apply outline-none;
       }
@@ -148,13 +144,14 @@
 
     .stats {
       @apply m-0 grid;
+      font-size: 0.7rem;
       grid-template-columns: max-content auto auto;
 
       span {
-        @apply block text-xs text-gray-500;
+        @apply block text-gray-500;
 
         &.circle {
-          @apply transform scale-50;
+          @apply transform scale-50 p-0 m-0 text-gray-400;
         }
       }
     }

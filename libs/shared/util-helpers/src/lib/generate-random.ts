@@ -15,12 +15,12 @@ export const generateCard = () => {
     title: generateRandom().sentence(),
     channelName: generateRandom().name(),
     channelVerified: generateRandom().bool(),
-    views: generateRandom().integer({ min: 0, max: 999 }),
+    views: generateRandom().integer({ min: 0, max: 3_000_000 }),
     published: generateRandom().date({
       max: new Date(),
       min: sub(new Date(), { years: 3 }),
     }) as Date,
     durationInSeconds: generateRandom().integer({ min: 0, max: 9000 }),
-    avatar: generateRandom().avatar({ protocol: 'http' }),
+    avatar: `https://source.unsplash.com/800x600?portrait&v=${generateRandom().integer()}`,
   };
 };
