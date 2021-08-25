@@ -18,12 +18,13 @@
   <img *ngIf="!horizontal" [src]="data.avatar" />
   <h3>{{ data.title }}</h3>
 
-  <button type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
-    <i
-      *ngIf="horizontal"
-      class="fas fa-ellipsis-v"
-      (click)="menuIsOpen = !menuIsOpen"
-    ></i>
+  <button
+    type="button"
+    cdkOverlayOrigin
+    #trigger="cdkOverlayOrigin"
+    (click)="menuIsOpen = !menuIsOpen"
+  >
+    <i *ngIf="horizontal" class="fas fa-ellipsis-v"></i>
   </button>
 
   <ng-template

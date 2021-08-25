@@ -21,7 +21,7 @@
   }
 
   .cover {
-    @apply overflow-hidden grid relative;
+    @apply overflow-hidden grid relative h-full;
 
     img {
       @apply w-full object-cover z-10;
@@ -31,7 +31,7 @@
     }
 
     .buttons {
-      @apply absolute top-0 right-0 z-40 text-white mt-2 mr-2 grid-flow-row hidden gap-2;
+      @apply absolute top-0 right-0 z-40 text-white mt-2 mr-2 grid-flow-row hidden gap-1;
 
       button {
         @apply rounded bg-gray-900 px-2 py-1;
@@ -101,7 +101,7 @@
       grid-area: image;
 
       .duration {
-        @apply m-1 font-semibold px-1;
+        @apply m-1 font-semibold px-1 bg-opacity-70;
         font-size: 0.5rem;
         line-height: 0.9rem;
       }
@@ -112,7 +112,7 @@
         margin-right: 2px;
 
         button {
-          @apply py-1 relative outline-none;
+          @apply py-1 relative outline-none w-7 h-7 grid content-center;
           margin-top: 2px;
 
           i {
@@ -124,10 +124,18 @@
           }
         }
       }
+
+      img {
+        height: 100%;
+      }
     }
 
     .title {
       @apply text-xs mt-0;
+
+      h3 {
+        @apply line-clamp-2;
+      }
 
       button {
         @apply outline-none;

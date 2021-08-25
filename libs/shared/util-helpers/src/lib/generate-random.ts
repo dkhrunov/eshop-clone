@@ -12,7 +12,7 @@ export const generateProduct = () => {
 export const generateCard = () => {
   return {
     cover: `https://source.unsplash.com/random/800x600?v=${generateRandom().integer()}`,
-    title: `${generateRandom().sentence().substring(0, 40)}...`,
+    title: generateRandom().sentence(),
     channelName: generateRandom().name(),
     channelVerified: generateRandom().bool(),
     views: generateRandom().integer({ min: 0, max: 999 }),

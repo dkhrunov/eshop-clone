@@ -46,6 +46,7 @@
     "@nestjs/typeorm": "^8.0.2",
     "@nrwl/angular": "12.7.2",
     "@nrwl/storybook": "^12.7.2",
+    "@tailwindcss/line-clamp": "^0.2.1",
     "chance": "^1.1.7",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
