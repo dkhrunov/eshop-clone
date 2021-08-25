@@ -30,8 +30,9 @@
     cdkConnectedOverlay
     [cdkConnectedOverlayOrigin]="trigger"
     [cdkConnectedOverlayOpen]="menuIsOpen"
+    [cdkConnectedOverlayPositions]="positions"
   >
-    <div class="menu-list">
+    <div class="menu-list" (mouseleave)="menuIsOpen = false">
       <ul>
         <li>Item 1</li>
         <li>Item 2</li>

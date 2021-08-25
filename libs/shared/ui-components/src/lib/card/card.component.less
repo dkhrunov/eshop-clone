@@ -74,20 +74,16 @@
   }
 
   .channel {
-    @apply ml-12 text-sm font-thin grid grid-flow-col items-baseline justify-start gap-2;
+    @apply ml-12 text-sm font-thin grid grid-flow-col items-baseline justify-start gap-2 text-gray-500;
     grid-area: channel;
-
-    i {
-      @apply text-gray-500;
-    }
   }
 
   .stats {
-    @apply ml-12 inline-grid grid-flow-col items-center text-sm font-thin justify-start;
+    @apply ml-12 inline-grid grid-flow-col items-center text-sm font-thin justify-start text-gray-500;
     grid-area: stats;
 
     .circle {
-      @apply text-xs text-gray-400 mx-1;
+      @apply text-xs  mx-1 transform scale-50;
     }
   }
 
@@ -116,7 +112,7 @@
         margin-right: 2px;
 
         button {
-          @apply py-1 relative;
+          @apply py-1 relative outline-none;
           margin-top: 2px;
 
           i {
@@ -132,6 +128,10 @@
 
     .title {
       @apply text-xs mt-0;
+
+      button {
+        @apply outline-none;
+      }
     }
 
     .channel {
@@ -159,6 +159,14 @@
   ul {
     li {
       @apply p-1 hover:bg-gray-100;
+    }
+
+    li:first-child {
+      @apply rounded-t;
+    }
+
+    li:last-child {
+      @apply rounded-b;
     }
   }
 }

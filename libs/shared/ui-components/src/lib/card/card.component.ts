@@ -1,3 +1,4 @@
+import { ConnectedPosition } from '@angular/cdk/overlay';
 import {
   Component,
   ChangeDetectionStrategy,
@@ -39,10 +40,20 @@ export class CardComponent {
 
   menuIsOpen = false;
 
-  // @HostListener('document:blur')
-  // closeMenu(): void {
-  //   this.menuIsOpen = false;
-  // }
+  positions: ConnectedPosition[] = [
+    {
+      originX: 'end',
+      originY: 'bottom',
+      overlayX: 'end',
+      overlayY: 'top',
+    },
+    {
+      originX: 'end',
+      originY: 'top',
+      overlayX: 'end',
+      overlayY: 'bottom',
+    },
+  ];
 
   get duration(): string {
     const hours = Math.floor(this.data.durationInSeconds / 3600);
