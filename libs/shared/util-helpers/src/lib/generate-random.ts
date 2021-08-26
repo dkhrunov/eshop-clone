@@ -11,7 +11,7 @@ export const generateProduct = () => {
 
 export const generateCard = () => {
   return {
-    cover: `https://source.unsplash.com/random/800x600?v=${generateRandom().integer()}`,
+    cover: `https://source.unsplash.com/random/400x300?v=${generateRandom().integer()}`,
     title: generateRandom().sentence(),
     channelName: generateRandom().name(),
     channelVerified: generateRandom().bool(),
@@ -21,6 +21,6 @@ export const generateCard = () => {
       min: sub(new Date(), { years: 3 }),
     }) as Date,
     durationInSeconds: generateRandom().integer({ min: 0, max: 9000 }),
-    avatar: `https://source.unsplash.com/800x600?portrait&v=${generateRandom().integer()}`,
+    avatar: `https://source.unsplash.com/100x100?portrait&v=${generateRandom().integer()}`,
   };
 };

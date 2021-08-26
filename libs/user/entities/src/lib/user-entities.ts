@@ -1,3 +1,7 @@
-export function userEntities(): string {
-  return 'user-entities';
+import { Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity()
+export class UserEntity {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 }

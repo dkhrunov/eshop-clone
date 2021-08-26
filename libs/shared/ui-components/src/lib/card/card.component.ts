@@ -82,22 +82,22 @@ export class CardComponent {
 
     const hours = differenceInHours(new Date(), this.data.published);
 
-    let result = `${years} years`;
+    let result = `${years} ${years > 1 ? 'years' : 'year'}`;
 
     if (!years) {
-      result = `${months} months`;
+      result = `${months} ${months > 1 ? 'months' : 'month'}`;
     }
 
     if (!months) {
-      result = `${weeks} weeks`;
+      result = `${weeks} ${weeks > 1 ? 'weeks' : 'week'}`;
     }
 
     if (!weeks) {
-      result = `${days} days`;
+      result = `${days} ${days > 1 ? 'days' : 'day'}`;
     }
 
     if (!days) {
-      result = `${hours} hours`;
+      result = `${hours} ${hours > 1 ? 'hours' : 'hour'}`;
     }
 
     return result;
