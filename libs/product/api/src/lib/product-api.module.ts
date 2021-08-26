@@ -1,13 +1,14 @@
-import { ProductEntity } from '@esc/product/entities';
+import { CategoryEntity, ProductEntity } from '@esc/product/entities';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CategoryService } from './category-api.service';
 import { ProductApiController } from './product-api.controller';
 import { ProductApiService } from './product-api.service';
 
 @Module({
   controllers: [ProductApiController],
-  providers: [ProductApiService],
+  providers: [ProductApiService, CategoryService],
   exports: [ProductApiService],
-  imports: [TypeOrmModule.forFeature([ProductEntity])],
+  imports: [TypeOrmModule.forFeature([CategoryEntity, ProductEntity])],
 })
 export class ProductApiModule {}

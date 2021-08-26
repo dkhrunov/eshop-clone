@@ -15,8 +15,4 @@ export class AppComponent {
   cards = Array.from({ length: this.cardsInWidth * 3 }).map(() =>
     generateCard()
   );
-
-  ngOnInit(): void {
-    console.log(this.cards);
-  }
 }
