@@ -73,7 +73,7 @@ describe('Eshop Clone', () => {
         method: 'POST',
         body: {
           ...product,
-          category_id: createdCategoryId,
+          category: createdCategoryId,
         },
         failOnStatusCode: false,
       }).then((response) => {
@@ -90,7 +90,7 @@ describe('Eshop Clone', () => {
       }).then((response) => {
         expect(response.status).to.be.eq(200);
         expect(response.body.id).to.be.eq(createdProductId);
-        cy.log(response.body.category_id);
+        cy.log(response.body.category);
       });
     });
 
@@ -100,7 +100,7 @@ describe('Eshop Clone', () => {
         method: 'POST',
         body: {
           ...product,
-          category_id: generateNonExistentCategoryId(),
+          category: generateNonExistentCategoryId(),
         },
         failOnStatusCode: false,
       }).then((response) => {

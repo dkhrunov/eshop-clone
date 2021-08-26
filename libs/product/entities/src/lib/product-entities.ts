@@ -37,8 +37,8 @@ export class ProductEntity {
   price!: number;
 
   @ManyToOne(() => CategoryEntity, (category) => category.id)
-  @JoinColumn({ name: 'category_id' })
-  category_id!: string;
+  @JoinColumn()
+  category!: string;
 
   @Column()
   count_in_stock!: number;
@@ -64,7 +64,7 @@ export class CreateProductDto {
   @IsNotEmpty()
   count_in_stock!: number;
   @IsNotEmpty()
-  category_id!: string;
+  category!: string;
 }
 
 @Entity()

@@ -26,7 +26,7 @@ export class ProductApiService {
 
   async getProduct(id: string): Promise<ProductEntity> {
     const product = await this.productRepository.findOne(id, {
-      relations: ['category_id'],
+      relations: ['category'],
     });
 
     if (!product) {
@@ -37,7 +37,7 @@ export class ProductApiService {
   }
 
   async createProduct(dto: CreateProductDto): Promise<ProductEntity> {
-    const category = await this.categoryRepository.findOne(dto.category_id);
+    const category = await this.categoryRepository.findOne(dto.category);
 
     if (!category) {
       throw new NotFoundException('Category not found');
@@ -45,7 +45,7 @@ export class ProductApiService {
 
     const product = this.productRepository.create(dto);
 
-    product.category_id = category.id;
+    product.category = category.id;
 
     try {
       const savedProduct = await this.productRepository.save(product);
