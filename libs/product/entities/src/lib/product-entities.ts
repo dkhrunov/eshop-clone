@@ -7,7 +7,18 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { IsNotEmpty } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUrl,
+  IsUUID,
+  Max,
+  Min,
+} from 'class-validator';
 
 @Entity()
 @Check(`"countInStock" > 0 AND "countInStock" < 255 `)
@@ -56,15 +67,110 @@ export class ProductEntity {
   date_created!: Date;
 }
 
+export type ProductEntityWithCategory = ProductEntity & {
+  category: CategoryEntity;
+};
+
 export class CreateProductDto {
   @IsNotEmpty()
-  name!: string;
+  @IsString()
+  name?: string;
+
   @IsNotEmpty()
-  image!: string;
+  @IsString()
+  description?: string;
+
+  @IsString()
+  rich_description?: string;
+
   @IsNotEmpty()
-  count_in_stock!: number;
+  @IsUrl()
+  image?: string;
+
+  @IsOptional()
+  @IsArray()
+  images?: string[];
+
   @IsNotEmpty()
-  category!: string;
+  @IsString()
+  brand?: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  price?: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  count_in_stock?: number;
+
+  @IsNotEmpty()
+  @IsUUID()
+  category?: string;
+
+  @IsNumber()
+  @Min(0)
+  @Max(10)
+  rating?: number;
+
+  @IsNumber()
+  @Min(0)
+  num_reviews?: number;
+
+  @IsBoolean()
+  is_featured?: boolean;
+}
+
+export class UpdateProductDto {
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsString()
+  rich_description?: string;
+
+  @IsOptional()
+  @IsUrl()
+  image?: string;
+
+  @IsOptional()
+  @IsArray()
+  images?: string[];
+
+  @IsOptional()
+  @IsString()
+  brand?: string;
+
+  @IsOptional()
+  @IsNumber()
+  price?: number;
+
+  @IsOptional()
+  @IsNumber()
+  count_in_stock?: number;
+
+  @IsOptional()
+  @IsUUID()
+  category?: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(10)
+  rating?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  num_reviews?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  is_featured?: boolean;
 }
 
 @Entity()

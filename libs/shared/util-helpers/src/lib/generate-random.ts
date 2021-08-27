@@ -29,6 +29,10 @@ export const generateNonExistentCategoryId = (): string => {
   return generateRandom().guid();
 };
 
+export const generateNonExistentProductId = (): string => {
+  return generateRandom().guid();
+};
+
 export const generateCategory = () => {
   return {
     name: newCategoryName,

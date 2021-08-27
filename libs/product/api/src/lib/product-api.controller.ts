@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ProductApiService } from './product-api.service';
 import {
   CategoryEntity,
@@ -6,9 +15,9 @@ import {
   CreateProductDto,
   ProductEntity,
   UpdateCategoryDto,
+  UpdateProductDto,
 } from '@esc/product/entities';
 import { CategoryService } from './category-api.service';
-import { UpdateResult } from 'typeorm';
 
 @Controller('')
 export class ProductApiController {
@@ -18,8 +27,20 @@ export class ProductApiController {
   ) {}
 
   @Get('products')
-  getProducts(): Promise<ProductEntity[]> {
-    return this.productApiService.getProducts();
+  getProducts(
+    @Query('categories') categories: string
+  ): Promise<ProductEntity[]> {
+    return this.productApiService.getProducts(categories);
+  }
+
+  @Get('products/count')
+  getProductsCount(): Promise<{ product_count: number }> {
+    return this.productApiService.getProductCount();
+  }
+
+  @Get('products/featured/:limit?')
+  getFeaturedProducts(@Param('limit') limit: number): Promise<ProductEntity[]> {
+    return this.productApiService.getFeaturedProducts(limit);
   }
 
   @Get('products/:id')
@@ -30,6 +51,19 @@ export class ProductApiController {
   @Post('products')
   createProduct(@Body() dto: CreateProductDto): Promise<ProductEntity> {
     return this.productApiService.createProduct(dto);
+  }
+
+  @Put('products/:id')
+  updateProduct(
+    @Param('id') id: string,
+    @Body() dto: UpdateProductDto
+  ): Promise<ProductEntity> {
+    return this.productApiService.updateProduct(id, dto);
+  }
+
+  @Delete('products/:id')
+  deleteProduct(@Param('id') id: string): Promise<void> {
+    return this.productApiService.deleteProduct(id);
   }
 
   @Get('categories')
