@@ -31,12 +31,10 @@ export class ProductApiService {
         )
         .map((category: CategoryEntity) => category.id);
 
-      const products = await this.productRepository.find({
+      return this.productRepository.find({
         relations: ['category'],
         where: { category: In(foundCategoriesIds) },
       });
-
-      return products;
     }
 
     return this.productRepository.find({

@@ -172,7 +172,7 @@ describe('Eshop Clone', () => {
           expect(response.body.message).to.be.eq('Category not found');
         });
       });
-      it.only('Get Products', () => {
+      it('Get Products', () => {
         cy.request({
           url: baseUrlProducts,
           method: 'GET',
@@ -207,20 +207,18 @@ describe('Eshop Clone', () => {
 
           expect(response.status).to.be.eq(200);
 
-          cy.request({
+          cy.request<ProductEntityWithCategory[]>({
             url: `${baseUrlProducts}?categories=${randomCategoriesNames}`,
             method: 'GET',
             failOnStatusCode: false,
           }).then((response) => {
             expect(response.status).to.be.eq(200);
 
-            console.log([...randomCategoriesMap.keys()]);
-
-            response.body.forEach((product: ProductEntityWithCategory) => {
+            for (const product of response.body) {
               expect(product.category.id).to.be.oneOf([
                 ...randomCategoriesMap.keys(),
               ]);
-            });
+            }
           });
         });
       });
