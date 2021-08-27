@@ -12,7 +12,7 @@ import {
   ProductEntityWithCategory,
 } from '@esc/product/entities';
 import { Chance as generateRandom } from 'chance';
-import { RegisterUserResponse, UserEntity } from '@esc/user/entities';
+import { UserResponse, UserEntity } from '@esc/user/entities';
 
 describe('Eshop Clone', () => {
   const baseUrlProducts = `${environment.baseUrlApi}/products`;
@@ -282,7 +282,7 @@ describe('Eshop Clone', () => {
   context('Users', () => {
     context('API', () => {
       it('Register User', () => {
-        cy.request<RegisterUserResponse>({
+        cy.request<UserResponse>({
           url: `${baseUrlUsers}`,
           method: 'POST',
           body: {
@@ -290,12 +290,10 @@ describe('Eshop Clone', () => {
           },
           failOnStatusCode: false,
         }).then((response) => {
-          expect(response.body.registered_user).to.not.have.property(
-            'password'
-          );
+          expect(response.body.user).to.not.have.property('password');
         });
       });
-      it.only('List Users', () => {
+      it('List Users', () => {
         cy.request<UserEntity[]>({
           url: `${baseUrlUsers}`,
           method: 'GET',
@@ -307,7 +305,7 @@ describe('Eshop Clone', () => {
         });
       });
 
-      it.only('Get User', () => {
+      it('Get User', () => {
         cy.request<UserEntity[]>({
           url: `${baseUrlUsers}`,
           method: 'GET',
@@ -321,6 +319,40 @@ describe('Eshop Clone', () => {
             failOnStatusCode: false,
           }).then(({ body }) => {
             expect(body.id).to.equal(userOneId);
+          });
+        });
+      });
+
+      it.only('Update User', () => {
+        cy.request<UserEntity[]>({
+          url: `${baseUrlUsers}`,
+          method: 'GET',
+          failOnStatusCode: false,
+        }).then(({ body }) => {
+          userOneId = body[0].id;
+          const userOneName = body[0].name;
+
+          cy.request<UserResponse>({
+            url: `${baseUrlUsers}/${userOneId}`,
+            method: 'PUT',
+            body: {
+              name: 'Updated Name',
+              password: 'Updated Password',
+            },
+            failOnStatusCode: false,
+          }).then(({ body }) => {
+            expect(body.user.name).to.equal('Updated Name');
+
+            cy.request<UserResponse>({
+              url: `${baseUrlUsers}/${userOneId}`,
+              method: 'PUT',
+              body: {
+                name: userOneName,
+              },
+              failOnStatusCode: false,
+            }).then(({ body }) => {
+              expect(body.user.name).to.equal(userOneName);
+            });
           });
         });
       });

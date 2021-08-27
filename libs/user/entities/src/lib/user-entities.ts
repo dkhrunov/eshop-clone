@@ -5,6 +5,7 @@ import {
   IsMobilePhone,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
 } from 'class-validator';
 import { hash } from 'bcrypt';
@@ -81,7 +82,44 @@ export class RegisterUserDto {
   @IsString()
   country!: string;
 }
+export class UpdateUserDto {
+  @IsOptional()
+  @IsString()
+  name?: string;
 
-export interface RegisterUserResponse {
-  registered_user: Omit<UserEntity, 'password' | 'hashPassword'>;
+  @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  password?: string;
+
+  @IsOptional()
+  @IsMobilePhone()
+  phone?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  is_admin?: boolean;
+
+  @IsOptional()
+  @IsNumber()
+  apartment?: number;
+
+  @IsOptional()
+  @IsString()
+  zip?: string;
+
+  @IsOptional()
+  @IsString()
+  city?: string;
+
+  @IsOptional()
+  @IsString()
+  country?: string;
+}
+
+export interface UserResponse {
+  user: Omit<UserEntity, 'password' | 'hashPassword'>;
 }

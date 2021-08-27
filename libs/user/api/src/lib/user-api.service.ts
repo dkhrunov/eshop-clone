@@ -1,7 +1,8 @@
 import {
   RegisterUserDto,
-  RegisterUserResponse,
+  UserResponse,
   UserEntity,
+  UpdateUserDto,
 } from '@esc/user/entities';
 import {
   ConflictException,
@@ -9,8 +10,9 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class UserApiService {
@@ -19,7 +21,7 @@ export class UserApiService {
     private readonly userRepository: Repository<UserEntity>
   ) {}
 
-  async registerUser(dto: RegisterUserDto): Promise<RegisterUserResponse> {
+  async registerUser(dto: RegisterUserDto): Promise<UserResponse> {
     const isUserExist = await this.userRepository.findOne({
       where: { email: dto.email },
     });
@@ -34,7 +36,7 @@ export class UserApiService {
       const { password, ...user } = await this.userRepository.save(newUser);
 
       return {
-        registered_user: {
+        user: {
           ...user,
         },
       };
@@ -57,5 +59,38 @@ export class UserApiService {
     }
 
     return user;
+  }
+
+  async updateUser(
+    id: string,
+    dto: UpdateUserDto
+  ): Promise<UserResponse | UpdateResult> {
+    const isUserExist = await this.userRepository.findOne(id, {
+      select: ['password'],
+    });
+
+    let newPassword;
+
+    if (dto.password) {
+      newPassword = await hash(dto.password, 10);
+    } else {
+      newPassword = isUserExist?.password;
+    }
+
+    const result = await this.userRepository.update(id, {
+      ...dto,
+      password: newPassword,
+    });
+
+    if (result.affected) {
+      const updatedUser = (await this.userRepository.findOne(id)) as UserEntity;
+      return {
+        user: {
+          ...updatedUser,
+        },
+      };
+    } else {
+      return result;
+    }
   }
 }

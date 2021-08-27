@@ -5,20 +5,23 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Put,
 } from '@nestjs/common';
 import { UserApiService } from './user-api.service';
 import {
   RegisterUserDto,
-  RegisterUserResponse,
+  UserResponse,
   UserEntity,
+  UpdateUserDto,
 } from '@esc/user/entities';
+import { UpdateResult } from 'typeorm';
 
 @Controller('users')
 export class UserApiController {
   constructor(private userApiService: UserApiService) {}
 
   @Post()
-  registerUser(@Body() dto: RegisterUserDto): Promise<RegisterUserResponse> {
+  registerUser(@Body() dto: RegisterUserDto): Promise<UserResponse> {
     return this.userApiService.registerUser(dto);
   }
 
@@ -30,5 +33,13 @@ export class UserApiController {
   @Get(':id')
   getUserById(@Param('id', ParseUUIDPipe) id: string): Promise<UserEntity> {
     return this.userApiService.getUserById(id);
+  }
+
+  @Put(':id')
+  updateUser(
+    @Body() dto: UpdateUserDto,
+    @Param('id', ParseUUIDPipe) id: string
+  ): Promise<UserResponse | UpdateResult> {
+    return this.userApiService.updateUser(id, dto);
   }
 }
