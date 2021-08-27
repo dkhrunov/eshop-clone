@@ -57,3 +57,18 @@ export const generateCard = () => {
     avatar: `https://source.unsplash.com/100x100?portrait&v=${generateRandom().integer()}`,
   };
 };
+
+export const generateUser = () => {
+  return {
+    name: generateRandom().name(),
+    email: generateRandom().email(),
+    password: generateRandom().string(),
+    street: generateRandom().street(),
+    apartment: generateRandom().integer({ min: 1, max: 50 }),
+    city: generateRandom().city(),
+    zip: generateRandom().zip(),
+    country: generateRandom().country(),
+    phone: generateRandom().phone({ mobile: true }),
+    is_admin: generateRandom().bool(),
+  };
+};

@@ -48,7 +48,7 @@ export class ProductEntity {
   price!: number;
 
   @ManyToOne(() => CategoryEntity, (category) => category.id)
-  @JoinColumn()
+  @JoinColumn({ name: 'category_id' })
   category!: string;
 
   @Column()

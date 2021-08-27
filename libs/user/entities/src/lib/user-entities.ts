@@ -1,7 +1,87 @@
-import { Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  IsBoolean,
+  IsEmail,
+  IsMobilePhone,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+} from 'class-validator';
+import { hash } from 'bcrypt';
 
 @Entity()
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
+
+  @Column({ length: 40 })
+  name!: string;
+
+  @Column({ length: 20 })
+  email!: string;
+
+  @Column({ select: false })
+  password!: string;
+
+  @Column({ nullable: true })
+  street!: string;
+
+  @Column({ nullable: true })
+  apartment!: number;
+
+  @Column({ nullable: true })
+  city!: string;
+
+  @Column({ length: 10, nullable: true })
+  zip!: string;
+
+  @Column({ length: 15, nullable: true })
+  country!: string;
+
+  @Column({ nullable: true })
+  phone!: string;
+
+  @Column({ type: 'boolean', default: false })
+  is_admin!: boolean;
+
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await hash(this.password, 10);
+  }
+}
+
+export class RegisterUserDto {
+  @IsNotEmpty()
+  @IsString()
+  name!: string;
+
+  @IsNotEmpty()
+  @IsEmail()
+  email!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  password!: string;
+
+  @IsMobilePhone()
+  phone!: string;
+
+  @IsBoolean()
+  is_admin!: boolean;
+
+  @IsNumber()
+  apartment!: number;
+
+  @IsString()
+  zip!: string;
+
+  @IsString()
+  city!: string;
+
+  @IsString()
+  country!: string;
+}
+
+export interface RegisterUserResponse {
+  registered_user: Omit<UserEntity, 'password' | 'hashPassword'>;
 }

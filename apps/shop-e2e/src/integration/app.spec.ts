@@ -4,6 +4,7 @@ import {
   generateCategory,
   generateNonExistentCategoryId,
   generateNonExistentProductId,
+  generateUser,
 } from '@esc/shared/util-helpers';
 import {
   CategoryEntity,
@@ -11,12 +12,16 @@ import {
   ProductEntityWithCategory,
 } from '@esc/product/entities';
 import { Chance as generateRandom } from 'chance';
+import { RegisterUserResponse } from '@esc/user/entities';
 
 describe('Eshop Clone', () => {
-  const baseUrlProducts = `${environment.baseUrlApi}/api/products`;
-  const baseUrlCategories = `${environment.baseUrlApi}/api/categories`;
+  const baseUrlProducts = `${environment.baseUrlApi}/products`;
+  const baseUrlUsers = `${environment.baseUrlApi}/users`;
+  const baseUrlCategories = `${environment.baseUrlApi}/categories`;
 
-  beforeEach(() => cy.visit('/'));
+  const userOne = generateUser();
+
+  before(() => cy.visit('/'));
 
   context('Products', () => {
     context('API', () => {
@@ -182,7 +187,7 @@ describe('Eshop Clone', () => {
           expect(response.body.length).to.above(0);
         });
       });
-      it.only('Get Products with Category', () => {
+      it('Get Products with Category', () => {
         const randomCategoriesMap = new Map<string, string>();
         let randomCategoriesNames: string;
 
@@ -268,6 +273,25 @@ describe('Eshop Clone', () => {
           });
 
           expect(response.body.length).to.be.eq(limit);
+        });
+      });
+    });
+  });
+
+  context('Users', () => {
+    context('API', () => {
+      it.only('Register User', () => {
+        cy.request<RegisterUserResponse>({
+          url: `${baseUrlUsers}`,
+          method: 'POST',
+          body: {
+            ...userOne,
+          },
+          failOnStatusCode: false,
+        }).then((response) => {
+          expect(response.body.registered_user).to.not.have.property(
+            'password'
+          );
         });
       });
     });
