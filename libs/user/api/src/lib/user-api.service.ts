@@ -3,8 +3,10 @@ import {
   UserResponse,
   UserEntity,
   UpdateUserDto,
+  LoginUserDto,
 } from '@esc/user/entities';
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -12,13 +14,16 @@ import {
 } from '@nestjs/common';
 import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { environment } from 'environments/environment';
 
 @Injectable()
 export class UserApiService {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>
+    private readonly userRepository: Repository<UserEntity>,
+    private jwtService: JwtService
   ) {}
 
   async registerUser(dto: RegisterUserDto): Promise<UserResponse> {
@@ -92,5 +97,34 @@ export class UserApiService {
     } else {
       return result;
     }
+  }
+
+  async loginUser(dto: LoginUserDto): Promise<any> {
+    const { email, password } = dto;
+
+    const user = await this.userRepository.findOne({
+      where: { email },
+      select: ['password', 'id', 'email'],
+    });
+
+    if (!user || !(await this.isPasswordValid(password, user.password))) {
+      throw new BadRequestException('Invalid credentials');
+    }
+
+    const token = this.jwtService.sign({
+      user_id: user.id,
+    });
+
+    return {
+      user: user.email,
+      token,
+    };
+  }
+
+  private async isPasswordValid(
+    password: string,
+    hash: string
+  ): Promise<boolean> {
+    return compare(password, hash);
   }
 }

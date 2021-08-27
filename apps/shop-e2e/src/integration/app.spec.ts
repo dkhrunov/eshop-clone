@@ -323,7 +323,7 @@ describe('Eshop Clone', () => {
         });
       });
 
-      it.only('Update User', () => {
+      it('Update User', () => {
         cy.request<UserEntity[]>({
           url: `${baseUrlUsers}`,
           method: 'GET',
@@ -353,6 +353,43 @@ describe('Eshop Clone', () => {
             }).then(({ body }) => {
               expect(body.user.name).to.equal(userOneName);
             });
+          });
+        });
+      });
+
+      it.only('Login User', () => {
+        cy.request<UserResponse>({
+          url: `${baseUrlUsers}`,
+          method: 'POST',
+          body: {
+            ...userOne,
+          },
+          failOnStatusCode: false,
+        }).then((response) => {
+          expect(response.body.user).to.not.have.property('password');
+
+          cy.request({
+            url: `${baseUrlUsers}/login`,
+            method: 'POST',
+            body: {
+              email: userOne.email,
+              password: userOne.password,
+            },
+            failOnStatusCode: false,
+          }).then((response) => {
+            expect(response.body).to.have.property('token');
+          });
+
+          cy.request({
+            url: `${baseUrlUsers}/login`,
+            method: 'POST',
+            body: {
+              email: userOne.email,
+              password: 'wrongpassword',
+            },
+            failOnStatusCode: false,
+          }).then((response) => {
+            expect(response.body.message).to.be.eql('Invalid credentials');
           });
         });
       });

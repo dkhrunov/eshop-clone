@@ -120,6 +120,16 @@ export class UpdateUserDto {
   country?: string;
 }
 
+export class LoginUserDto {
+  @IsNotEmpty()
+  @IsEmail()
+  email!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  password!: string;
+}
+
 export interface UserResponse {
   user: Omit<UserEntity, 'password' | 'hashPassword'>;
 }
