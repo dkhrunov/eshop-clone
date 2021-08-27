@@ -7,6 +7,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -31,6 +32,7 @@ export class UserApiService {
 
     try {
       const { password, ...user } = await this.userRepository.save(newUser);
+
       return {
         registered_user: {
           ...user,
@@ -39,5 +41,21 @@ export class UserApiService {
     } catch (error) {
       throw new InternalServerErrorException();
     }
+  }
+
+  async listUsers(): Promise<UserEntity[]> {
+    const users = await this.userRepository.find();
+
+    return users;
+  }
+
+  async getUserById(id: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne(id);
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
   }
 }

@@ -12,7 +12,7 @@ import {
   ProductEntityWithCategory,
 } from '@esc/product/entities';
 import { Chance as generateRandom } from 'chance';
-import { RegisterUserResponse } from '@esc/user/entities';
+import { RegisterUserResponse, UserEntity } from '@esc/user/entities';
 
 describe('Eshop Clone', () => {
   const baseUrlProducts = `${environment.baseUrlApi}/products`;
@@ -20,6 +20,7 @@ describe('Eshop Clone', () => {
   const baseUrlCategories = `${environment.baseUrlApi}/categories`;
 
   const userOne = generateUser();
+  let userOneId: string;
 
   before(() => cy.visit('/'));
 
@@ -280,7 +281,7 @@ describe('Eshop Clone', () => {
 
   context('Users', () => {
     context('API', () => {
-      it.only('Register User', () => {
+      it('Register User', () => {
         cy.request<RegisterUserResponse>({
           url: `${baseUrlUsers}`,
           method: 'POST',
@@ -292,6 +293,35 @@ describe('Eshop Clone', () => {
           expect(response.body.registered_user).to.not.have.property(
             'password'
           );
+        });
+      });
+      it.only('List Users', () => {
+        cy.request<UserEntity[]>({
+          url: `${baseUrlUsers}`,
+          method: 'GET',
+          failOnStatusCode: false,
+        }).then(({ body }) => {
+          body.forEach((user) => {
+            expect(user).to.include.keys(['name', 'id', 'email']);
+          });
+        });
+      });
+
+      it.only('Get User', () => {
+        cy.request<UserEntity[]>({
+          url: `${baseUrlUsers}`,
+          method: 'GET',
+          failOnStatusCode: false,
+        }).then(({ body }) => {
+          userOneId = body[0].id;
+
+          cy.request<UserEntity>({
+            url: `${baseUrlUsers}/${userOneId}`,
+            method: 'GET',
+            failOnStatusCode: false,
+          }).then(({ body }) => {
+            expect(body.id).to.equal(userOneId);
+          });
         });
       });
     });
