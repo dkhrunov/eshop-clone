@@ -10,6 +10,7 @@ import {
 } from 'class-validator';
 import { hash } from 'bcrypt';
 import { Request } from 'express';
+import { JwtPayload } from 'jsonwebtoken';
 
 @Entity()
 export class UserEntity {
@@ -139,8 +140,9 @@ export interface LoginResponse {
   token: string;
 }
 
-export interface JwtPayload {
-  user_id: string;
+export interface JwtUserPayload extends JwtPayload {
+  userId: string;
+  isAdmin: boolean;
 }
 
 export interface RequestWithUser extends Request {

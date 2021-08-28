@@ -1,4 +1,8 @@
-import { RequestWithUser, UserEntity } from '@esc/user/entities';
+import {
+  JwtUserPayload,
+  RequestWithUser,
+  UserEntity,
+} from '@esc/user/entities';
 import {
   Injectable,
   NestMiddleware,
@@ -25,10 +29,10 @@ export class AuthMiddleware implements NestMiddleware {
 
     try {
       const [, token] = req.headers['authorization'].split(' ');
-      const decodedToken = this.jwtService.verify(token);
+      const decodedToken: JwtUserPayload = this.jwtService.verify(token);
       const user = await this.userRepository.findOne(decodedToken.user_id);
 
-      if (user) {
+      if (user && user.is_admin) {
         req.user = user;
 
         next();

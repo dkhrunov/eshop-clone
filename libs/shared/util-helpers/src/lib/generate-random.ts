@@ -69,6 +69,6 @@ export const generateUser = () => {
     zip: generateRandom().zip(),
     country: generateRandom().country(),
     phone: generateRandom().phone({ mobile: true }),
-    is_admin: generateRandom().bool(),
+    is_admin: true,
   };
 };

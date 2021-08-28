@@ -5,7 +5,7 @@ import {
   UpdateUserDto,
   LoginUserDto,
   LoginResponse,
-  JwtPayload,
+  JwtUserPayload,
 } from '@esc/user/entities';
 import {
   BadRequestException,
@@ -105,14 +105,14 @@ export class UserApiService {
 
     const user = await this.userRepository.findOne({
       where: { email },
-      select: ['password', 'id', 'email'],
+      select: ['password', 'id', 'email', 'is_admin'],
     });
 
     if (!user || !(await this.isPasswordValid(password, user.password))) {
       throw new BadRequestException('Invalid credentials');
     }
 
-    const payload: JwtPayload = { user_id: user.id };
+    const payload: JwtUserPayload = { userId: user.id, isAdmin: user.is_admin };
 
     const token = this.jwtService.sign(payload);
 
