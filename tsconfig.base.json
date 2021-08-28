@@ -17,7 +17,7 @@
     "paths": {
       "@esc/order/api": ["libs/order/api/src/index.ts"],
       "@esc/order/domain": ["libs/order/domain/src/index.ts"],
-      "@esc/order/entities": ["libs/order/entities/src/index.ts"],
+      "@esc/order/models": ["libs/order/models/src/index.ts"],
       "@esc/product/api": ["libs/product/api/src/index.ts"],
       "@esc/product/domain": ["libs/product/domain/src/index.ts"],
       "@esc/product/entities": ["libs/product/entities/src/index.ts"],

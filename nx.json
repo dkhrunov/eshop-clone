@@ -43,7 +43,7 @@
     "order-domain": {
       "tags": ["domain:order", "type:domain-logic"]
     },
-    "order-entities": {
+    "order-models": {
       "tags": []
     },
     "product-api": {
