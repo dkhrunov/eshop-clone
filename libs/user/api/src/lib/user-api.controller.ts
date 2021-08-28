@@ -6,7 +6,6 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  UseGuards,
 } from '@nestjs/common';
 import { UserApiService } from './user-api.service';
 import {
@@ -18,7 +17,6 @@ import {
   LoginResponse,
 } from '@esc/user/entities';
 import { UpdateResult } from 'typeorm';
-import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UserApiController {
@@ -29,7 +27,6 @@ export class UserApiController {
     return this.userApiService.registerUser(dto);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get()
   listUsers(): Promise<UserEntity[]> {
     return this.userApiService.listUsers();

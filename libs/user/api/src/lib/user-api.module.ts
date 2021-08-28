@@ -5,13 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserApiController } from './user-api.controller';
 import { UserApiService } from './user-api.service';
 import { environment } from '../../../../../environments/environment';
-import { JwtStrategy } from './jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 
 @Module({
   controllers: [UserApiController],
-  providers: [UserApiService, JwtStrategy],
-  exports: [UserApiService, JwtStrategy],
+  providers: [UserApiService],
+  exports: [UserApiService, JwtModule],
   imports: [
     PassportModule,
     TypeOrmModule.forFeature([UserEntity]),

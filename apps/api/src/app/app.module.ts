@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ProductApiModule } from '@esc/product/api';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoryEntity, ProductEntity } from '@esc/product/entities';
 import { UserEntity } from '@esc/user/entities';
-import { UserApiModule } from '@esc/user/api';
+import { AuthMiddleware, UserApiModule } from '@esc/user/api';
 
 @Module({
   imports: [
@@ -20,8 +20,33 @@ import { UserApiModule } from '@esc/user/api';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    TypeOrmModule.forFeature([UserEntity]),
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .exclude(
+        {
+          path: '/api/users',
+          method: RequestMethod.POST,
+        },
+        {
+          path: '/api/users/login',
+          method: RequestMethod.POST,
+        },
+        {
+          path: '/api/categories(.*)',
+          method: RequestMethod.GET,
+        },
+        {
+          path: '/api/products(.*)',
+          method: RequestMethod.GET,
+        }
+      )
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

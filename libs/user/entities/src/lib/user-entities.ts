@@ -9,6 +9,7 @@ import {
   IsString,
 } from 'class-validator';
 import { hash } from 'bcrypt';
+import { Request } from 'express';
 
 @Entity()
 export class UserEntity {
@@ -140,4 +141,8 @@ export interface LoginResponse {
 
 export interface JwtPayload {
   user_id: string;
+}
+
+export interface RequestWithUser extends Request {
+  user: UserEntity | null;
 }

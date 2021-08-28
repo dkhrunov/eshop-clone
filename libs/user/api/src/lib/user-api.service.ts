@@ -18,7 +18,6 @@ import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hash, compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { environment } from 'environments/environment';
 
 @Injectable()
 export class UserApiService {
