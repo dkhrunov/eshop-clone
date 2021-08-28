@@ -14,7 +14,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hash, compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -125,6 +125,16 @@ export class UserApiService {
   async getUserCount(): Promise<{ user_count: number }> {
     const [, user_count] = await this.userRepository.findAndCount();
     return { user_count };
+  }
+
+  async deleteUser(id: string): Promise<DeleteResult> {
+    const result = await this.userRepository.delete(id);
+
+    if (!result) {
+      throw new InternalServerErrorException();
+    }
+
+    return result;
   }
 
   private async isPasswordValid(

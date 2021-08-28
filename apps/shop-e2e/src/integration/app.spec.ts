@@ -80,6 +80,57 @@ describe('Eshop Clone', () => {
         });
       });
 
+      it('Delete User', () => {
+        const userForDelete = generateUser();
+        let userForDeleteId: string;
+
+        cy.request<UserResponse>({
+          url: `${baseUrlUsers}`,
+          method: 'POST',
+          body: {
+            ...userForDelete,
+            name: 'User For Delete',
+          },
+          failOnStatusCode: false,
+        }).then((response) => {
+          userForDeleteId = response.body.user.id;
+          expect(response.body.user).to.not.have.property('password');
+
+          cy.request({
+            url: `${baseUrlUsers}/${userForDeleteId}`,
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${userOneToken}`,
+            },
+            failOnStatusCode: false,
+          }).then((response) => {
+            expect(response.body.id).to.be.eql(userForDeleteId);
+          });
+
+          cy.request({
+            url: `${baseUrlUsers}/${userForDeleteId}`,
+            method: 'DELETE',
+            headers: {
+              Authorization: `Bearer ${userOneToken}`,
+            },
+            failOnStatusCode: false,
+          }).then((response) => {
+            expect(response.body.affected).to.be.eql(1);
+          });
+
+          cy.request({
+            url: `${baseUrlUsers}/${userForDeleteId}`,
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${userOneToken}`,
+            },
+            failOnStatusCode: false,
+          }).then((response) => {
+            expect(response.body.message).to.be.eql('Not Found');
+          });
+        });
+      });
+
       it('List Users', () => {
         cy.request<UserEntity[]>({
           url: `${baseUrlUsers}`,

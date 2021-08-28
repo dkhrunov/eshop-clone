@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -16,7 +17,7 @@ import {
   LoginUserDto,
   LoginResponse,
 } from '@esc/user/entities';
-import { UpdateResult } from 'typeorm';
+import { DeleteResult, UpdateResult } from 'typeorm';
 
 @Controller('users')
 export class UserApiController {
@@ -53,5 +54,10 @@ export class UserApiController {
   @Post('login')
   loginUser(@Body() dto: LoginUserDto): Promise<LoginResponse> {
     return this.userApiService.loginUser(dto);
+  }
+
+  @Delete(':id')
+  deleteUser(@Param('id', ParseUUIDPipe) id: string): Promise<DeleteResult> {
+    return this.userApiService.deleteUser(id);
   }
 }
