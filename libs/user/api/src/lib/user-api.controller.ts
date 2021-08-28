@@ -32,6 +32,11 @@ export class UserApiController {
     return this.userApiService.listUsers();
   }
 
+  @Get('count')
+  getUsersCount(): Promise<{ user_count: number }> {
+    return this.userApiService.getUserCount();
+  }
+
   @Get(':id')
   getUserById(@Param('id', ParseUUIDPipe) id: string): Promise<UserEntity> {
     return this.userApiService.getUserById(id);

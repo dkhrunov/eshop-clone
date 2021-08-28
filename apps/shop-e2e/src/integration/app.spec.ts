@@ -119,6 +119,34 @@ describe('Eshop Clone', () => {
         });
       });
 
+      it('Get User Count', () => {
+        let user_count: number;
+
+        cy.request({
+          url: baseUrlUsers,
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${userOneToken}`,
+          },
+          failOnStatusCode: false,
+        }).then((response) => {
+          user_count = response.body.length;
+          expect(response.body.length).to.above(0);
+
+          cy.request({
+            url: `${baseUrlUsers}/count`,
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${userOneToken}`,
+            },
+            failOnStatusCode: false,
+          }).then((response) => {
+            expect(response.status).to.be.eq(200);
+            expect(response.body.user_count).to.be.eq(user_count);
+          });
+        });
+      });
+
       it('Update User', () => {
         cy.request<UserEntity[]>({
           url: `${baseUrlUsers}`,

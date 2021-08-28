@@ -122,6 +122,11 @@ export class UserApiService {
     };
   }
 
+  async getUserCount(): Promise<{ user_count: number }> {
+    const [, user_count] = await this.userRepository.findAndCount();
+    return { user_count };
+  }
+
   private async isPasswordValid(
     password: string,
     hash: string
