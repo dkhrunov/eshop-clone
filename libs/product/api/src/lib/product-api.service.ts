@@ -3,7 +3,7 @@ import {
   CreateProductDto,
   ProductEntity,
   UpdateProductDto,
-} from '@esc/product/entities';
+} from '@esc/product/models';
 import {
   Injectable,
   InternalServerErrorException,

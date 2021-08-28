@@ -2,7 +2,7 @@ import {
   CategoryEntity,
   CreateCategoryDto,
   UpdateCategoryDto,
-} from '@esc/product/entities';
+} from '@esc/product/models';
 import {
   ConflictException,
   Injectable,

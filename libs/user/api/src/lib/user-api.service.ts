@@ -6,7 +6,7 @@ import {
   LoginUserDto,
   LoginResponse,
   JwtUserPayload,
-} from '@esc/user/entities';
+} from '@esc/user/models';
 import {
   BadRequestException,
   ConflictException,

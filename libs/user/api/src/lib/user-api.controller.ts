@@ -16,7 +16,7 @@ import {
   UpdateUserDto,
   LoginUserDto,
   LoginResponse,
-} from '@esc/user/entities';
+} from '@esc/user/models';
 import { DeleteResult, UpdateResult } from 'typeorm';
 
 @Controller('users')

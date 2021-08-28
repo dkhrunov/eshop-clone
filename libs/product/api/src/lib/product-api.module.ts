@@ -1,4 +1,4 @@
-import { CategoryEntity, ProductEntity } from '@esc/product/entities';
+import { CategoryEntity, ProductEntity } from '@esc/product/models';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoryService } from './category-api.service';

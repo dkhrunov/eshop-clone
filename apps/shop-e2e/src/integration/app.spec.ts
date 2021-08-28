@@ -10,9 +10,9 @@ import {
   CategoryEntity,
   ProductEntity,
   ProductEntityWithCategory,
-} from '@esc/product/entities';
+} from '@esc/product/models';
 import { Chance as generateRandom } from 'chance';
-import { UserResponse, UserEntity, LoginResponse } from '@esc/user/entities';
+import { UserResponse, UserEntity, LoginResponse } from '@esc/user/models';
 
 describe('Eshop Clone', () => {
   const baseUrlProducts = `${environment.baseUrlApi}/products`;

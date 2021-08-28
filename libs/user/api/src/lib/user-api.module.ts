@@ -1,4 +1,4 @@
-import { UserEntity } from '@esc/user/entities';
+import { UserEntity } from '@esc/user/models';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';

@@ -16,7 +16,7 @@ import {
   ProductEntity,
   UpdateCategoryDto,
   UpdateProductDto,
-} from '@esc/product/entities';
+} from '@esc/product/models';
 import { CategoryService } from './category-api.service';
 
 @Controller('')

@@ -1,8 +1,4 @@
-import {
-  JwtUserPayload,
-  RequestWithUser,
-  UserEntity,
-} from '@esc/user/entities';
+import { JwtUserPayload, RequestWithUser, UserEntity } from '@esc/user/models';
 import {
   Injectable,
   NestMiddleware,

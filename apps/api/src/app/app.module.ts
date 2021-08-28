@@ -1,8 +1,8 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ProductApiModule } from '@esc/product/api';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CategoryEntity, ProductEntity } from '@esc/product/entities';
-import { UserEntity } from '@esc/user/entities';
+import { CategoryEntity, ProductEntity } from '@esc/product/models';
+import { UserEntity } from '@esc/user/models';
 import { AuthMiddleware, UserApiModule } from '@esc/user/api';
 
 @Module({
