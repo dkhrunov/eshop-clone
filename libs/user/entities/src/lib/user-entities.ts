@@ -133,3 +133,11 @@ export class LoginUserDto {
 export interface UserResponse {
   user: Omit<UserEntity, 'password' | 'hashPassword'>;
 }
+export interface LoginResponse {
+  user: string;
+  token: string;
+}
+
+export interface JwtPayload {
+  user_id: string;
+}

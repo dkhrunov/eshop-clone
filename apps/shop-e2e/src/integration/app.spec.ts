@@ -12,7 +12,7 @@ import {
   ProductEntityWithCategory,
 } from '@esc/product/entities';
 import { Chance as generateRandom } from 'chance';
-import { UserResponse, UserEntity } from '@esc/user/entities';
+import { UserResponse, UserEntity, LoginResponse } from '@esc/user/entities';
 
 describe('Eshop Clone', () => {
   const baseUrlProducts = `${environment.baseUrlApi}/products`;
@@ -357,7 +357,7 @@ describe('Eshop Clone', () => {
         });
       });
 
-      it.only('Login User', () => {
+      it('Login User', () => {
         cy.request<UserResponse>({
           url: `${baseUrlUsers}`,
           method: 'POST',
@@ -368,7 +368,7 @@ describe('Eshop Clone', () => {
         }).then((response) => {
           expect(response.body.user).to.not.have.property('password');
 
-          cy.request({
+          cy.request<LoginResponse>({
             url: `${baseUrlUsers}/login`,
             method: 'POST',
             body: {
@@ -390,6 +390,53 @@ describe('Eshop Clone', () => {
             failOnStatusCode: false,
           }).then((response) => {
             expect(response.body.message).to.be.eql('Invalid credentials');
+          });
+        });
+      });
+
+      it.only('Restrict unauthorized access', () => {
+        let userOneToken: string;
+
+        cy.request({
+          url: `${baseUrlUsers}`,
+          method: 'GET',
+          failOnStatusCode: false,
+        })
+          .its('body.message')
+          .should('equal', 'Unauthorized');
+
+        cy.request<UserResponse>({
+          url: `${baseUrlUsers}`,
+          method: 'POST',
+          body: {
+            ...userOne,
+          },
+          failOnStatusCode: false,
+        }).then((response) => {
+          expect(response.body.user).to.not.have.property('password');
+
+          cy.request<LoginResponse>({
+            url: `${baseUrlUsers}/login`,
+            method: 'POST',
+            body: {
+              email: userOne.email,
+              password: userOne.password,
+            },
+            failOnStatusCode: false,
+          }).then((response) => {
+            userOneToken = response.body.token;
+            expect(response.body).to.have.property('token');
+
+            cy.request({
+              url: `${baseUrlUsers}`,
+              method: 'GET',
+              headers: {
+                Authorization: `Bearer ${userOneToken}`,
+              },
+              failOnStatusCode: false,
+            })
+              .its('body')
+              .should('have.length.above', 0);
           });
         });
       });
