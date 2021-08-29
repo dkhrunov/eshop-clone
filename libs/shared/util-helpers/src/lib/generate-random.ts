@@ -1,5 +1,7 @@
 import { Chance as generateRandom } from 'chance';
 import { sub } from 'date-fns';
+import { ProductEntity } from '@esc/product/models';
+import { OrderEntity, OrderItemEntity } from '@esc/order/models';
 
 const categoriesMap = new Map([
   ['Computers', 'icon-computer'],
@@ -25,11 +27,7 @@ export const generateProduct = () => {
   };
 };
 
-export const generateNonExistentCategoryId = (): string => {
-  return generateRandom().guid();
-};
-
-export const generateNonExistentProductId = (): string => {
+export const generateNonExistentUUID = (): string => {
   return generateRandom().guid();
 };
 
@@ -38,7 +36,7 @@ export const generateCategory = () => {
     name: newCategoryName,
     image: `https://source.unsplash.com/random/400x300?v=${generateRandom().integer()}`,
     color: generateRandom().color({ format: 'hex' }),
-    icon: categoriesMap.get(newCategoryName),
+    icon: categoriesMap.get(newCategoryName) as string,
   };
 };
 
@@ -71,4 +69,29 @@ export const generateUser = () => {
     phone: generateRandom().phone({ mobile: true }),
     is_admin: true,
   };
+};
+
+export const generateOrder = (
+  orderItems: OrderItemEntity[]
+): Partial<OrderEntity> => {
+  return {
+    shippingAddressOne: generateRandom().address(),
+    shippingAddressTwo: generateRandom().address(),
+    city: generateRandom().city(),
+    zip: generateRandom().zip(),
+    country: generateRandom().country(),
+    phone: generateRandom().phone({ mobile: true }),
+  };
+};
+
+export const generateOrderItem = (
+  products: ProductEntity[]
+): OrderItemEntity => {
+  const orderItem = new Map();
+
+  for (const product of products) {
+    orderItem.set(product.id, product.price);
+  }
+
+  return Object.fromEntries(orderItem);
 };

@@ -2,575 +2,363 @@ import { environment } from '../../../../environments/environment';
 import {
   generateProduct,
   generateCategory,
-  generateNonExistentCategoryId,
-  generateNonExistentProductId,
   generateUser,
+  generateNonExistentUUID,
 } from '@esc/shared/util-helpers';
-import {
-  CategoryEntity,
-  ProductEntity,
-  ProductEntityWithCategory,
-} from '@esc/product/models';
+import { CategoryEntity } from '@esc/product/models';
 import { Chance as generateRandom } from 'chance';
-import { UserResponse, UserEntity, LoginResponse } from '@esc/user/models';
-import { registerUser } from '../support/user.po';
+import {
+  deleteUserOnServer,
+  getUserCount,
+  getUserFromServer,
+  getAllUsersFromServer,
+  loginUserOnServer,
+  registerUserOnServer,
+  updateUserOnServer,
+} from '../support/user.po';
+import {
+  createCategoryOnServer,
+  createProductOnServer,
+  deleteProductOnServer,
+  getAllCategoriesFromServer,
+  getAllProductsFromServer,
+  getCategoryFromServer,
+  getFeaturedProducts,
+  getProductFromServer,
+  getProductsCount,
+  getProductsWithCategory,
+  updateCategoryOnServer,
+  updateProductOnServer,
+} from '../support/product.po';
 
 describe('Eshop Clone', () => {
-  const baseUrlProducts = `${environment.baseUrlApi}/products`;
-  const baseUrlUsers = `${environment.baseUrlApi}/users`;
-  const baseUrlCategories = `${environment.baseUrlApi}/categories`;
-
   const userOne = generateUser();
-  let userOneToken: string;
   let userOneId: string;
+  let userOneToken: string;
 
-  before(() => cy.visit('/'));
+  const product = generateProduct();
+  let createdProductId: string;
+
+  const category = generateCategory();
+  let createdCategoryId: string;
+
+  before(() => {
+    cy.visit('/');
+
+    registerUserOnServer(userOne).then(({ body }) => {
+      userOneId = body.user.id;
+
+      loginUserOnServer(userOne.email, userOne.password).then(({ body }) => {
+        userOneToken = body.token;
+
+        createCategoryOnServer({ ...category }, userOneToken).then(
+          ({ body: { id } }) => {
+            createdCategoryId = id;
+
+            createProductOnServer(product, id, userOneToken).then(
+              ({ body: { id } }) => {
+                createdProductId = id;
+              }
+            );
+          }
+        );
+      });
+    });
+  });
 
   context('Users', () => {
     context('API', () => {
       it('Register User', () => {
-        registerUser(userOne).then((response) => {
-          expect(response.body.user).to.not.have.property('password');
-        });
+        const newUser = generateUser();
+        registerUserOnServer(newUser);
       });
 
       it('Login User', () => {
         const newUser = generateUser();
 
-        cy.request<UserResponse>({
-          url: `${baseUrlUsers}`,
-          method: 'POST',
-          body: {
-            ...newUser,
-          },
-          failOnStatusCode: false,
-        }).then((response) => {
-          expect(response.body.user).to.not.have.property('password');
+        registerUserOnServer(newUser);
 
-          cy.request<LoginResponse>({
-            url: `${baseUrlUsers}/login`,
-            method: 'POST',
-            body: {
-              email: userOne.email,
-              password: userOne.password,
-            },
-            failOnStatusCode: false,
-          }).then((response) => {
-            userOneToken = response.body.token;
-            expect(response.body).to.have.property('token');
-          });
+        loginUserOnServer(newUser.email, newUser.password)
+          .its('body.token')
+          .should('be.a', 'string');
 
-          cy.request({
-            url: `${baseUrlUsers}/login`,
-            method: 'POST',
-            body: {
-              email: userOne.email,
-              password: 'wrongpassword',
-            },
-            failOnStatusCode: false,
-          }).then((response) => {
-            expect(response.body.message).to.be.eql('Invalid credentials');
-          });
-        });
+        loginUserOnServer(newUser.email, 'wrongpassword')
+          .its('body.message')
+          .should('eq', 'Invalid credentials');
       });
 
       it('Delete User', () => {
         const userForDelete = generateUser();
-        let userForDeleteId: string;
+        userForDelete.name = 'User for delete';
 
-        cy.request<UserResponse>({
-          url: `${baseUrlUsers}`,
-          method: 'POST',
-          body: {
-            ...userForDelete,
-            name: 'User For Delete',
-          },
-          failOnStatusCode: false,
-        }).then((response) => {
-          userForDeleteId = response.body.user.id;
-          expect(response.body.user).to.not.have.property('password');
+        registerUserOnServer(userForDelete).then(({ body: { user } }) => {
+          loginUserOnServer(userForDelete.email, userForDelete.password).then(
+            ({ body: { token } }) => {
+              getUserFromServer(user.id, token)
+                .its('body')
+                .should('deep.include', {
+                  id: user.id,
+                  name: 'User for delete',
+                });
 
-          cy.request({
-            url: `${baseUrlUsers}/${userForDeleteId}`,
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${userOneToken}`,
-            },
-            failOnStatusCode: false,
-          }).then((response) => {
-            expect(response.body.id).to.be.eql(userForDeleteId);
-          });
+              deleteUserOnServer(user.id, token)
+                .its('body.affected')
+                .should('eq', 1);
 
-          cy.request({
-            url: `${baseUrlUsers}/${userForDeleteId}`,
-            method: 'DELETE',
-            headers: {
-              Authorization: `Bearer ${userOneToken}`,
-            },
-            failOnStatusCode: false,
-          }).then((response) => {
-            expect(response.body.affected).to.be.eql(1);
-          });
-
-          cy.request({
-            url: `${baseUrlUsers}/${userForDeleteId}`,
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${userOneToken}`,
-            },
-            failOnStatusCode: false,
-          }).then((response) => {
-            expect(response.body.message).to.be.eql('Not Found');
-          });
+              getUserFromServer(user.id, token)
+                .its('body.message')
+                .should('eq', 'Not Found');
+            }
+          );
         });
       });
 
       it('List Users', () => {
-        cy.request<UserEntity[]>({
-          url: `${baseUrlUsers}`,
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${userOneToken}`,
-          },
-          failOnStatusCode: false,
-        }).then(({ body }) => {
-          body.forEach((user) => {
+        getAllUsersFromServer(userOneToken)
+          .its('body')
+          .each((user) => {
             expect(user).to.include.keys(['name', 'id', 'email']);
           });
-        });
       });
 
       it('Get User', () => {
-        cy.request<UserEntity[]>({
-          url: `${baseUrlUsers}`,
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${userOneToken}`,
-          },
-          failOnStatusCode: false,
-        }).then(({ body }) => {
-          userOneId = body[0].id;
-
-          cy.request<UserEntity>({
-            url: `${baseUrlUsers}/${userOneId}`,
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${userOneToken}`,
-            },
-            failOnStatusCode: false,
-          }).then(({ body }) => {
-            expect(body.id).to.equal(userOneId);
-          });
+        getUserFromServer(userOneId, userOneToken).then(({ body }) => {
+          expect(body.id).to.equal(userOneId);
         });
       });
 
       it('Get User Count', () => {
-        let user_count: number;
+        getAllUsersFromServer(userOneToken).then(({ body }) => {
+          expect(body.length).to.above(0);
 
-        cy.request({
-          url: baseUrlUsers,
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${userOneToken}`,
-          },
-          failOnStatusCode: false,
-        }).then((response) => {
-          user_count = response.body.length;
-          expect(response.body.length).to.above(0);
-
-          cy.request({
-            url: `${baseUrlUsers}/count`,
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${userOneToken}`,
-            },
-            failOnStatusCode: false,
-          }).then((response) => {
-            expect(response.status).to.be.eq(200);
-            expect(response.body.user_count).to.be.eq(user_count);
-          });
+          getUserCount(userOneToken).then(
+            ({ status, body: { user_count } }) => {
+              expect(status).to.be.eq(200);
+              expect(user_count).to.be.eq(user_count);
+            }
+          );
         });
       });
 
       it('Update User', () => {
-        cy.request<UserEntity[]>({
-          url: `${baseUrlUsers}`,
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${userOneToken}`,
-          },
-          failOnStatusCode: false,
-        }).then(({ body }) => {
-          userOneId = body[0].id;
-          const userOneName = body[0].name;
+        getAllUsersFromServer(userOneToken).then(({ body: [user] }) => {
+          const userFromServer = user.id;
+          const userOneName = user.name;
 
-          cy.request<UserResponse>({
-            url: `${baseUrlUsers}/${userOneId}`,
-            method: 'PUT',
-            body: {
+          updateUserOnServer(
+            userFromServer,
+            {
               name: 'Updated Name',
               password: 'Updated Password',
             },
-            headers: {
-              Authorization: `Bearer ${userOneToken}`,
-            },
-            failOnStatusCode: false,
-          }).then(({ body }) => {
-            expect(body.user.name).to.equal('Updated Name');
+            userOneToken
+          ).then(({ body: { user } }) => {
+            expect(user.name).to.equal('Updated Name');
 
-            cy.request<UserResponse>({
-              url: `${baseUrlUsers}/${userOneId}`,
-              method: 'PUT',
-              body: {
+            updateUserOnServer(
+              userFromServer,
+              {
                 name: userOneName,
               },
-              headers: {
-                Authorization: `Bearer ${userOneToken}`,
-              },
-              failOnStatusCode: false,
-            }).then(({ body }) => {
-              expect(body.user.name).to.equal(userOneName);
-            });
+              userOneToken
+            )
+              .its('body.user.name')
+              .should('eq', userOneName);
           });
         });
       });
 
       it('Restrict unauthorized access', () => {
-        const userTwo = generateUser();
-        let userTwoToken: string;
-
-        cy.request({
-          url: `${baseUrlUsers}`,
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer NOTWORKINGTOKEN`,
-          },
-          failOnStatusCode: false,
-        })
+        getAllUsersFromServer('TOKEN NOT EXIST')
           .its('body.message')
           .should('equal', 'Unauthorized');
 
-        cy.request<UserResponse>({
-          url: `${baseUrlUsers}`,
-          method: 'POST',
-          body: {
-            ...userTwo,
-          },
-          failOnStatusCode: false,
-        }).then((response) => {
-          expect(response.body.user).to.not.have.property('password');
-
-          cy.request<LoginResponse>({
-            url: `${baseUrlUsers}/login`,
-            method: 'POST',
-            body: {
-              email: userTwo.email,
-              password: userTwo.password,
-            },
-            failOnStatusCode: false,
-          }).then((response) => {
-            userTwoToken = response.body.token;
-            expect(response.body).to.have.property('token');
-
-            cy.request({
-              url: `${baseUrlUsers}`,
-              method: 'GET',
-              headers: {
-                Authorization: `Bearer ${userTwoToken}`,
-              },
-              failOnStatusCode: false,
-            })
+        loginUserOnServer(userOne.email, userOne.password).then(
+          ({ body: { token } }) => {
+            getAllUsersFromServer(token)
               .its('body')
               .should('have.length.above', 0);
-          });
-        });
+          }
+        );
       });
     });
   });
 
   context('Products', () => {
     context('API', () => {
-      const product = generateProduct();
-      const category = generateCategory();
-      let createdCategoryId: string;
-      let createdProductId: string;
-
       it('List Categories', () => {
-        cy.request({
-          url: baseUrlCategories,
-          method: 'GET',
-          failOnStatusCode: false,
-        }).then((response) => {
+        getAllCategoriesFromServer().then((response) => {
           expect(response.status).to.be.eq(200);
         });
       });
       it('Create Category', () => {
-        cy.request({
-          url: baseUrlCategories,
-          method: 'POST',
-          body: {
-            ...category,
-            name: 'New Category',
-          },
-          headers: {
-            Authorization: `Bearer ${userOneToken}`,
-          },
-          failOnStatusCode: false,
-        }).then((response) => {
-          createdCategoryId = response.body.id;
-          expect(response.body.name).to.be.eq('New Category');
-          expect(response.status).to.be.eq(201);
-        });
+        createCategoryOnServer({ ...category }, userOneToken)
+          .its('body')
+          .should('include.all.keys', category);
       });
 
       it('Get Category By Id', () => {
-        cy.request({
-          url: `${baseUrlCategories}/${createdCategoryId}`,
-          method: 'GET',
-          failOnStatusCode: false,
-        }).then((response) => {
-          expect(response.body.id).to.be.eq(createdCategoryId);
+        getAllCategoriesFromServer().then(({ body: [category] }) => {
+          getCategoryFromServer(category.id)
+            .its('body')
+            .should('deep.equal', category);
         });
       });
 
       it('Update Category', () => {
-        cy.request({
-          url: `${baseUrlCategories}/${createdCategoryId}`,
-          method: 'PUT',
-          body: {
-            ...category,
-          },
-          headers: {
-            Authorization: `Bearer ${userOneToken}`,
-          },
-          failOnStatusCode: false,
-        }).then((response) => {
-          createdCategoryId = response.body.id;
-          expect(response.status).to.be.eq(200);
-          expect(response.body.name).to.be.eq(category.name);
+        getAllCategoriesFromServer().then(({ body: [category] }) => {
+          updateCategoryOnServer(
+            category.id,
+            { ...category, name: 'Updated Category' },
+            userOneToken
+          ).then(({ body: { name } }) => {
+            expect(name).to.be.eq('Updated Category');
+
+            updateCategoryOnServer(category.id, { ...category }, userOneToken)
+              .its('body')
+              .should('deep.equal', category);
+          });
         });
       });
 
       it('Create Product', () => {
-        cy.request({
-          url: baseUrlProducts,
-          method: 'POST',
-          body: {
-            ...product,
-            category: createdCategoryId,
-          },
-          headers: {
-            Authorization: `Bearer ${userOneToken}`,
-          },
-          failOnStatusCode: false,
-        }).then((response) => {
-          createdProductId = response.body.id;
-          expect(response.status).to.be.eq(201);
+        getAllCategoriesFromServer().then(({ body: [category] }) => {
+          createProductOnServer(product, category.id, userOneToken)
+            .its('body')
+            .should('deep.include', product);
         });
       });
 
       it('Get Product By Id', () => {
-        cy.request({
-          url: `${baseUrlProducts}/${createdProductId}`,
-          method: 'GET',
-          failOnStatusCode: false,
-        }).then((response) => {
-          expect(response.status).to.be.eq(200);
-          expect(response.body.id).to.be.eq(createdProductId);
-          cy.log(response.body.category);
+        getAllCategoriesFromServer().then(({ body: [category] }) => {
+          createProductOnServer(product, category.id, userOneToken).then(
+            ({ body: newProduct }) => {
+              getProductFromServer(newProduct.id)
+                .its('body')
+                .should('deep.include', product);
+            }
+          );
         });
       });
 
       it('Update Product', () => {
-        cy.request({
-          url: `${baseUrlProducts}/${createdProductId}`,
-          method: 'PUT',
-          body: {
-            description: 'Updated Description',
-          },
-          headers: {
-            Authorization: `Bearer ${userOneToken}`,
-          },
-          failOnStatusCode: false,
-        }).then((response) => {
-          expect(response.status).to.be.eq(200);
-          expect(response.body.description).to.be.eq('Updated Description');
-        });
+        updateProductOnServer(
+          createdProductId,
+          { name: 'Updated Product Name' },
+          userOneToken
+        ).then(({ body: { name } }) => {
+          expect(name).to.be.eq('Updated Product Name');
 
-        cy.request({
-          url: `${baseUrlProducts}/${createdProductId}`,
-          method: 'PUT',
-          body: {
-            description: product.description,
-          },
-          headers: {
-            Authorization: `Bearer ${userOneToken}`,
-          },
-          failOnStatusCode: false,
-        }).then((response) => {
-          expect(response.status).to.be.eq(200);
-          expect(response.body.description).to.be.eq(product.description);
+          updateProductOnServer(
+            createdProductId,
+            { name: product.name },
+            userOneToken
+          )
+            .its('body.name')
+            .should('eq', product.name);
         });
       });
 
       it('Delete Product', () => {
-        cy.request({
-          url: baseUrlProducts,
-          method: 'POST',
-          body: {
-            ...generateProduct(),
-            name: 'Temporary Product',
-            category: createdCategoryId,
-          },
-          headers: {
-            Authorization: `Bearer ${userOneToken}`,
-          },
-          failOnStatusCode: false,
-        }).then((response) => {
-          cy.request({
-            url: `${baseUrlProducts}/${response.body.id}`,
-            method: 'DELETE',
-            headers: {
-              Authorization: `Bearer ${userOneToken}`,
-            },
-            failOnStatusCode: false,
-          }).then((response) => {
-            expect(response.status).to.be.eq(200);
+        const productForDelete = generateProduct();
+
+        createProductOnServer(
+          productForDelete,
+          createdCategoryId,
+          userOneToken
+        ).then(({ body: { id } }) => {
+          deleteProductOnServer(id, userOneToken).then(({ status }) => {
+            expect(status).to.be.eq(200);
           });
         });
       });
       it('Delete Product Validate Id', () => {
-        cy.request({
-          url: `${baseUrlProducts}/${generateNonExistentProductId()}`,
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${userOneToken}`,
-          },
-          failOnStatusCode: false,
-        }).then((response) => {
-          expect(response.status).to.be.eq(404);
-        });
+        deleteProductOnServer(generateNonExistentUUID(), userOneToken)
+          .its('status')
+          .should('eq', 404);
       });
 
       it('Create Product Validate Category', () => {
-        cy.request({
-          url: baseUrlProducts,
-          method: 'POST',
-          body: {
-            ...product,
-            category: generateNonExistentCategoryId(),
-          },
-          headers: {
-            Authorization: `Bearer ${userOneToken}`,
-          },
-          failOnStatusCode: false,
-        }).then((response) => {
-          expect(response.status).to.be.eq(404);
-          expect(response.body.message).to.be.eq('Category not found');
-        });
+        const nonExistentCategoryId = generateNonExistentUUID();
+
+        createProductOnServer(product, nonExistentCategoryId, userOneToken)
+          .its('body')
+          .should('deep.equal', {
+            error: 'Not Found',
+            message: 'Category not found',
+            statusCode: 404,
+          });
       });
       it('Get Products', () => {
-        cy.request({
-          url: baseUrlProducts,
-          method: 'GET',
-          failOnStatusCode: false,
-        }).then((response) => {
+        getAllProductsFromServer().then((response) => {
           expect(response.status).to.be.eq(200);
           expect(response.body.length).to.above(0);
         });
       });
       it('Get Products with Category', () => {
-        const randomCategoriesMap = new Map<string, string>();
-        let randomCategoriesNames: string;
+        const allCategoriesMap = new Map<string, string>();
+        let allCategoriesNames: string;
 
-        cy.request({
-          url: baseUrlCategories,
-          method: 'GET',
-          failOnStatusCode: false,
-        }).then((response) => {
+        getAllCategoriesFromServer().then(({ body: categories }) => {
           generateRandom()
             .pickset<CategoryEntity>(
-              response.body,
+              categories,
               generateRandom().integer({
                 min: 1,
                 max: 3,
               })
             )
-            .forEach((category: CategoryEntity) => {
-              randomCategoriesMap.set(category.id, category.name);
+            .forEach(({ id, name }: CategoryEntity) => {
+              allCategoriesMap.set(id, name);
             });
 
-          randomCategoriesNames = [...randomCategoriesMap.values()].join(',');
+          allCategoriesNames = [...allCategoriesMap.values()].join(',');
 
-          expect(response.status).to.be.eq(200);
+          getProductsWithCategory(allCategoriesNames).then(
+            ({ status, body: products }) => {
+              expect(status).to.be.eq(200);
 
-          cy.request<ProductEntityWithCategory[]>({
-            url: `${baseUrlProducts}?categories=${randomCategoriesNames}`,
-            method: 'GET',
-            failOnStatusCode: false,
-          }).then((response) => {
-            expect(response.status).to.be.eq(200);
-
-            for (const product of response.body) {
-              expect(product.category.id).to.be.oneOf([
-                ...randomCategoriesMap.keys(),
-              ]);
+              for (const {
+                category: { id },
+              } of products) {
+                expect(id).to.be.oneOf([...allCategoriesMap.keys()]);
+              }
             }
-          });
+          );
         });
       });
       it('Get Product Count', () => {
-        let product_count: number;
+        getAllProductsFromServer().then(({ body: products }) => {
+          expect(products.length).to.above(0);
 
-        cy.request({
-          url: baseUrlProducts,
-          method: 'GET',
-          failOnStatusCode: false,
-        }).then((response) => {
-          product_count = response.body.length;
-          expect(response.body.length).to.above(0);
-
-          cy.request({
-            url: `${baseUrlProducts}/count`,
-            method: 'GET',
-            failOnStatusCode: false,
-          }).then((response) => {
-            expect(response.status).to.be.eq(200);
-            expect(response.body.product_count).to.be.eq(product_count);
-          });
+          getProductsCount()
+            .its('body.product_count')
+            .should('eq', products.length);
         });
       });
       it('Get All Featured Products', () => {
-        cy.request({
-          url: `${baseUrlProducts}/featured`,
-          method: 'GET',
-          failOnStatusCode: false,
-        }).then((response) => {
-          response.body.forEach((product: ProductEntity) => {
-            expect(product.is_featured).to.be.eq(true);
-          });
+        getFeaturedProducts().then(({ body: products }) => {
+          for (const { is_featured } of products) {
+            expect(is_featured).to.be.eq(true);
+          }
         });
       });
 
       it('Get Featured Products with limit', () => {
         const limit = generateRandom().integer({ min: 3, max: 10 });
 
-        cy.request({
-          url: `${baseUrlProducts}/featured/${limit}`,
-          method: 'GET',
-          failOnStatusCode: false,
-        }).then((response) => {
-          response.body.forEach((product: ProductEntity) => {
-            expect(product.is_featured).to.be.eq(true);
-          });
+        getFeaturedProducts(limit).then(({ body: products }) => {
+          for (const { is_featured } of products) {
+            expect(is_featured).to.be.eq(true);
+          }
 
-          expect(response.body).to.have.length.of.at.most(limit);
+          expect(products).to.have.length.of.at.most(limit);
         });
       });
     });
   });
 
-  context('Orders', () => {
+  context.skip('Orders', () => {
     context('API', () => {
       it('Create Order', () => {
         //

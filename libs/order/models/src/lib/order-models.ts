@@ -12,6 +12,9 @@ import { CoreEntity } from '@esc/shared/util-models';
 import { ProductEntity } from '@esc/product/models';
 import { UserEntity } from '@esc/user/models';
 
+export enum OrderStatus {
+  PENDING = 'Pending',
+}
 @Entity('order')
 export class OrderEntity extends CoreEntity {
   @Column()
@@ -32,7 +35,7 @@ export class OrderEntity extends CoreEntity {
   @Column()
   phone!: string;
 
-  @Column({ default: 'Pending' })
+  @Column({ default: OrderStatus.PENDING })
   status!: string;
 
   @Column()
@@ -55,4 +58,8 @@ export class OrderItemEntity extends CoreEntity {
 
   @Column()
   quantity!: number;
+}
+
+export class CreateOrderDto {
+  //
 }
