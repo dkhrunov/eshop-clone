@@ -18,7 +18,7 @@ export const generateProduct = () => {
     image: generateRandom().url(),
     brand: generateRandom().animal(),
     price: generateRandom().integer({ min: 1, max: 10_000 }),
-    count_in_stock: generateRandom().integer({ min: 1, max: 254 }),
+    countInStock: generateRandom().integer({ min: 1, max: 254 }),
     rating: generateRandom().integer({ min: 0, max: 10 }),
     num_reviews: generateRandom().integer({ min: 0, max: 1000 }),
     is_featured: generateRandom().bool(),

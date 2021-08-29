@@ -13,6 +13,7 @@ import {
 } from '@esc/product/models';
 import { Chance as generateRandom } from 'chance';
 import { UserResponse, UserEntity, LoginResponse } from '@esc/user/models';
+import { registerUser } from '../support/user.po';
 
 describe('Eshop Clone', () => {
   const baseUrlProducts = `${environment.baseUrlApi}/products`;
@@ -28,14 +29,7 @@ describe('Eshop Clone', () => {
   context('Users', () => {
     context('API', () => {
       it('Register User', () => {
-        cy.request<UserResponse>({
-          url: `${baseUrlUsers}`,
-          method: 'POST',
-          body: {
-            ...userOne,
-          },
-          failOnStatusCode: false,
-        }).then((response) => {
+        registerUser(userOne).then((response) => {
           expect(response.body.user).to.not.have.property('password');
         });
       });
@@ -270,8 +264,8 @@ describe('Eshop Clone', () => {
             url: `${baseUrlUsers}/login`,
             method: 'POST',
             body: {
-              email: userOne.email,
-              password: userOne.password,
+              email: userTwo.email,
+              password: userTwo.password,
             },
             failOnStatusCode: false,
           }).then((response) => {
@@ -570,8 +564,16 @@ describe('Eshop Clone', () => {
             expect(product.is_featured).to.be.eq(true);
           });
 
-          expect(response.body.length).to.be.eq(limit);
+          expect(response.body).to.have.length.of.at.most(limit);
         });
+      });
+    });
+  });
+
+  context('Orders', () => {
+    context('API', () => {
+      it('Create Order', () => {
+        //
       });
     });
   });

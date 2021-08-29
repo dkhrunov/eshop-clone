@@ -1,14 +1,17 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ProductApiModule } from '@esc/product/api';
+import { OrderApiModule } from '@esc/order/api';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoryEntity, ProductEntity } from '@esc/product/models';
 import { UserEntity } from '@esc/user/models';
 import { AuthMiddleware, UserApiModule } from '@esc/user/api';
+import { OrderEntity, OrderItemEntity } from '@esc/order/models';
 
 @Module({
   imports: [
     ProductApiModule,
     UserApiModule,
+    OrderApiModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: '192.168.49.2',
@@ -16,7 +19,13 @@ import { AuthMiddleware, UserApiModule } from '@esc/user/api';
       username: 'postgres',
       password: '123456',
       database: 'eshop',
-      entities: [ProductEntity, CategoryEntity, UserEntity],
+      entities: [
+        ProductEntity,
+        CategoryEntity,
+        UserEntity,
+        OrderEntity,
+        OrderItemEntity,
+      ],
       autoLoadEntities: true,
       synchronize: true,
     }),

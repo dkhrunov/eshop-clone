@@ -64,6 +64,9 @@
     "shared-util-helpers": {
       "tags": ["domain:shared", "type:util"]
     },
+    "shared-util-models": {
+      "tags": ["domain:shared", "type:util"]
+    },
     "shop": {
       "tags": []
     },

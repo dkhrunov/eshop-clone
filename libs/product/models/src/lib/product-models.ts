@@ -19,13 +19,11 @@ import {
   Max,
   Min,
 } from 'class-validator';
+import { CoreEntity } from '@esc/shared/util-models';
 
-@Entity()
+@Entity('product')
 @Check(`"countInStock" > 0 AND "countInStock" < 255 `)
-export class ProductEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
+export class ProductEntity extends CoreEntity {
   @Column({ length: 20 })
   name!: string;
 
@@ -52,7 +50,7 @@ export class ProductEntity {
   category!: string;
 
   @Column()
-  count_in_stock!: number;
+  countInStock!: number;
 
   @Column({ default: 0 })
   rating!: number;
@@ -62,9 +60,6 @@ export class ProductEntity {
 
   @Column({ type: 'boolean' })
   is_featured!: boolean;
-
-  @CreateDateColumn()
-  date_created!: Date;
 }
 
 export type ProductEntityWithCategory = ProductEntity & {
@@ -101,7 +96,7 @@ export class CreateProductDto {
 
   @IsNotEmpty()
   @IsNumber()
-  count_in_stock?: number;
+  countInStock?: number;
 
   @IsNotEmpty()
   @IsUUID()
@@ -151,7 +146,7 @@ export class UpdateProductDto {
 
   @IsOptional()
   @IsNumber()
-  count_in_stock?: number;
+  countInStock?: number;
 
   @IsOptional()
   @IsUUID()
@@ -173,11 +168,8 @@ export class UpdateProductDto {
   is_featured?: boolean;
 }
 
-@Entity()
-export class CategoryEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
+@Entity('category')
+export class CategoryEntity extends CoreEntity {
   @Column({ unique: true })
   name!: string;
 

@@ -1,4 +1,4 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity } from 'typeorm';
 import {
   IsBoolean,
   IsEmail,
@@ -11,12 +11,10 @@ import {
 import { hash } from 'bcrypt';
 import { Request } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
+import { CoreEntity } from '@esc/shared/util-models';
 
-@Entity()
-export class UserEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
+@Entity('user')
+export class UserEntity extends CoreEntity {
   @Column({ length: 40 })
   name!: string;
 
