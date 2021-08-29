@@ -1,11 +1,10 @@
-import { environment } from '../../../../environments/environment';
 import {
   generateProduct,
   generateCategory,
   generateUser,
   generateNonExistentUUID,
+  pickRandomCategories,
 } from '@esc/shared/util-helpers';
-import { CategoryEntity } from '@esc/product/models';
 import { Chance as generateRandom } from 'chance';
 import {
   deleteUserOnServer,
@@ -169,17 +168,21 @@ describe('Eshop Clone', () => {
       });
 
       it('Restrict unauthorized access', () => {
+        const newUser = generateUser();
+
         getAllUsersFromServer('TOKEN NOT EXIST')
           .its('body.message')
           .should('equal', 'Unauthorized');
 
-        loginUserOnServer(userOne.email, userOne.password).then(
-          ({ body: { token } }) => {
-            getAllUsersFromServer(token)
-              .its('body')
-              .should('have.length.above', 0);
-          }
-        );
+        registerUserOnServer(newUser).then(() => {
+          loginUserOnServer(newUser.email, newUser.password).then(
+            ({ body: { token } }) => {
+              getAllUsersFromServer(token)
+                .its('body')
+                .should('have.length.above', 0);
+            }
+          );
+        });
       });
     });
   });
@@ -296,23 +299,9 @@ describe('Eshop Clone', () => {
         });
       });
       it('Get Products with Category', () => {
-        const allCategoriesMap = new Map<string, string>();
-        let allCategoriesNames: string;
-
         getAllCategoriesFromServer().then(({ body: categories }) => {
-          generateRandom()
-            .pickset<CategoryEntity>(
-              categories,
-              generateRandom().integer({
-                min: 1,
-                max: 3,
-              })
-            )
-            .forEach(({ id, name }: CategoryEntity) => {
-              allCategoriesMap.set(id, name);
-            });
-
-          allCategoriesNames = [...allCategoriesMap.values()].join(',');
+          const { allCategoriesMap, allCategoriesNames } =
+            pickRandomCategories(categories);
 
           getProductsWithCategory(allCategoriesNames).then(
             ({ status, body: products }) => {
@@ -358,7 +347,7 @@ describe('Eshop Clone', () => {
     });
   });
 
-  context.skip('Orders', () => {
+  context('Orders', () => {
     context('API', () => {
       it('Create Order', () => {
         //

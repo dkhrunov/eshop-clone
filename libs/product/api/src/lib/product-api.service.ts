@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CountResponse, ErrorMessages } from '@esc/shared/util-models';
 
 @Injectable()
 export class ProductApiService {
@@ -25,11 +26,11 @@ export class ProductApiService {
     if (categories) {
       const categoriesNames = categories.split(',');
 
-      const foundCategoriesIds = (await this.categoryRepository.find())
-        .filter((category: CategoryEntity) =>
-          categoriesNames.includes(category.name)
-        )
-        .map((category: CategoryEntity) => category.id);
+      const allCategories = await this.categoryRepository.find();
+
+      const foundCategoriesIds = allCategories
+        .filter(({ name }: CategoryEntity) => categoriesNames.includes(name))
+        .map(({ id }: CategoryEntity) => id);
 
       return this.productRepository.find({
         relations: ['category'],
@@ -42,12 +43,12 @@ export class ProductApiService {
     });
   }
 
-  async getProductCount(): Promise<{ product_count: number }> {
+  async getProductCount(): Promise<CountResponse> {
     const [, product_count] = await this.productRepository.findAndCount();
     return { product_count };
   }
 
-  async getFeaturedProducts(limit: number): Promise<ProductEntity[]> {
+  async getFeaturedProducts(limit?: number): Promise<ProductEntity[]> {
     const query = this.productRepository
       .createQueryBuilder('featured_products')
       .where('is_featured = true');
@@ -77,7 +78,7 @@ export class ProductApiService {
     const category = await this.categoryRepository.findOne(dto.category);
 
     if (!category) {
-      throw new NotFoundException('Category not found');
+      throw new NotFoundException(ErrorMessages.CATEGORY_NOT_FOUND);
     }
 
     const product = this.productRepository.create(dto);
@@ -85,8 +86,7 @@ export class ProductApiService {
     product.category = category.id;
 
     try {
-      const savedProduct = await this.productRepository.save(product);
-      return savedProduct;
+      return await this.productRepository.save(product);
     } catch (error) {
       throw new InternalServerErrorException(error);
     }

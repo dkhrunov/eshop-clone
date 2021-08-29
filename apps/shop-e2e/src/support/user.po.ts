@@ -4,6 +4,7 @@ import { environment } from '../../../../environments/environment';
 const baseUrlUsers = `${environment.baseUrlApi}/users`;
 
 export const registerUserOnServer = (user: RegisterUserDto) => {
+  cy.log('Register user');
   return cy.request<UserResponse>({
     url: `${baseUrlUsers}`,
     method: 'POST',
@@ -15,6 +16,7 @@ export const registerUserOnServer = (user: RegisterUserDto) => {
 };
 
 export const loginUserOnServer = (email: string, password: string) => {
+  cy.log('Login user');
   return cy.request({
     url: `${baseUrlUsers}/login`,
     method: 'POST',
@@ -27,6 +29,7 @@ export const loginUserOnServer = (email: string, password: string) => {
 };
 
 export const deleteUserOnServer = (id: string, token: string) => {
+  cy.log('Delete user');
   return cy.request({
     url: `${baseUrlUsers}/${id}`,
     method: 'DELETE',
@@ -38,6 +41,7 @@ export const deleteUserOnServer = (id: string, token: string) => {
 };
 
 export const getUserFromServer = (id: string, token: string) => {
+  cy.log('Get user from server');
   return cy.request({
     url: `${baseUrlUsers}/${id}`,
     method: 'GET',
@@ -49,6 +53,7 @@ export const getUserFromServer = (id: string, token: string) => {
 };
 
 export const getAllUsersFromServer = (token: string) => {
+  cy.log('Get all users');
   return cy.request<UserEntity[]>({
     url: `${baseUrlUsers}`,
     method: 'GET',
@@ -60,6 +65,7 @@ export const getAllUsersFromServer = (token: string) => {
 };
 
 export const getUserCount = (token: string) => {
+  cy.log('Get users count');
   return cy.request({
     url: `${baseUrlUsers}/count`,
     method: 'GET',
@@ -75,6 +81,8 @@ export const updateUserOnServer = (
   user: Partial<UserEntity>,
   token: string
 ) => {
+  cy.log('Update user on server');
+
   return cy.request<UserResponse>({
     url: `${baseUrlUsers}/${id}`,
     method: 'PUT',

@@ -18,6 +18,7 @@ import {
   UpdateProductDto,
 } from '@esc/product/models';
 import { CategoryService } from './category-api.service';
+import { CountResponse } from '@esc/shared/util-models';
 
 @Controller('')
 export class ProductApiController {
@@ -34,12 +35,14 @@ export class ProductApiController {
   }
 
   @Get('products/count')
-  getProductsCount(): Promise<{ product_count: number }> {
+  getProductsCount(): Promise<CountResponse> {
     return this.productApiService.getProductCount();
   }
 
   @Get('products/featured/:limit?')
-  getFeaturedProducts(@Param('limit') limit: number): Promise<ProductEntity[]> {
+  getFeaturedProducts(
+    @Param('limit') limit?: number
+  ): Promise<ProductEntity[]> {
     return this.productApiService.getFeaturedProducts(limit);
   }
 

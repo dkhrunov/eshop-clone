@@ -1,4 +1,5 @@
 import {
+  CategoryEntity,
   CreateCategoryDto,
   CreateProductDto,
   ProductEntity,
@@ -12,7 +13,8 @@ const baseUrlProducts = `${environment.baseUrlApi}/products`;
 const baseUrlCategories = `${environment.baseUrlApi}/categories`;
 
 export const getAllCategoriesFromServer = () => {
-  return cy.request({
+  cy.log('Get all categories');
+  return cy.request<CategoryEntity[]>({
     url: baseUrlCategories,
     method: 'GET',
     failOnStatusCode: false,
@@ -23,6 +25,7 @@ export const createCategoryOnServer = (
   category: CreateCategoryDto,
   token: string
 ) => {
+  cy.log('Create category');
   return cy.request({
     url: baseUrlCategories,
     method: 'POST',
@@ -37,6 +40,7 @@ export const createCategoryOnServer = (
 };
 
 export const getCategoryFromServer = (id: string) => {
+  cy.log('Get category');
   return cy.request({
     url: `${baseUrlCategories}/${id}`,
     method: 'GET',
@@ -49,6 +53,7 @@ export const updateCategoryOnServer = (
   category: UpdateCategoryDto,
   token: string
 ) => {
+  cy.log('Update category');
   return cy.request({
     url: `${baseUrlCategories}/${id}`,
     method: 'PUT',
@@ -67,6 +72,7 @@ export const createProductOnServer = (
   category: string,
   token: string
 ) => {
+  cy.log('Create product');
   return cy.request({
     url: baseUrlProducts,
     method: 'POST',
@@ -82,6 +88,7 @@ export const createProductOnServer = (
 };
 
 export const getProductFromServer = (id: string) => {
+  cy.log('Get product');
   return cy.request({
     url: `${baseUrlProducts}/${id}`,
     method: 'GET',
@@ -94,6 +101,7 @@ export const updateProductOnServer = (
   product: UpdateProductDto,
   token: string
 ) => {
+  cy.log('Update product');
   return cy.request({
     url: `${baseUrlProducts}/${id}`,
     method: 'PUT',
@@ -108,6 +116,7 @@ export const updateProductOnServer = (
 };
 
 export const deleteProductOnServer = (id: string, token: string) => {
+  cy.log('Delete product');
   return cy.request({
     url: `${baseUrlProducts}/${id}`,
     method: 'DELETE',
@@ -119,6 +128,7 @@ export const deleteProductOnServer = (id: string, token: string) => {
 };
 
 export const getAllProductsFromServer = () => {
+  cy.log('Get all products');
   return cy.request({
     url: baseUrlProducts,
     method: 'GET',
@@ -127,6 +137,7 @@ export const getAllProductsFromServer = () => {
 };
 
 export const getProductsWithCategory = (categories: string) => {
+  cy.log('Get products with category');
   return cy.request<ProductEntityWithCategory[]>({
     url: `${baseUrlProducts}?categories=${categories}`,
     method: 'GET',
@@ -135,6 +146,7 @@ export const getProductsWithCategory = (categories: string) => {
 };
 
 export const getProductsCount = () => {
+  cy.log('Get products count');
   return cy.request({
     url: `${baseUrlProducts}/count`,
     method: 'GET',
@@ -143,6 +155,7 @@ export const getProductsCount = () => {
 };
 
 export const getFeaturedProducts = (limit?: number) => {
+  cy.log('Get featured products');
   return cy.request<ProductEntity[]>({
     url: `${baseUrlProducts}/featured/${limit ? limit : ''}`,
     method: 'GET',

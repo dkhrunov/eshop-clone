@@ -18,6 +18,7 @@ import {
   LoginResponse,
 } from '@esc/user/models';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { CountResponse } from '@esc/shared/util-models';
 
 @Controller('users')
 export class UserApiController {
@@ -34,7 +35,7 @@ export class UserApiController {
   }
 
   @Get('count')
-  getUsersCount(): Promise<{ user_count: number }> {
+  getUsersCount(): Promise<CountResponse> {
     return this.userApiService.getUserCount();
   }
 

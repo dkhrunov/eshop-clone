@@ -1,6 +1,6 @@
 import { Chance as generateRandom } from 'chance';
 import { sub } from 'date-fns';
-import { ProductEntity } from '@esc/product/models';
+import { CategoryEntity, ProductEntity } from '@esc/product/models';
 import { OrderEntity, OrderItemEntity } from '@esc/order/models';
 
 const categoriesMap = new Map([
@@ -94,4 +94,24 @@ export const generateOrderItem = (
   }
 
   return Object.fromEntries(orderItem);
+};
+
+export const pickRandomCategories = (categories: CategoryEntity[]) => {
+  const allCategoriesMap = new Map<string, string>();
+
+  generateRandom()
+    .pickset<CategoryEntity>(
+      categories,
+      generateRandom().integer({
+        min: 1,
+        max: 3,
+      })
+    )
+    .forEach(({ id, name }: CategoryEntity) => {
+      allCategoriesMap.set(id, name);
+    });
+
+  const allCategoriesNames = [...allCategoriesMap.values()].join(',');
+
+  return { allCategoriesMap, allCategoriesNames };
 };

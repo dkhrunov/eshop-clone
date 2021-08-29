@@ -18,6 +18,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hash, compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { CountResponse, ErrorMessages } from '@esc/shared/util-models';
 
 @Injectable()
 export class UserApiService {
@@ -33,7 +34,7 @@ export class UserApiService {
     });
 
     if (isUserExist) {
-      throw new ConflictException('User already exist');
+      throw new ConflictException(ErrorMessages.USER_ALREADY_EXIST);
     }
 
     const newUser = this.userRepository.create(dto);
@@ -109,7 +110,7 @@ export class UserApiService {
     });
 
     if (!user || !(await this.isPasswordValid(password, user.password))) {
-      throw new BadRequestException('Invalid credentials');
+      throw new BadRequestException(ErrorMessages.INVALID_CREDENTIALS);
     }
 
     const payload: JwtUserPayload = { userId: user.id, isAdmin: user.is_admin };
@@ -122,7 +123,7 @@ export class UserApiService {
     };
   }
 
-  async getUserCount(): Promise<{ user_count: number }> {
+  async getUserCount(): Promise<CountResponse> {
     const [, user_count] = await this.userRepository.findAndCount();
     return { user_count };
   }
