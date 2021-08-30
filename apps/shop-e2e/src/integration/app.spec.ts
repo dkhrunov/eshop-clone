@@ -5,6 +5,7 @@ import {
   generateNonExistentUUID,
   pickRandomCategories,
   generateOrderItems,
+  generateOrder,
 } from '@esc/shared/util-helpers';
 import { Chance as generateRandom } from 'chance';
 import {
@@ -32,49 +33,58 @@ import {
 } from '../support/product.po';
 import { createOrderOnServer } from '../support/order.po';
 import { ProductEntity } from '@esc/product/models';
+import { OrderItem } from '@esc/order/models';
+import { UserFromServer } from '@esc/user/models';
 
 describe('Eshop Clone', () => {
-  const userOne = generateUser();
-  let userOneId: string;
-  let userOneToken: string;
+  const randomNumberOfProducts = generateRandom().integer({ min: 1, max: 3 });
+  const generatedProducts = Array.from({
+    length: randomNumberOfProducts,
+  }).map(() => generateProduct());
 
-  const productOne = generateProduct();
-  let productOneWithId: ProductEntity;
+  const createdProductsOnServer: ProductEntity[] = [];
 
-  const productTwo = generateProduct();
-  let productTwoWithId: ProductEntity;
+  const randomNumberOfUsers = generateRandom().integer({ min: 2, max: 3 });
+  const generatedUsers = Array.from({
+    length: randomNumberOfUsers,
+  }).map(() => generateUser());
+
+  const createdUsersOnServer: UserFromServer[] = [];
+  const userTokensMap = new Map<string, string>();
 
   const category = generateCategory();
   let createdCategoryId: string;
 
+  let orderItems: OrderItem[];
+
   before(() => {
     cy.visit('/');
 
-    registerUserOnServer(userOne).then(({ body }) => {
-      userOneId = body.user.id;
+    for (const user of generatedUsers) {
+      registerUserOnServer(user).then(({ body: { user: newUser } }) => {
+        createdUsersOnServer.push(newUser);
 
-      loginUserOnServer(userOne.email, userOne.password).then(({ body }) => {
-        userOneToken = body.token;
+        loginUserOnServer(user.email, user.password).then(
+          ({ body: { token } }) => {
+            userTokensMap.set(newUser.id, token);
 
-        createCategoryOnServer({ ...category }, userOneToken).then(
-          ({ body: { id } }) => {
-            createdCategoryId = id;
+            createCategoryOnServer({ ...category }, token).then(
+              ({ body: { id: categoryId } }) => {
+                createdCategoryId = categoryId;
 
-            createProductOnServer(productOne, id, userOneToken).then(
-              ({ body: product }) => {
-                productOneWithId = product;
-              }
-            );
-
-            createProductOnServer(productOne, id, userOneToken).then(
-              ({ body: product }) => {
-                productTwoWithId = product;
+                for (const product of generatedProducts) {
+                  createProductOnServer(product, categoryId, token).then(
+                    ({ body: product }) => {
+                      createdProductsOnServer.push(product);
+                    }
+                  );
+                }
               }
             );
           }
         );
       });
-    });
+    }
   });
 
   context('Users', () => {
@@ -125,7 +135,10 @@ describe('Eshop Clone', () => {
       });
 
       it('List Users', () => {
-        getAllUsersFromServer(userOneToken)
+        const [{ id }] = createdUsersOnServer;
+        const token = userTokensMap.get(id) as string;
+
+        getAllUsersFromServer(token)
           .its('body')
           .each((user) => {
             expect(user).to.include.keys(['name', 'id', 'email']);
@@ -133,68 +146,62 @@ describe('Eshop Clone', () => {
       });
 
       it('Get User', () => {
-        getUserFromServer(userOneId, userOneToken).then(({ body }) => {
-          expect(body.id).to.equal(userOneId);
+        const [{ id }] = createdUsersOnServer;
+        const token = userTokensMap.get(id) as string;
+
+        getUserFromServer(id, token).then(({ body: { id: foundId } }) => {
+          expect(foundId).to.equal(id);
         });
       });
 
       it('Get User Count', () => {
-        getAllUsersFromServer(userOneToken).then(({ body }) => {
+        const [{ id }] = createdUsersOnServer;
+        const token = userTokensMap.get(id) as string;
+
+        getAllUsersFromServer(token).then(({ body }) => {
           expect(body.length).to.above(0);
 
-          getUserCount(userOneToken).then(
-            ({ status, body: { user_count } }) => {
-              expect(status).to.be.eq(200);
-              expect(user_count).to.be.eq(user_count);
-            }
-          );
-        });
-      });
-
-      it('Update User', () => {
-        getAllUsersFromServer(userOneToken).then(({ body: [user] }) => {
-          const userFromServer = user.id;
-          const userOneName = user.name;
-
-          updateUserOnServer(
-            userFromServer,
-            {
-              name: 'Updated Name',
-              password: 'Updated Password',
-            },
-            userOneToken
-          ).then(({ body: { user } }) => {
-            expect(user.name).to.equal('Updated Name');
-
-            updateUserOnServer(
-              userFromServer,
-              {
-                name: userOneName,
-              },
-              userOneToken
-            )
-              .its('body.user.name')
-              .should('eq', userOneName);
+          getUserCount(token).then(({ status, body: { user_count } }) => {
+            expect(status).to.be.eq(200);
+            expect(user_count).to.be.eq(user_count);
           });
         });
       });
 
+      it('Update User', () => {
+        const [{ id, name }] = createdUsersOnServer;
+        const token = userTokensMap.get(id) as string;
+
+        updateUserOnServer(
+          id,
+          {
+            name: 'Updated Name',
+          },
+          token
+        ).then(({ body: { user } }) => {
+          expect(user.name).to.equal('Updated Name');
+
+          updateUserOnServer(
+            id,
+            {
+              name,
+            },
+            token
+          )
+            .its('body.user.name')
+            .should('eq', name);
+        });
+      });
+
       it('Restrict unauthorized access', () => {
-        const newUser = generateUser();
+        const [{ id }] = createdUsersOnServer;
+        const token = userTokensMap.get(id) as string;
 
         getAllUsersFromServer('TOKEN NOT EXIST')
           .its('body.message')
           .should('equal', 'Unauthorized');
 
-        registerUserOnServer(newUser).then(() => {
-          loginUserOnServer(newUser.email, newUser.password).then(
-            ({ body: { token } }) => {
-              getAllUsersFromServer(token)
-                .its('body')
-                .should('have.length.above', 0);
-            }
-          );
-        });
+        getAllUsersFromServer(token).its('body').should('have.length.above', 0);
       });
     });
   });
@@ -207,7 +214,10 @@ describe('Eshop Clone', () => {
         });
       });
       it('Create Category', () => {
-        createCategoryOnServer({ ...category }, userOneToken)
+        const [{ id }] = createdUsersOnServer;
+        const token = userTokensMap.get(id) as string;
+
+        createCategoryOnServer({ ...category }, token)
           .its('body')
           .should('include.all.keys', category);
       });
@@ -221,15 +231,18 @@ describe('Eshop Clone', () => {
       });
 
       it('Update Category', () => {
+        const [{ id }] = createdUsersOnServer;
+        const token = userTokensMap.get(id) as string;
+
         getAllCategoriesFromServer().then(({ body: [category] }) => {
           updateCategoryOnServer(
             category.id,
             { ...category, name: 'Updated Category' },
-            userOneToken
+            token
           ).then(({ body: { name } }) => {
             expect(name).to.be.eq('Updated Category');
 
-            updateCategoryOnServer(category.id, { ...category }, userOneToken)
+            updateCategoryOnServer(category.id, { ...category }, token)
               .its('body')
               .should('deep.equal', category);
           });
@@ -237,66 +250,79 @@ describe('Eshop Clone', () => {
       });
 
       it('Create Product', () => {
+        const [product] = generatedProducts;
+        const [{ id }] = createdUsersOnServer;
+        const token = userTokensMap.get(id) as string;
+
         getAllCategoriesFromServer().then(({ body: [category] }) => {
-          createProductOnServer(productOne, category.id, userOneToken)
+          createProductOnServer(product, category.id, token)
             .its('body')
-            .should('deep.include', productOne);
+            .should('deep.include', product);
         });
       });
 
       it('Get Product By Id', () => {
+        const [product] = generatedProducts;
+        const [{ id }] = createdUsersOnServer;
+        const token = userTokensMap.get(id) as string;
+
         getAllCategoriesFromServer().then(({ body: [category] }) => {
-          createProductOnServer(productOne, category.id, userOneToken).then(
+          createProductOnServer(product, category.id, token).then(
             ({ body: newProduct }) => {
               getProductFromServer(newProduct.id)
                 .its('body')
-                .should('deep.include', productOne);
+                .should('deep.include', product);
             }
           );
         });
       });
 
       it('Update Product', () => {
-        updateProductOnServer(
-          productOneWithId.id,
-          { name: 'Updated Product Name' },
-          userOneToken
-        ).then(({ body: { name } }) => {
-          expect(name).to.be.eq('Updated Product Name');
+        const [{ id, name: oldName }] = createdProductsOnServer;
+        const [{ id: userId }] = createdUsersOnServer;
+        const token = userTokensMap.get(userId) as string;
 
-          updateProductOnServer(
-            productOneWithId.id,
-            { name: productOne.name },
-            userOneToken
-          )
-            .its('body.name')
-            .should('eq', productOne.name);
-        });
+        updateProductOnServer(id, { name: 'Updated Product Name' }, token).then(
+          ({ body: { name } }) => {
+            expect(name).to.be.eq('Updated Product Name');
+
+            updateProductOnServer(id, { name: oldName }, token)
+              .its('body.name')
+              .should('eq', oldName);
+          }
+        );
       });
 
       it('Delete Product', () => {
+        const [{ id: userId }] = createdUsersOnServer;
+        const token = userTokensMap.get(userId) as string;
         const productForDelete = generateProduct();
 
-        createProductOnServer(
-          productForDelete,
-          createdCategoryId,
-          userOneToken
-        ).then(({ body: { id } }) => {
-          deleteProductOnServer(id, userOneToken).then(({ status }) => {
-            expect(status).to.be.eq(200);
-          });
-        });
+        createProductOnServer(productForDelete, createdCategoryId, token).then(
+          ({ body: { id } }) => {
+            deleteProductOnServer(id, token).then(({ status }) => {
+              expect(status).to.be.eq(200);
+            });
+          }
+        );
       });
       it('Delete Product Validate Id', () => {
-        deleteProductOnServer(generateNonExistentUUID(), userOneToken)
+        const [{ id: userId }] = createdUsersOnServer;
+        const token = userTokensMap.get(userId) as string;
+
+        deleteProductOnServer(generateNonExistentUUID(), token)
           .its('status')
           .should('eq', 404);
       });
 
       it('Create Product Validate Category', () => {
+        const [product] = generatedProducts;
+        const [{ id: userId }] = createdUsersOnServer;
+        const token = userTokensMap.get(userId) as string;
+
         const nonExistentCategoryId = generateNonExistentUUID();
 
-        createProductOnServer(productOne, nonExistentCategoryId, userOneToken)
+        createProductOnServer(product, nonExistentCategoryId, token)
           .its('body')
           .should('deep.equal', {
             error: 'Not Found',
@@ -359,10 +385,11 @@ describe('Eshop Clone', () => {
     });
   });
 
-  context.only('Orders', () => {
+  context('Orders', () => {
     context('API', () => {
-      it('Create Order', () => {
-        console.log(generateOrderItems([productOneWithId, productTwoWithId]));
+      it.only('Create Order', () => {
+        orderItems = generateOrderItems(createdProductsOnServer);
+        console.log(generateOrder(orderItems));
       });
     });
   });

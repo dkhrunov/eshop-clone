@@ -71,10 +71,9 @@ export const generateUser = () => {
   };
 };
 
-export const generateOrder = (
-  orderItems: OrderItemEntity[]
-): Partial<OrderEntity> => {
+export const generateOrder = (orderItems: any) => {
   return {
+    orderItems,
     shippingAddressOne: generateRandom().address(),
     shippingAddressTwo: generateRandom().address(),
     city: generateRandom().city(),
