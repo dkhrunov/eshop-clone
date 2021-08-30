@@ -4,6 +4,7 @@ import {
   generateUser,
   generateNonExistentUUID,
   pickRandomCategories,
+  generateOrderItems,
 } from '@esc/shared/util-helpers';
 import { Chance as generateRandom } from 'chance';
 import {
@@ -29,14 +30,19 @@ import {
   updateCategoryOnServer,
   updateProductOnServer,
 } from '../support/product.po';
+import { createOrderOnServer } from '../support/order.po';
+import { ProductEntity } from '@esc/product/models';
 
 describe('Eshop Clone', () => {
   const userOne = generateUser();
   let userOneId: string;
   let userOneToken: string;
 
-  const product = generateProduct();
-  let createdProductId: string;
+  const productOne = generateProduct();
+  let productOneWithId: ProductEntity;
+
+  const productTwo = generateProduct();
+  let productTwoWithId: ProductEntity;
 
   const category = generateCategory();
   let createdCategoryId: string;
@@ -54,9 +60,15 @@ describe('Eshop Clone', () => {
           ({ body: { id } }) => {
             createdCategoryId = id;
 
-            createProductOnServer(product, id, userOneToken).then(
-              ({ body: { id } }) => {
-                createdProductId = id;
+            createProductOnServer(productOne, id, userOneToken).then(
+              ({ body: product }) => {
+                productOneWithId = product;
+              }
+            );
+
+            createProductOnServer(productOne, id, userOneToken).then(
+              ({ body: product }) => {
+                productTwoWithId = product;
               }
             );
           }
@@ -226,19 +238,19 @@ describe('Eshop Clone', () => {
 
       it('Create Product', () => {
         getAllCategoriesFromServer().then(({ body: [category] }) => {
-          createProductOnServer(product, category.id, userOneToken)
+          createProductOnServer(productOne, category.id, userOneToken)
             .its('body')
-            .should('deep.include', product);
+            .should('deep.include', productOne);
         });
       });
 
       it('Get Product By Id', () => {
         getAllCategoriesFromServer().then(({ body: [category] }) => {
-          createProductOnServer(product, category.id, userOneToken).then(
+          createProductOnServer(productOne, category.id, userOneToken).then(
             ({ body: newProduct }) => {
               getProductFromServer(newProduct.id)
                 .its('body')
-                .should('deep.include', product);
+                .should('deep.include', productOne);
             }
           );
         });
@@ -246,19 +258,19 @@ describe('Eshop Clone', () => {
 
       it('Update Product', () => {
         updateProductOnServer(
-          createdProductId,
+          productOneWithId.id,
           { name: 'Updated Product Name' },
           userOneToken
         ).then(({ body: { name } }) => {
           expect(name).to.be.eq('Updated Product Name');
 
           updateProductOnServer(
-            createdProductId,
-            { name: product.name },
+            productOneWithId.id,
+            { name: productOne.name },
             userOneToken
           )
             .its('body.name')
-            .should('eq', product.name);
+            .should('eq', productOne.name);
         });
       });
 
@@ -284,7 +296,7 @@ describe('Eshop Clone', () => {
       it('Create Product Validate Category', () => {
         const nonExistentCategoryId = generateNonExistentUUID();
 
-        createProductOnServer(product, nonExistentCategoryId, userOneToken)
+        createProductOnServer(productOne, nonExistentCategoryId, userOneToken)
           .its('body')
           .should('deep.equal', {
             error: 'Not Found',
@@ -347,10 +359,10 @@ describe('Eshop Clone', () => {
     });
   });
 
-  context('Orders', () => {
+  context.only('Orders', () => {
     context('API', () => {
       it('Create Order', () => {
-        //
+        console.log(generateOrderItems([productOneWithId, productTwoWithId]));
       });
     });
   });

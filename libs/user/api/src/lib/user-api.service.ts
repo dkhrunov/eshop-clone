@@ -6,6 +6,7 @@ import {
   LoginUserDto,
   LoginResponse,
   JwtUserPayload,
+  UserFromServer,
 } from '@esc/user/models';
 import {
   BadRequestException,
@@ -42,11 +43,7 @@ export class UserApiService {
     try {
       const { password, ...user } = await this.userRepository.save(newUser);
 
-      return {
-        user: {
-          ...user,
-        },
-      };
+      return this.createUserResponse(user);
     } catch (error) {
       throw new InternalServerErrorException();
     }
@@ -78,10 +75,14 @@ export class UserApiService {
 
     let newPassword;
 
-    if (dto.password) {
-      newPassword = await hash(dto.password, 10);
+    if (!isUserExist) {
+      throw new NotFoundException();
     } else {
-      newPassword = isUserExist?.password;
+      if (dto.password) {
+        newPassword = await hash(dto.password, 10);
+      } else {
+        newPassword = isUserExist.password;
+      }
     }
 
     const result = await this.userRepository.update(id, {
@@ -91,11 +92,7 @@ export class UserApiService {
 
     if (result.affected) {
       const updatedUser = (await this.userRepository.findOne(id)) as UserEntity;
-      return {
-        user: {
-          ...updatedUser,
-        },
-      };
+      return this.createUserResponse(updatedUser);
     } else {
       return result;
     }
@@ -143,5 +140,13 @@ export class UserApiService {
     hash: string
   ): Promise<boolean> {
     return compare(password, hash);
+  }
+
+  private createUserResponse(user: UserFromServer): UserResponse {
+    return {
+      user: {
+        ...user,
+      },
+    };
   }
 }

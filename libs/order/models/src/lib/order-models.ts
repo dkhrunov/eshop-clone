@@ -63,3 +63,5 @@ export class OrderItemEntity extends CoreEntity {
 export class CreateOrderDto {
   //
 }
+
+export type OrderItem = Omit<OrderItemEntity, 'id' | 'dateCreated'>;

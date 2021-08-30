@@ -73,7 +73,7 @@ export const createProductOnServer = (
   token: string
 ) => {
   cy.log('Create product');
-  return cy.request({
+  return cy.request<ProductEntity>({
     url: baseUrlProducts,
     method: 'POST',
     body: {

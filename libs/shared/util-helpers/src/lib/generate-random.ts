@@ -1,7 +1,7 @@
 import { Chance as generateRandom } from 'chance';
 import { sub } from 'date-fns';
 import { CategoryEntity, ProductEntity } from '@esc/product/models';
-import { OrderEntity, OrderItemEntity } from '@esc/order/models';
+import { OrderEntity, OrderItem, OrderItemEntity } from '@esc/order/models';
 
 const categoriesMap = new Map([
   ['Computers', 'icon-computer'],
@@ -84,16 +84,17 @@ export const generateOrder = (
   };
 };
 
-export const generateOrderItem = (
-  products: ProductEntity[]
-): OrderItemEntity => {
+export const generateOrderItems = (products: ProductEntity[]): OrderItem[] => {
   const orderItem = new Map();
 
   for (const product of products) {
-    orderItem.set(product.id, product.price);
+    orderItem.set(product.id, generateRandom().integer({ min: 1, max: 10 }));
   }
 
-  return Object.fromEntries(orderItem);
+  return Array.from(orderItem).map(([product, quantity]) => ({
+    product,
+    quantity,
+  }));
 };
 
 export const pickRandomCategories = (categories: CategoryEntity[]) => {
