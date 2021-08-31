@@ -45,7 +45,7 @@ export class ProductEntity extends CoreEntity {
   @Column()
   price!: number;
 
-  @ManyToOne(() => CategoryEntity, (category) => category.id)
+  @ManyToOne(() => CategoryEntity, (category) => category.id, { eager: true })
   @JoinColumn({ name: 'category_id' })
   category!: string;
 

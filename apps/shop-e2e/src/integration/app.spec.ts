@@ -31,9 +31,18 @@ import {
   updateCategoryOnServer,
   updateProductOnServer,
 } from '../support/product.po';
-import { createOrderOnServer } from '../support/order.po';
+import {
+  createOrderOnServer,
+  deleteOrderOnServer,
+  getAllOrdersFromServer,
+  getOrderCount,
+  getOrderFromServer,
+  getTotalSales,
+  getUserOrders,
+  updateOrderStatus,
+} from '../support/order.po';
 import { ProductEntity } from '@esc/product/models';
-import { OrderItem } from '@esc/order/models';
+import { OrderEntity, OrderItem } from '@esc/order/models';
 import { UserFromServer } from '@esc/user/models';
 
 describe('Eshop Clone', () => {
@@ -57,6 +66,10 @@ describe('Eshop Clone', () => {
 
   let orderItems: OrderItem[];
 
+  let createdOrderId: string;
+
+  const createdOrdersOnServer: Partial<OrderEntity>[] = [];
+
   before(() => {
     cy.visit('/');
 
@@ -79,6 +92,15 @@ describe('Eshop Clone', () => {
                     }
                   );
                 }
+
+                orderItems = generateOrderItems(createdProductsOnServer);
+                const newOrder = generateOrder(orderItems);
+
+                createOrderOnServer(newOrder, token).then(
+                  ({ body: createdOrder }) => {
+                    createdOrdersOnServer.push(createdOrder);
+                  }
+                );
               }
             );
           }
@@ -109,28 +131,25 @@ describe('Eshop Clone', () => {
       });
 
       it('Delete User', () => {
+        const [{ id }] = createdUsersOnServer;
+        const token = userTokensMap.get(id) as string;
+
         const userForDelete = generateUser();
         userForDelete.name = 'User for delete';
 
         registerUserOnServer(userForDelete).then(({ body: { user } }) => {
-          loginUserOnServer(userForDelete.email, userForDelete.password).then(
-            ({ body: { token } }) => {
-              getUserFromServer(user.id, token)
-                .its('body')
-                .should('deep.include', {
-                  id: user.id,
-                  name: 'User for delete',
-                });
+          getUserFromServer(user.id, token).its('body').should('deep.include', {
+            id: user.id,
+            name: 'User for delete',
+          });
 
-              deleteUserOnServer(user.id, token)
-                .its('body.affected')
-                .should('eq', 1);
+          deleteUserOnServer(user.id, token)
+            .its('body.affected')
+            .should('eq', 1);
 
-              getUserFromServer(user.id, token)
-                .its('body.message')
-                .should('eq', 'Not Found');
-            }
-          );
+          getUserFromServer(user.id, token)
+            .its('body.message')
+            .should('eq', 'Not Found');
         });
       });
 
@@ -387,9 +406,118 @@ describe('Eshop Clone', () => {
 
   context('Orders', () => {
     context('API', () => {
-      it.only('Create Order', () => {
+      it('Create Order', () => {
+        const [{ id: userId }] = createdUsersOnServer;
+        const token = userTokensMap.get(userId) as string;
+
         orderItems = generateOrderItems(createdProductsOnServer);
-        console.log(generateOrder(orderItems));
+        const newOrder = generateOrder(orderItems);
+
+        createOrderOnServer(newOrder, token).then(
+          ({ body: createdOrder, status }) => {
+            expect(createdOrder).to.include.keys(newOrder);
+            expect(status).to.be.eql(201);
+          }
+        );
+      });
+
+      it('List All orders', () => {
+        const [{ id: userId }] = createdUsersOnServer;
+        const token = userTokensMap.get(userId) as string;
+        const [, exampleOrder] = createdOrdersOnServer;
+
+        getAllOrdersFromServer(token).then(({ body: orderList, status }) => {
+          for (const order of orderList) {
+            expect(order).to.include.keys(exampleOrder);
+          }
+          expect(status).to.be.eql(200);
+        });
+      });
+      it('Get order', () => {
+        const [{ id: userId }] = createdUsersOnServer;
+        const token = userTokensMap.get(userId) as string;
+        const [, searchOrder] = createdOrdersOnServer;
+
+        getOrderFromServer(searchOrder.id as string, token).then(
+          ({ body: foundOrder, status }) => {
+            expect(foundOrder).to.include.keys(searchOrder);
+            expect(status).to.be.eql(200);
+          }
+        );
+      });
+      it('Update order status', () => {
+        const [{ id: userId }] = createdUsersOnServer;
+        const token = userTokensMap.get(userId) as string;
+        const [, { id }] = createdOrdersOnServer;
+
+        updateOrderStatus(id as string, 'DELIVERED', token).then(
+          ({ body: { status: orderStatus }, status }) => {
+            expect(orderStatus).to.be.eq('DELIVERED');
+            expect(status).to.be.eql(200);
+          }
+        );
+
+        updateOrderStatus(id as string, 'SHIPPED', token).then(
+          ({ body: { status: orderStatus }, status }) => {
+            expect(orderStatus).to.be.eq('SHIPPED');
+            expect(status).to.be.eql(200);
+          }
+        );
+
+        updateOrderStatus(id as string, 'STATUSNOTEXIST', token).then(
+          ({
+            body: {
+              message: [error],
+            },
+            status,
+          }) => {
+            expect(error).to.be.eql('status must be a valid enum value');
+            expect(status).to.be.eql(400);
+          }
+        );
+      });
+
+      it('Delete Order', () => {
+        const [{ id: userId }] = createdUsersOnServer;
+        const token = userTokensMap.get(userId) as string;
+
+        orderItems = generateOrderItems(createdProductsOnServer);
+        const newOrder = generateOrder(orderItems);
+
+        createOrderOnServer(newOrder, token).then(({ body: { id } }) => {
+          deleteOrderOnServer(id, token).then(({ body: { affected } }) => {
+            expect(affected).to.be.eql(1);
+          });
+        });
+      });
+
+      it('Get Total Sales', () => {
+        const [{ id: userId }] = createdUsersOnServer;
+        const token = userTokensMap.get(userId) as string;
+
+        getTotalSales(token)
+          .its('body.total_sales')
+          .should('be.greaterThan', 0);
+      });
+      it('Get Order Count', () => {
+        const [{ id: userId }] = createdUsersOnServer;
+        const token = userTokensMap.get(userId) as string;
+
+        getAllOrdersFromServer(token).then(({ body: allOrders }) => {
+          getOrderCount(token)
+            .its('body.order_count')
+            .should('eq', allOrders.length);
+        });
+      });
+      it('Get User Orders', () => {
+        const [, { user: userId }] = createdOrdersOnServer;
+        const token = userTokensMap.get(userId as string) as string;
+
+        getUserOrders(userId as string, token).then(({ body: orders }) => {
+          for (const { user } of orders) {
+            expect(user).to.deep.include({ id: userId });
+          }
+        });
       });
     });
   });

@@ -71,7 +71,7 @@ export const generateUser = () => {
   };
 };
 
-export const generateOrder = (orderItems: any) => {
+export const generateOrder = (orderItems: OrderItem[]) => {
   return {
     orderItems,
     shippingAddressOne: generateRandom().address(),
