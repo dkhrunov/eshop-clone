@@ -9,6 +9,8 @@ import {
 } from 'typeorm';
 import {
   IsArray,
+  IsBase64,
+  isBase64,
   IsBoolean,
   IsNotEmpty,
   IsNumber,
@@ -20,6 +22,8 @@ import {
   Min,
 } from 'class-validator';
 import { CoreEntity } from '@esc/shared/util-models';
+import { HasMimeType, IsFile } from 'nestjs-form-data';
+import { Transform } from 'node:stream';
 
 @Entity('product')
 @Check(`"countInStock" > 0 AND "countInStock" < 255 `)

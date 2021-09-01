@@ -44,6 +44,7 @@ import {
 import { ProductEntity } from '@esc/product/models';
 import { OrderEntity, OrderItem } from '@esc/order/models';
 import { UserFromServer } from '@esc/user/models';
+import { environment } from '../../../../environments/environment';
 
 describe('Eshop Clone', () => {
   const randomNumberOfProducts = generateRandom().integer({ min: 1, max: 3 });
@@ -399,6 +400,41 @@ describe('Eshop Clone', () => {
           }
 
           expect(products).to.have.length.of.at.most(limit);
+        });
+      });
+
+      it.only('Upload product image', () => {
+        const [{ id: userId }] = createdUsersOnServer;
+        const token = userTokensMap.get(userId) as string;
+
+        cy.fixture('image').then((image) => {
+          const blob = Cypress.Blob.base64StringToBlob(image);
+          const randomImageName = generateNonExistentUUID();
+          const myHeaders = new Headers({
+            Authorization: `Bearer ${token}`,
+          });
+          const formData = new FormData();
+          formData.append('image', blob, `${randomImageName}.jpeg`);
+
+          fetch(`${environment.baseUrlApi}/uploads`, {
+            method: 'POST',
+            headers: myHeaders,
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then(({ imageUrl }) => {
+              expect(imageUrl).to.be.include(randomImageName);
+
+              fetch(
+                `${environment.baseUrlApi}/uploads/${randomImageName}.jpeg`,
+                {
+                  method: 'GET',
+                  headers: myHeaders,
+                }
+              ).then(({ status }) => {
+                expect(status).to.be.eq(200);
+              });
+            });
         });
       });
     });

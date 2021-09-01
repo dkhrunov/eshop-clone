@@ -1,6 +1,10 @@
 import { Chance as generateRandom } from 'chance';
 import { sub } from 'date-fns';
-import { CategoryEntity, ProductEntity } from '@esc/product/models';
+import {
+  CategoryEntity,
+  CreateProductDto,
+  ProductEntity,
+} from '@esc/product/models';
 import { OrderEntity, OrderItem, OrderItemEntity } from '@esc/order/models';
 
 const categoriesMap = new Map([
@@ -12,7 +16,7 @@ const categoriesMap = new Map([
 
 const newCategoryName = generateRandom().pickone([...categoriesMap.keys()]);
 
-export const generateProduct = () => {
+export const generateProduct = (): CreateProductDto => {
   return {
     name: generateRandom().name(),
     description: generateRandom().sentence(),

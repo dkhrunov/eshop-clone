@@ -4,7 +4,7 @@ import {
   OrderItemEntity,
 } from '@esc/order/models';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Any, DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductEntity } from '@esc/product/models';
 import { CountResponse } from '@esc/shared/util-models';
@@ -28,9 +28,7 @@ export class OrderApiService {
     for (const item of newOrder.orderItems) {
       const product = await this.productRepository.findOne(item.id);
 
-      if (!product) {
-        throw new NotFoundException();
-      }
+      if (!product) throw new NotFoundException();
 
       newOrder.totalPrice += product.price * item.quantity;
 
@@ -51,9 +49,7 @@ export class OrderApiService {
   async getOrderById(id: string): Promise<OrderEntity> {
     const order = await this.orderRepository.findOne(id);
 
-    if (!order) {
-      throw new NotFoundException();
-    }
+    if (!order) throw new NotFoundException();
 
     return order;
   }
@@ -61,23 +57,17 @@ export class OrderApiService {
   async updateOrderStatus(id: string, status: string): Promise<OrderEntity> {
     const order = await this.orderRepository.findOne(id);
 
-    if (!order) {
-      throw new NotFoundException();
-    }
+    if (!order) throw new NotFoundException();
 
     order.status = status;
 
-    const updatedOrder = await this.orderRepository.save(order);
-
-    return updatedOrder;
+    return await this.orderRepository.save(order);
   }
 
   async deleteOrder(id: string): Promise<DeleteResult> {
     const result = await this.orderRepository.delete(id);
 
-    if (!result.affected) {
-      throw new NotFoundException();
-    }
+    if (!result.affected) throw new NotFoundException();
 
     return result;
   }

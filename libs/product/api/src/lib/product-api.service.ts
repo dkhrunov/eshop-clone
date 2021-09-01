@@ -53,9 +53,7 @@ export class ProductApiService {
       .createQueryBuilder('featured_products')
       .where('is_featured = true');
 
-    if (limit) {
-      query.limit(limit);
-    }
+    limit && query.limit(limit);
 
     const products = await query.getMany();
 
@@ -67,9 +65,7 @@ export class ProductApiService {
       relations: ['category'],
     });
 
-    if (!product) {
-      throw new NotFoundException();
-    }
+    if (!product) throw new NotFoundException();
 
     return product;
   }
@@ -104,8 +100,6 @@ export class ProductApiService {
   async deleteProduct(id: string): Promise<void> {
     const result = await this.productRepository.delete(id);
 
-    if (result.affected !== 1) {
-      throw new NotFoundException();
-    }
+    if (result.affected !== 1) throw new NotFoundException();
   }
 }
