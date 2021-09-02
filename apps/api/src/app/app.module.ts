@@ -54,6 +54,10 @@ export class AppModule {
         {
           path: '/api/products(.*)',
           method: RequestMethod.GET,
+        },
+        {
+          path: '/api/uploads(.*)',
+          method: RequestMethod.GET,
         }
       )
       .forRoutes({ path: '*', method: RequestMethod.ALL });

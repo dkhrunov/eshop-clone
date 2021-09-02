@@ -55,6 +55,9 @@
     "product-entities": {
       "tags": []
     },
+    "product-util-helpers": {
+      "tags": ["domain:product", "type:util"]
+    },
     "shared-ui-components": {
       "tags": ["domain:shared", "type:ui"]
     },

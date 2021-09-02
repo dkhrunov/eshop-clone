@@ -1,57 +1,66 @@
 import {
-  BadRequestException,
   Controller,
   Get,
   Param,
   Post,
+  Put,
   Req,
   Res,
   UploadedFile,
+  UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Express, Request, Response } from 'express';
-import { FILE_TYPE_MAP } from '@esc/product/models';
-import { ErrorMessages } from '@esc/shared/util-models';
+import { getImageUrl, imageFileFilter } from '@esc/product/util-helpers';
+import { ProductApiService } from './product-api.service';
+import { ProductEntity } from '@esc/product/models';
 
 @Controller('uploads')
 export class UploadImagesController {
+  constructor(private productService: ProductApiService) {}
+
   @Post()
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
         destination: './uploads',
-        filename: (_: Request, file: Express.Multer.File, cb) => {
-          const isFileValid = FILE_TYPE_MAP.has(file.mimetype);
-
-          let uploadError: Error | null = new Error(
-            ErrorMessages.INVALID_IMAGE_TYPE
-          );
-
-          if (isFileValid) {
-            uploadError = null;
-          }
-
-          return cb(uploadError, file.originalname);
-        },
+        filename: imageFileFilter,
       }),
     })
   )
   uploadImage(@UploadedFile() image: Express.Multer.File, @Req() req: Request) {
-    const protocol = req.protocol;
-    const host = req.get('host');
-    const filename = image.path;
-
-    const imageUrl = `${protocol}://${host}/api/${filename}`;
-
     return {
-      imageUrl,
+      imageUrl: getImageUrl(req, image),
     };
   }
 
   @Get(':id')
   getImage(@Param('id') id: string, @Res() res: Response) {
     res.sendFile(id, { root: './uploads' });
+  }
+
+  @Put('gallery/:id')
+  @UseInterceptors(
+    FilesInterceptor('images', 2, {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: imageFileFilter,
+      }),
+    })
+  )
+  uploadFile(
+    @Param('id') id: string,
+    @UploadedFiles() images: Array<Express.Multer.File>,
+    @Req() req: Request
+  ): Promise<ProductEntity> {
+    const imageUrls: string[] = [];
+
+    for (const image of images) {
+      imageUrls.push(getImageUrl(req, image));
+    }
+
+    return this.productService.addImagesToProduct(id, imageUrls);
   }
 }

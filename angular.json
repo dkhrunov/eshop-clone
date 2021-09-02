@@ -343,6 +343,51 @@
         }
       }
     },
+    "product-util-helpers": {
+      "projectType": "library",
+      "root": "libs/product/util-helpers",
+      "sourceRoot": "libs/product/util-helpers/src",
+      "prefix": "helpers",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:ng-packagr-lite",
+          "outputs": [
+            "dist/libs/product/util-helpers"
+          ],
+          "options": {
+            "project": "libs/product/util-helpers/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/product/util-helpers/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/product/util-helpers/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/product/util-helpers"
+          ],
+          "options": {
+            "jestConfig": "libs/product/util-helpers/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/product/util-helpers/src/**/*.ts",
+              "libs/product/util-helpers/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "shared-ui-components": {
       "projectType": "library",
       "root": "libs/shared/ui-components",

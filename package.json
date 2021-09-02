@@ -46,6 +46,7 @@
     "@nestjs/mapped-types": "^1.0.0",
     "@nestjs/passport": "^8.0.1",
     "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/serve-static": "^2.2.2",
     "@nestjs/typeorm": "^8.0.2",
     "@nrwl/angular": "12.7.2",
     "@nrwl/storybook": "^12.7.2",

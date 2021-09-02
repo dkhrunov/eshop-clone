@@ -102,4 +102,14 @@ export class ProductApiService {
 
     if (result.affected !== 1) throw new NotFoundException();
   }
+
+  async addImagesToProduct(id: string, images: string[]) {
+    const product = await this.productRepository.findOne(id);
+
+    if (!product) throw new NotFoundException();
+
+    product.images.push(...images);
+
+    return this.productRepository.save(product);
+  }
 }

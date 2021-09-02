@@ -437,6 +437,91 @@ describe('Eshop Clone', () => {
             });
         });
       });
+
+      it.skip('Upload product image - Validate extension', () => {
+        const [{ id: userId }] = createdUsersOnServer;
+        const token = userTokensMap.get(userId) as string;
+
+        cy.fixture('image').then((image) => {
+          const blob = Cypress.Blob.base64StringToBlob(
+            image,
+            'image/notextension'
+          );
+          const randomImageName = generateNonExistentUUID();
+          const myHeaders = new Headers({
+            Authorization: `Bearer ${token}`,
+          });
+          const formData = new FormData();
+          formData.append('image', blob, `${randomImageName}.jpeg`);
+
+          fetch(`${environment.baseUrlApi}/uploads`, {
+            method: 'POST',
+            headers: myHeaders,
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then(({ imageUrl }) => {
+              expect(imageUrl).to.be.include(randomImageName);
+
+              fetch(
+                `${environment.baseUrlApi}/uploads/${randomImageName}.jpeg`,
+                {
+                  method: 'GET',
+                  headers: myHeaders,
+                }
+              ).then(({ status }) => {
+                expect(status).to.be.eq(500);
+              });
+            });
+        });
+      });
+      it.skip('Upload gallery images', () => {
+        const [{ id: userId }] = createdUsersOnServer;
+        const token = userTokensMap.get(userId) as string;
+        const [{ id: productId }] = createdProductsOnServer;
+
+        cy.fixture('image').then((imageOne) => {
+          cy.fixture('imageTwo').then((imageTwo) => {
+            const blobOne = Cypress.Blob.base64StringToBlob(
+              imageOne,
+              'image/jpeg'
+            );
+            const blobTwo = Cypress.Blob.base64StringToBlob(
+              imageTwo,
+              'image/jpeg'
+            );
+            const randomImageNameOne = generateNonExistentUUID();
+            const randomImageNameTwo = generateNonExistentUUID();
+            const myHeaders = new Headers({
+              Authorization: `Bearer ${token}`,
+            });
+            const formData = new FormData();
+            formData.append('images', blobOne, `${randomImageNameOne}.jpeg`);
+            formData.append('images', blobTwo, `${randomImageNameTwo}.jpeg`);
+
+            fetch(`${environment.baseUrlApi}/uploads/gallery/${productId}`, {
+              method: 'PUT',
+              headers: myHeaders,
+              body: formData,
+            })
+              .then((response) => response.json())
+              .then((response) => {
+                console.log(response);
+                // expect(imageUrl).to.be.include(randomImageName);
+
+                // fetch(
+                //   `${environment.baseUrlApi}/uploads/${randomImageName}.jpeg`,
+                //   {
+                //     method: 'GET',
+                //     headers: myHeaders,
+                //   }
+                // ).then(({ status }) => {
+                //   expect(status).to.be.eq(200);
+                // });
+              });
+          });
+        });
+      });
     });
   });
 
