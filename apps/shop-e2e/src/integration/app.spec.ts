@@ -408,7 +408,7 @@ describe('Eshop Clone', () => {
         const token = userTokensMap.get(userId) as string;
 
         cy.fixture('image').then((image) => {
-          const blob = Cypress.Blob.base64StringToBlob(image);
+          const blob = Cypress.Blob.base64StringToBlob(image, 'image/jpeg');
           const randomImageName = generateNonExistentUUID();
           const myHeaders = new Headers({
             Authorization: `Bearer ${token}`,

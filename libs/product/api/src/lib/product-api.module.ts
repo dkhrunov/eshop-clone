@@ -11,6 +11,9 @@ import { UploadImagesController } from './upload-images.controller';
   controllers: [ProductApiController, UploadImagesController],
   providers: [ProductApiService, CategoryService],
   exports: [ProductApiService],
-  imports: [TypeOrmModule.forFeature([CategoryEntity, ProductEntity])],
+  imports: [
+    TypeOrmModule.forFeature([CategoryEntity, ProductEntity]),
+    NestjsFormDataModule,
+  ],
 })
 export class ProductApiModule {}

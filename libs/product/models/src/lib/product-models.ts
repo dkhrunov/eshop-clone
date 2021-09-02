@@ -208,3 +208,9 @@ export class UpdateCategoryDto {
   @IsNotEmpty()
   icon?: string;
 }
+
+export const FILE_TYPE_MAP = new Map([
+  ['image/png', 'png'],
+  ['image/jpeg', 'jpeg'],
+  ['image/jpg', 'jpg'],
+]);

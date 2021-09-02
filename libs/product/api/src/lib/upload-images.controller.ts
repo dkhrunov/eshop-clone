@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Get,
   Param,
@@ -11,6 +12,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Express, Request, Response } from 'express';
+import { FILE_TYPE_MAP } from '@esc/product/models';
+import { ErrorMessages } from '@esc/shared/util-models';
 
 @Controller('uploads')
 export class UploadImagesController {
@@ -20,7 +23,17 @@ export class UploadImagesController {
       storage: diskStorage({
         destination: './uploads',
         filename: (_: Request, file: Express.Multer.File, cb) => {
-          return cb(null, file.originalname);
+          const isFileValid = FILE_TYPE_MAP.has(file.mimetype);
+
+          let uploadError: Error | null = new Error(
+            ErrorMessages.INVALID_IMAGE_TYPE
+          );
+
+          if (isFileValid) {
+            uploadError = null;
+          }
+
+          return cb(uploadError, file.originalname);
         },
       }),
     })
