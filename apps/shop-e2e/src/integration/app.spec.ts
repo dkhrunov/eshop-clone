@@ -67,8 +67,6 @@ describe('Eshop Clone', () => {
 
   let orderItems: OrderItem[];
 
-  let createdOrderId: string;
-
   const createdOrdersOnServer: Partial<OrderEntity>[] = [];
 
   before(() => {
@@ -110,535 +108,527 @@ describe('Eshop Clone', () => {
     }
   });
 
-  context('Users', () => {
-    context('API', () => {
-      it('Register User', () => {
-        const newUser = generateUser();
-        registerUserOnServer(newUser);
-      });
+  context('Shop', () => {
+    //
+  });
 
-      it('Login User', () => {
-        const newUser = generateUser();
+  context('Admin', () => {
+    //
+  })
 
-        registerUserOnServer(newUser);
+  context('Users API', () => {
+    it('Register User', () => {
+      const newUser = generateUser();
+      registerUserOnServer(newUser);
+    });
 
-        loginUserOnServer(newUser.email, newUser.password)
-          .its('body.token')
-          .should('be.a', 'string');
+    it('Login User', () => {
+      const newUser = generateUser();
 
-        loginUserOnServer(newUser.email, 'wrongpassword')
+      registerUserOnServer(newUser);
+
+      loginUserOnServer(newUser.email, newUser.password)
+        .its('body.token')
+        .should('be.a', 'string');
+
+      loginUserOnServer(newUser.email, 'wrongpassword')
+        .its('body.message')
+        .should('eq', 'Invalid credentials');
+    });
+
+    it('Delete User', () => {
+      const [{ id }] = createdUsersOnServer;
+      const token = userTokensMap.get(id) as string;
+
+      const userForDelete = generateUser();
+      userForDelete.name = 'User for delete';
+
+      registerUserOnServer(userForDelete).then(({ body: { user } }) => {
+        getUserFromServer(user.id, token).its('body').should('deep.include', {
+          id: user.id,
+          name: 'User for delete',
+        });
+
+        deleteUserOnServer(user.id, token).its('body.affected').should('eq', 1);
+
+        getUserFromServer(user.id, token)
           .its('body.message')
-          .should('eq', 'Invalid credentials');
+          .should('eq', 'Not Found');
       });
+    });
 
-      it('Delete User', () => {
-        const [{ id }] = createdUsersOnServer;
-        const token = userTokensMap.get(id) as string;
+    it('List Users', () => {
+      const [{ id }] = createdUsersOnServer;
+      const token = userTokensMap.get(id) as string;
 
-        const userForDelete = generateUser();
-        userForDelete.name = 'User for delete';
+      getAllUsersFromServer(token)
+        .its('body')
+        .each((user) => {
+          expect(user).to.include.keys(['name', 'id', 'email']);
+        });
+    });
 
-        registerUserOnServer(userForDelete).then(({ body: { user } }) => {
-          getUserFromServer(user.id, token).its('body').should('deep.include', {
-            id: user.id,
-            name: 'User for delete',
-          });
+    it('Get User', () => {
+      const [{ id }] = createdUsersOnServer;
+      const token = userTokensMap.get(id) as string;
 
-          deleteUserOnServer(user.id, token)
-            .its('body.affected')
-            .should('eq', 1);
+      getUserFromServer(id, token).then(({ body: { id: foundId } }) => {
+        expect(foundId).to.equal(id);
+      });
+    });
 
-          getUserFromServer(user.id, token)
-            .its('body.message')
-            .should('eq', 'Not Found');
+    it('Get User Count', () => {
+      const [{ id }] = createdUsersOnServer;
+      const token = userTokensMap.get(id) as string;
+
+      getAllUsersFromServer(token).then(({ body }) => {
+        expect(body.length).to.above(0);
+
+        getUserCount(token).then(({ status, body: { user_count } }) => {
+          expect(status).to.be.eq(200);
+          expect(user_count).to.be.eq(user_count);
         });
       });
+    });
 
-      it('List Users', () => {
-        const [{ id }] = createdUsersOnServer;
-        const token = userTokensMap.get(id) as string;
+    it('Update User', () => {
+      const [{ id, name }] = createdUsersOnServer;
+      const token = userTokensMap.get(id) as string;
 
-        getAllUsersFromServer(token)
-          .its('body')
-          .each((user) => {
-            expect(user).to.include.keys(['name', 'id', 'email']);
-          });
-      });
-
-      it('Get User', () => {
-        const [{ id }] = createdUsersOnServer;
-        const token = userTokensMap.get(id) as string;
-
-        getUserFromServer(id, token).then(({ body: { id: foundId } }) => {
-          expect(foundId).to.equal(id);
-        });
-      });
-
-      it('Get User Count', () => {
-        const [{ id }] = createdUsersOnServer;
-        const token = userTokensMap.get(id) as string;
-
-        getAllUsersFromServer(token).then(({ body }) => {
-          expect(body.length).to.above(0);
-
-          getUserCount(token).then(({ status, body: { user_count } }) => {
-            expect(status).to.be.eq(200);
-            expect(user_count).to.be.eq(user_count);
-          });
-        });
-      });
-
-      it('Update User', () => {
-        const [{ id, name }] = createdUsersOnServer;
-        const token = userTokensMap.get(id) as string;
+      updateUserOnServer(
+        id,
+        {
+          name: 'Updated Name',
+        },
+        token
+      ).then(({ body: { user } }) => {
+        expect(user.name).to.equal('Updated Name');
 
         updateUserOnServer(
           id,
           {
-            name: 'Updated Name',
+            name,
           },
           token
-        ).then(({ body: { user } }) => {
-          expect(user.name).to.equal('Updated Name');
-
-          updateUserOnServer(
-            id,
-            {
-              name,
-            },
-            token
-          )
-            .its('body.user.name')
-            .should('eq', name);
-        });
+        )
+          .its('body.user.name')
+          .should('eq', name);
       });
+    });
 
-      it('Restrict unauthorized access', () => {
-        const [{ id }] = createdUsersOnServer;
-        const token = userTokensMap.get(id) as string;
+    it('Restrict unauthorized access', () => {
+      const [{ id }] = createdUsersOnServer;
+      const token = userTokensMap.get(id) as string;
 
-        getAllUsersFromServer('TOKEN NOT EXIST')
-          .its('body.message')
-          .should('equal', 'Unauthorized');
+      getAllUsersFromServer('TOKEN NOT EXIST')
+        .its('body.message')
+        .should('equal', 'Unauthorized');
 
-        getAllUsersFromServer(token).its('body').should('have.length.above', 0);
-      });
+      getAllUsersFromServer(token).its('body').should('have.length.above', 0);
     });
   });
 
-  context('Products', () => {
-    context('API', () => {
-      it('List Categories', () => {
-        getAllCategoriesFromServer().then((response) => {
-          expect(response.status).to.be.eq(200);
-        });
+  context('Products API', () => {
+    it('List Categories', () => {
+      getAllCategoriesFromServer().then((response) => {
+        expect(response.status).to.be.eq(200);
       });
-      it('Create Category', () => {
-        const [{ id }] = createdUsersOnServer;
-        const token = userTokensMap.get(id) as string;
+    });
+    it('Create Category', () => {
+      const [{ id }] = createdUsersOnServer;
+      const token = userTokensMap.get(id) as string;
 
-        createCategoryOnServer({ ...category }, token)
+      createCategoryOnServer({ ...category }, token)
+        .its('body')
+        .should('include.all.keys', category);
+    });
+
+    it('Get Category By Id', () => {
+      getAllCategoriesFromServer().then(({ body: [category] }) => {
+        getCategoryFromServer(category.id)
           .its('body')
-          .should('include.all.keys', category);
+          .should('deep.equal', category);
       });
+    });
 
-      it('Get Category By Id', () => {
-        getAllCategoriesFromServer().then(({ body: [category] }) => {
-          getCategoryFromServer(category.id)
+    it('Update Category', () => {
+      const [{ id }] = createdUsersOnServer;
+      const token = userTokensMap.get(id) as string;
+
+      getAllCategoriesFromServer().then(({ body: [category] }) => {
+        updateCategoryOnServer(
+          category.id,
+          { ...category, name: 'Updated Category' },
+          token
+        ).then(({ body: { name } }) => {
+          expect(name).to.be.eq('Updated Category');
+
+          updateCategoryOnServer(category.id, { ...category }, token)
             .its('body')
             .should('deep.equal', category);
         });
       });
+    });
 
-      it('Update Category', () => {
-        const [{ id }] = createdUsersOnServer;
-        const token = userTokensMap.get(id) as string;
+    it('Create Product', () => {
+      const [product] = generatedProducts;
+      const [{ id }] = createdUsersOnServer;
+      const token = userTokensMap.get(id) as string;
 
-        getAllCategoriesFromServer().then(({ body: [category] }) => {
-          updateCategoryOnServer(
-            category.id,
-            { ...category, name: 'Updated Category' },
-            token
-          ).then(({ body: { name } }) => {
-            expect(name).to.be.eq('Updated Category');
-
-            updateCategoryOnServer(category.id, { ...category }, token)
-              .its('body')
-              .should('deep.equal', category);
-          });
-        });
-      });
-
-      it('Create Product', () => {
-        const [product] = generatedProducts;
-        const [{ id }] = createdUsersOnServer;
-        const token = userTokensMap.get(id) as string;
-
-        getAllCategoriesFromServer().then(({ body: [category] }) => {
-          createProductOnServer(product, category.id, token)
-            .its('body')
-            .should('deep.include', product);
-        });
-      });
-
-      it('Get Product By Id', () => {
-        const [product] = generatedProducts;
-        const [{ id }] = createdUsersOnServer;
-        const token = userTokensMap.get(id) as string;
-
-        getAllCategoriesFromServer().then(({ body: [category] }) => {
-          createProductOnServer(product, category.id, token).then(
-            ({ body: newProduct }) => {
-              getProductFromServer(newProduct.id)
-                .its('body')
-                .should('deep.include', product);
-            }
-          );
-        });
-      });
-
-      it('Update Product', () => {
-        const [{ id, name: oldName }] = createdProductsOnServer;
-        const [{ id: userId }] = createdUsersOnServer;
-        const token = userTokensMap.get(userId) as string;
-
-        updateProductOnServer(id, { name: 'Updated Product Name' }, token).then(
-          ({ body: { name } }) => {
-            expect(name).to.be.eq('Updated Product Name');
-
-            updateProductOnServer(id, { name: oldName }, token)
-              .its('body.name')
-              .should('eq', oldName);
-          }
-        );
-      });
-
-      it('Delete Product', () => {
-        const [{ id: userId }] = createdUsersOnServer;
-        const token = userTokensMap.get(userId) as string;
-        const productForDelete = generateProduct();
-
-        createProductOnServer(productForDelete, createdCategoryId, token).then(
-          ({ body: { id } }) => {
-            deleteProductOnServer(id, token).then(({ status }) => {
-              expect(status).to.be.eq(200);
-            });
-          }
-        );
-      });
-      it('Delete Product Validate Id', () => {
-        const [{ id: userId }] = createdUsersOnServer;
-        const token = userTokensMap.get(userId) as string;
-
-        deleteProductOnServer(generateNonExistentUUID(), token)
-          .its('status')
-          .should('eq', 404);
-      });
-
-      it('Create Product Validate Category', () => {
-        const [product] = generatedProducts;
-        const [{ id: userId }] = createdUsersOnServer;
-        const token = userTokensMap.get(userId) as string;
-
-        const nonExistentCategoryId = generateNonExistentUUID();
-
-        createProductOnServer(product, nonExistentCategoryId, token)
+      getAllCategoriesFromServer().then(({ body: [category] }) => {
+        createProductOnServer(product, category.id, token)
           .its('body')
-          .should('deep.equal', {
-            error: 'Not Found',
-            message: 'Category not found',
-            statusCode: 404,
+          .should('deep.include', product);
+      });
+    });
+
+    it('Get Product By Id', () => {
+      const [product] = generatedProducts;
+      const [{ id }] = createdUsersOnServer;
+      const token = userTokensMap.get(id) as string;
+
+      getAllCategoriesFromServer().then(({ body: [category] }) => {
+        createProductOnServer(product, category.id, token).then(
+          ({ body: newProduct }) => {
+            getProductFromServer(newProduct.id)
+              .its('body')
+              .should('deep.include', product);
+          }
+        );
+      });
+    });
+
+    it('Update Product', () => {
+      const [{ id, name: oldName }] = createdProductsOnServer;
+      const [{ id: userId }] = createdUsersOnServer;
+      const token = userTokensMap.get(userId) as string;
+
+      updateProductOnServer(id, { name: 'Updated Product Name' }, token).then(
+        ({ body: { name } }) => {
+          expect(name).to.be.eq('Updated Product Name');
+
+          updateProductOnServer(id, { name: oldName }, token)
+            .its('body.name')
+            .should('eq', oldName);
+        }
+      );
+    });
+
+    it('Delete Product', () => {
+      const [{ id: userId }] = createdUsersOnServer;
+      const token = userTokensMap.get(userId) as string;
+      const productForDelete = generateProduct();
+
+      createProductOnServer(productForDelete, createdCategoryId, token).then(
+        ({ body: { id } }) => {
+          deleteProductOnServer(id, token).then(({ status }) => {
+            expect(status).to.be.eq(200);
           });
-      });
-      it('Get Products', () => {
-        getAllProductsFromServer().then((response) => {
-          expect(response.status).to.be.eq(200);
-          expect(response.body.length).to.above(0);
+        }
+      );
+    });
+    it('Delete Product Validate Id', () => {
+      const [{ id: userId }] = createdUsersOnServer;
+      const token = userTokensMap.get(userId) as string;
+
+      deleteProductOnServer(generateNonExistentUUID(), token)
+        .its('status')
+        .should('eq', 404);
+    });
+
+    it('Create Product Validate Category', () => {
+      const [product] = generatedProducts;
+      const [{ id: userId }] = createdUsersOnServer;
+      const token = userTokensMap.get(userId) as string;
+
+      const nonExistentCategoryId = generateNonExistentUUID();
+
+      createProductOnServer(product, nonExistentCategoryId, token)
+        .its('body')
+        .should('deep.equal', {
+          error: 'Not Found',
+          message: 'Category not found',
+          statusCode: 404,
         });
+    });
+    it('Get Products', () => {
+      getAllProductsFromServer().then((response) => {
+        expect(response.status).to.be.eq(200);
+        expect(response.body.length).to.above(0);
       });
-      it('Get Products with Category', () => {
-        getAllCategoriesFromServer().then(({ body: categories }) => {
-          const { allCategoriesMap, allCategoriesNames } =
-            pickRandomCategories(categories);
+    });
+    it('Get Products with Category', () => {
+      getAllCategoriesFromServer().then(({ body: categories }) => {
+        const { allCategoriesMap, allCategoriesNames } =
+          pickRandomCategories(categories);
 
-          getProductsWithCategory(allCategoriesNames).then(
-            ({ status, body: products }) => {
-              expect(status).to.be.eq(200);
+        getProductsWithCategory(allCategoriesNames).then(
+          ({ status, body: products }) => {
+            expect(status).to.be.eq(200);
 
-              for (const {
-                category: { id },
-              } of products) {
-                expect(id).to.be.oneOf([...allCategoriesMap.keys()]);
-              }
+            for (const {
+              category: { id },
+            } of products) {
+              expect(id).to.be.oneOf([...allCategoriesMap.keys()]);
             }
-          );
-        });
-      });
-      it('Get Product Count', () => {
-        getAllProductsFromServer().then(({ body: products }) => {
-          expect(products.length).to.above(0);
-
-          getProductsCount()
-            .its('body.product_count')
-            .should('eq', products.length);
-        });
-      });
-      it('Get All Featured Products', () => {
-        getFeaturedProducts().then(({ body: products }) => {
-          for (const { is_featured } of products) {
-            expect(is_featured).to.be.eq(true);
           }
-        });
+        );
       });
+    });
+    it('Get Product Count', () => {
+      getAllProductsFromServer().then(({ body: products }) => {
+        expect(products.length).to.above(0);
 
-      it('Get Featured Products with limit', () => {
-        const limit = generateRandom().integer({ min: 3, max: 10 });
-
-        getFeaturedProducts(limit).then(({ body: products }) => {
-          for (const { is_featured } of products) {
-            expect(is_featured).to.be.eq(true);
-          }
-
-          expect(products).to.have.length.of.at.most(limit);
-        });
+        getProductsCount()
+          .its('body.product_count')
+          .should('eq', products.length);
       });
-
-      it.only('Upload product image', () => {
-        const [{ id: userId }] = createdUsersOnServer;
-        const token = userTokensMap.get(userId) as string;
-
-        cy.fixture('image').then((image) => {
-          const blob = Cypress.Blob.base64StringToBlob(image, 'image/jpeg');
-          const randomImageName = generateNonExistentUUID();
-          const myHeaders = new Headers({
-            Authorization: `Bearer ${token}`,
-          });
-          const formData = new FormData();
-          formData.append('image', blob, `${randomImageName}.jpeg`);
-
-          fetch(`${environment.baseUrlApi}/uploads`, {
-            method: 'POST',
-            headers: myHeaders,
-            body: formData,
-          })
-            .then((response) => response.json())
-            .then(({ imageUrl }) => {
-              expect(imageUrl).to.be.include(randomImageName);
-
-              fetch(
-                `${environment.baseUrlApi}/uploads/${randomImageName}.jpeg`,
-                {
-                  method: 'GET',
-                  headers: myHeaders,
-                }
-              ).then(({ status }) => {
-                expect(status).to.be.eq(200);
-              });
-            });
-        });
+    });
+    it('Get All Featured Products', () => {
+      getFeaturedProducts().then(({ body: products }) => {
+        for (const { is_featured } of products) {
+          expect(is_featured).to.be.eq(true);
+        }
       });
+    });
 
-      it.skip('Upload product image - Validate extension', () => {
-        const [{ id: userId }] = createdUsersOnServer;
-        const token = userTokensMap.get(userId) as string;
+    it('Get Featured Products with limit', () => {
+      const limit = generateRandom().integer({ min: 3, max: 10 });
 
-        cy.fixture('image').then((image) => {
-          const blob = Cypress.Blob.base64StringToBlob(
-            image,
-            'image/notextension'
-          );
-          const randomImageName = generateNonExistentUUID();
-          const myHeaders = new Headers({
-            Authorization: `Bearer ${token}`,
-          });
-          const formData = new FormData();
-          formData.append('image', blob, `${randomImageName}.jpeg`);
+      getFeaturedProducts(limit).then(({ body: products }) => {
+        for (const { is_featured } of products) {
+          expect(is_featured).to.be.eq(true);
+        }
 
-          fetch(`${environment.baseUrlApi}/uploads`, {
-            method: 'POST',
-            headers: myHeaders,
-            body: formData,
-          })
-            .then((response) => response.json())
-            .then(({ imageUrl }) => {
-              expect(imageUrl).to.be.include(randomImageName);
-
-              fetch(
-                `${environment.baseUrlApi}/uploads/${randomImageName}.jpeg`,
-                {
-                  method: 'GET',
-                  headers: myHeaders,
-                }
-              ).then(({ status }) => {
-                expect(status).to.be.eq(500);
-              });
-            });
-        });
+        expect(products).to.have.length.of.at.most(limit);
       });
-      it.skip('Upload gallery images', () => {
-        const [{ id: userId }] = createdUsersOnServer;
-        const token = userTokensMap.get(userId) as string;
-        const [{ id: productId }] = createdProductsOnServer;
+    });
 
-        cy.fixture('image').then((imageOne) => {
-          cy.fixture('imageTwo').then((imageTwo) => {
-            const blobOne = Cypress.Blob.base64StringToBlob(
-              imageOne,
-              'image/jpeg'
-            );
-            const blobTwo = Cypress.Blob.base64StringToBlob(
-              imageTwo,
-              'image/jpeg'
-            );
-            const randomImageNameOne = generateNonExistentUUID();
-            const randomImageNameTwo = generateNonExistentUUID();
-            const myHeaders = new Headers({
-              Authorization: `Bearer ${token}`,
-            });
-            const formData = new FormData();
-            formData.append('images', blobOne, `${randomImageNameOne}.jpeg`);
-            formData.append('images', blobTwo, `${randomImageNameTwo}.jpeg`);
+    it('Upload product image', () => {
+      const [{ id: userId }] = createdUsersOnServer;
+      const token = userTokensMap.get(userId) as string;
 
-            fetch(`${environment.baseUrlApi}/uploads/gallery/${productId}`, {
-              method: 'PUT',
+      cy.fixture('image').then((image) => {
+        const blob = Cypress.Blob.base64StringToBlob(image, 'image/jpeg');
+        const randomImageName = generateNonExistentUUID();
+        const myHeaders = new Headers({
+          Authorization: `Bearer ${token}`,
+        });
+        const formData = new FormData();
+        formData.append('image', blob, `${randomImageName}.jpeg`);
+
+        fetch(`${environment.baseUrlApi}/uploads`, {
+          method: 'POST',
+          headers: myHeaders,
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then(({ imageUrl }) => {
+            expect(imageUrl).to.be.include(randomImageName);
+
+            fetch(`${environment.baseUrlApi}/uploads/${randomImageName}.jpeg`, {
+              method: 'GET',
               headers: myHeaders,
-              body: formData,
-            })
-              .then((response) => response.json())
-              .then((response) => {
-                console.log(response);
-                // expect(imageUrl).to.be.include(randomImageName);
-
-                // fetch(
-                //   `${environment.baseUrlApi}/uploads/${randomImageName}.jpeg`,
-                //   {
-                //     method: 'GET',
-                //     headers: myHeaders,
-                //   }
-                // ).then(({ status }) => {
-                //   expect(status).to.be.eq(200);
-                // });
-              });
+            }).then(({ status }) => {
+              expect(status).to.be.eq(200);
+            });
           });
+      });
+    });
+
+    it.skip('Upload product image - Validate extension', () => {
+      const [{ id: userId }] = createdUsersOnServer;
+      const token = userTokensMap.get(userId) as string;
+
+      cy.fixture('image').then((image) => {
+        const blob = Cypress.Blob.base64StringToBlob(
+          image,
+          'image/notextension'
+        );
+        const randomImageName = generateNonExistentUUID();
+        const myHeaders = new Headers({
+          Authorization: `Bearer ${token}`,
+        });
+        const formData = new FormData();
+        formData.append('image', blob, `${randomImageName}.jpeg`);
+
+        fetch(`${environment.baseUrlApi}/uploads`, {
+          method: 'POST',
+          headers: myHeaders,
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then(({ imageUrl }) => {
+            expect(imageUrl).to.be.include(randomImageName);
+
+            fetch(`${environment.baseUrlApi}/uploads/${randomImageName}.jpeg`, {
+              method: 'GET',
+              headers: myHeaders,
+            }).then(({ status }) => {
+              expect(status).to.be.eq(500);
+            });
+          });
+      });
+    });
+    it.skip('Upload gallery images', () => {
+      const [{ id: userId }] = createdUsersOnServer;
+      const token = userTokensMap.get(userId) as string;
+      const [{ id: productId }] = createdProductsOnServer;
+
+      cy.fixture('image').then((imageOne) => {
+        cy.fixture('imageTwo').then((imageTwo) => {
+          const blobOne = Cypress.Blob.base64StringToBlob(
+            imageOne,
+            'image/jpeg'
+          );
+          const blobTwo = Cypress.Blob.base64StringToBlob(
+            imageTwo,
+            'image/jpeg'
+          );
+          const randomImageNameOne = generateNonExistentUUID();
+          const randomImageNameTwo = generateNonExistentUUID();
+          const myHeaders = new Headers({
+            Authorization: `Bearer ${token}`,
+          });
+          const formData = new FormData();
+          formData.append('images', blobOne, `${randomImageNameOne}.jpeg`);
+          formData.append('images', blobTwo, `${randomImageNameTwo}.jpeg`);
+
+          fetch(`${environment.baseUrlApi}/uploads/gallery/${productId}`, {
+            method: 'PUT',
+            headers: myHeaders,
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((response) => {
+              console.log(response);
+              // expect(imageUrl).to.be.include(randomImageName);
+
+              // fetch(
+              //   `${environment.baseUrlApi}/uploads/${randomImageName}.jpeg`,
+              //   {
+              //     method: 'GET',
+              //     headers: myHeaders,
+              //   }
+              // ).then(({ status }) => {
+              //   expect(status).to.be.eq(200);
+              // });
+            });
         });
       });
     });
   });
 
-  context('Orders', () => {
-    context('API', () => {
-      it('Create Order', () => {
-        const [{ id: userId }] = createdUsersOnServer;
-        const token = userTokensMap.get(userId) as string;
+  context('Orders API', () => {
+    it('Create Order', () => {
+      const [{ id: userId }] = createdUsersOnServer;
+      const token = userTokensMap.get(userId) as string;
 
-        orderItems = generateOrderItems(createdProductsOnServer);
-        const newOrder = generateOrder(orderItems);
+      orderItems = generateOrderItems(createdProductsOnServer);
+      const newOrder = generateOrder(orderItems);
 
-        createOrderOnServer(newOrder, token).then(
-          ({ body: createdOrder, status }) => {
-            expect(createdOrder).to.include.keys(newOrder);
-            expect(status).to.be.eql(201);
-          }
-        );
+      createOrderOnServer(newOrder, token).then(
+        ({ body: createdOrder, status }) => {
+          expect(createdOrder).to.include.keys(newOrder);
+          expect(status).to.be.eql(201);
+        }
+      );
+    });
+
+    it('List All orders', () => {
+      const [{ id: userId }] = createdUsersOnServer;
+      const token = userTokensMap.get(userId) as string;
+      const [, exampleOrder] = createdOrdersOnServer;
+
+      getAllOrdersFromServer(token).then(({ body: orderList, status }) => {
+        for (const order of orderList) {
+          expect(order).to.include.keys(exampleOrder);
+        }
+        expect(status).to.be.eql(200);
       });
+    });
+    it('Get order', () => {
+      const [{ id: userId }] = createdUsersOnServer;
+      const token = userTokensMap.get(userId) as string;
+      const [, searchOrder] = createdOrdersOnServer;
 
-      it('List All orders', () => {
-        const [{ id: userId }] = createdUsersOnServer;
-        const token = userTokensMap.get(userId) as string;
-        const [, exampleOrder] = createdOrdersOnServer;
-
-        getAllOrdersFromServer(token).then(({ body: orderList, status }) => {
-          for (const order of orderList) {
-            expect(order).to.include.keys(exampleOrder);
-          }
+      getOrderFromServer(searchOrder.id as string, token).then(
+        ({ body: foundOrder, status }) => {
+          expect(foundOrder).to.include.keys(searchOrder);
           expect(status).to.be.eql(200);
+        }
+      );
+    });
+    it('Update order status', () => {
+      const [{ id: userId }] = createdUsersOnServer;
+      const token = userTokensMap.get(userId) as string;
+      const [, { id }] = createdOrdersOnServer;
+
+      updateOrderStatus(id as string, 'DELIVERED', token).then(
+        ({ body: { status: orderStatus }, status }) => {
+          expect(orderStatus).to.be.eq('DELIVERED');
+          expect(status).to.be.eql(200);
+        }
+      );
+
+      updateOrderStatus(id as string, 'SHIPPED', token).then(
+        ({ body: { status: orderStatus }, status }) => {
+          expect(orderStatus).to.be.eq('SHIPPED');
+          expect(status).to.be.eql(200);
+        }
+      );
+
+      updateOrderStatus(id as string, 'STATUSNOTEXIST', token).then(
+        ({
+          body: {
+            message: [error],
+          },
+          status,
+        }) => {
+          expect(error).to.be.eql('status must be a valid enum value');
+          expect(status).to.be.eql(400);
+        }
+      );
+    });
+
+    it('Delete Order', () => {
+      const [{ id: userId }] = createdUsersOnServer;
+      const token = userTokensMap.get(userId) as string;
+
+      orderItems = generateOrderItems(createdProductsOnServer);
+      const newOrder = generateOrder(orderItems);
+
+      createOrderOnServer(newOrder, token).then(({ body: { id } }) => {
+        deleteOrderOnServer(id, token).then(({ body: { affected } }) => {
+          expect(affected).to.be.eql(1);
         });
       });
-      it('Get order', () => {
-        const [{ id: userId }] = createdUsersOnServer;
-        const token = userTokensMap.get(userId) as string;
-        const [, searchOrder] = createdOrdersOnServer;
+    });
 
-        getOrderFromServer(searchOrder.id as string, token).then(
-          ({ body: foundOrder, status }) => {
-            expect(foundOrder).to.include.keys(searchOrder);
-            expect(status).to.be.eql(200);
-          }
-        );
+    it('Get Total Sales', () => {
+      const [{ id: userId }] = createdUsersOnServer;
+      const token = userTokensMap.get(userId) as string;
+
+      getTotalSales(token).its('body.total_sales').should('be.greaterThan', 0);
+    });
+    it('Get Order Count', () => {
+      const [{ id: userId }] = createdUsersOnServer;
+      const token = userTokensMap.get(userId) as string;
+
+      getAllOrdersFromServer(token).then(({ body: allOrders }) => {
+        getOrderCount(token)
+          .its('body.order_count')
+          .should('eq', allOrders.length);
       });
-      it('Update order status', () => {
-        const [{ id: userId }] = createdUsersOnServer;
-        const token = userTokensMap.get(userId) as string;
-        const [, { id }] = createdOrdersOnServer;
+    });
+    it('Get User Orders', () => {
+      const [, { user: userId }] = createdOrdersOnServer;
+      const token = userTokensMap.get(userId as string) as string;
 
-        updateOrderStatus(id as string, 'DELIVERED', token).then(
-          ({ body: { status: orderStatus }, status }) => {
-            expect(orderStatus).to.be.eq('DELIVERED');
-            expect(status).to.be.eql(200);
-          }
-        );
-
-        updateOrderStatus(id as string, 'SHIPPED', token).then(
-          ({ body: { status: orderStatus }, status }) => {
-            expect(orderStatus).to.be.eq('SHIPPED');
-            expect(status).to.be.eql(200);
-          }
-        );
-
-        updateOrderStatus(id as string, 'STATUSNOTEXIST', token).then(
-          ({
-            body: {
-              message: [error],
-            },
-            status,
-          }) => {
-            expect(error).to.be.eql('status must be a valid enum value');
-            expect(status).to.be.eql(400);
-          }
-        );
-      });
-
-      it('Delete Order', () => {
-        const [{ id: userId }] = createdUsersOnServer;
-        const token = userTokensMap.get(userId) as string;
-
-        orderItems = generateOrderItems(createdProductsOnServer);
-        const newOrder = generateOrder(orderItems);
-
-        createOrderOnServer(newOrder, token).then(({ body: { id } }) => {
-          deleteOrderOnServer(id, token).then(({ body: { affected } }) => {
-            expect(affected).to.be.eql(1);
-          });
-        });
-      });
-
-      it('Get Total Sales', () => {
-        const [{ id: userId }] = createdUsersOnServer;
-        const token = userTokensMap.get(userId) as string;
-
-        getTotalSales(token)
-          .its('body.total_sales')
-          .should('be.greaterThan', 0);
-      });
-      it('Get Order Count', () => {
-        const [{ id: userId }] = createdUsersOnServer;
-        const token = userTokensMap.get(userId) as string;
-
-        getAllOrdersFromServer(token).then(({ body: allOrders }) => {
-          getOrderCount(token)
-            .its('body.order_count')
-            .should('eq', allOrders.length);
-        });
-      });
-      it('Get User Orders', () => {
-        const [, { user: userId }] = createdOrdersOnServer;
-        const token = userTokensMap.get(userId as string) as string;
-
-        getUserOrders(userId as string, token).then(({ body: orders }) => {
-          for (const { user } of orders) {
-            expect(user).to.deep.include({ id: userId });
-          }
-        });
+      getUserOrders(userId as string, token).then(({ body: orders }) => {
+        for (const { user } of orders) {
+          expect(user).to.deep.include({ id: userId });
+        }
       });
     });
   });

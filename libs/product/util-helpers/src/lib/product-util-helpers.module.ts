@@ -1,4 +1,4 @@
-import { FileTypeMap } from '@esc/product/models';
+import { ImageTypesForUpload } from '@esc/product/models';
 import { ErrorMessages } from '@esc/shared/util-models';
 import { Express, Request } from 'express';
 import 'multer';
@@ -6,9 +6,9 @@ import 'multer';
 export const imageFileFilter = (
   _: Request,
   file: Express.Multer.File,
-  cb: any
+  cb: (error: Error | null, filename: string) => void
 ) => {
-  const isFileValid = FileTypeMap.has(file.mimetype);
+  const isFileValid = ImageTypesForUpload.has(file.mimetype);
 
   let uploadError: Error | null = new Error(ErrorMessages.INVALID_IMAGE_TYPE);
 

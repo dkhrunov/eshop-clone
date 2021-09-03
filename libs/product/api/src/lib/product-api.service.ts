@@ -100,7 +100,7 @@ export class ProductApiService {
   async deleteProduct(id: string): Promise<void> {
     const result = await this.productRepository.delete(id);
 
-    if (result.affected !== 1) throw new NotFoundException();
+    if (!result.affected) throw new NotFoundException();
   }
 
   async addImagesToProduct(id: string, images: string[]) {

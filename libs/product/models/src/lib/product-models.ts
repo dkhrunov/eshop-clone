@@ -197,7 +197,7 @@ export class UpdateCategoryDto {
   icon?: string;
 }
 
-export const FileTypeMap = new Map([
+export const ImageTypesForUpload = new Map([
   ['image/png', 'png'],
   ['image/jpeg', 'jpeg'],
   ['image/jpg', 'jpg'],
