@@ -26,7 +26,7 @@ export interface ICard {
 }
 
 @Component({
-  selector: 'components-card',
+  selector: 'ui-card',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -39,25 +39,30 @@ export class AppModule {
     consumer
       .apply(AuthMiddleware)
       .exclude(
+        // {
+        //   path: '/api/users',
+        //   method: RequestMethod.POST,
+        // },
+        // {
+        //   path: '/api/users/login',
+        //   method: RequestMethod.POST,
+        // },
+        // {
+        //   path: '/api/categories(.*)',
+        //   method: RequestMethod.GET,
+        // },
+        // {
+        //   path: '/api/products(.*)',
+        //   method: RequestMethod.GET,
+        // },
+        // {
+        //   path: '/api/uploads(.*)',
+        //   method: RequestMethod.GET,
+        // }
+
         {
-          path: '/api/users',
-          method: RequestMethod.POST,
-        },
-        {
-          path: '/api/users/login',
-          method: RequestMethod.POST,
-        },
-        {
-          path: '/api/categories(.*)',
-          method: RequestMethod.GET,
-        },
-        {
-          path: '/api/products(.*)',
-          method: RequestMethod.GET,
-        },
-        {
-          path: '/api/uploads(.*)',
-          method: RequestMethod.GET,
+          path: '/(.*)',
+          method: RequestMethod.ALL,
         }
       )
       .forRoutes({ path: '*', method: RequestMethod.ALL });

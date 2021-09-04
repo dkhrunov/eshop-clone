@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   baseUrlApi: 'http://localhost:3333/api',
-  baseUrlFront: 'http://localhost:4200',
+  baseUrlFrontShop: 'http://localhost:4200',
+  baseUrlFrontAdmin: 'http://localhost:4300',
   jwtSecret: 'topsecret44',
 };
 

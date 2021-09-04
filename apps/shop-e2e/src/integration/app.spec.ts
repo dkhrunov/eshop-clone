@@ -112,10 +112,6 @@ describe('Eshop Clone', () => {
     //
   });
 
-  context('Admin', () => {
-    //
-  })
-
   context('Users API', () => {
     it('Register User', () => {
       const newUser = generateUser();

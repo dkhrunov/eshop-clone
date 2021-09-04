@@ -1,13 +1,16 @@
-import { getGreeting } from '../support/app.po';
+import { environment } from '../../../../environments/environment';
 
-describe('admin', () => {
-  beforeEach(() => cy.visit('/'));
+describe('Admin App', () => {
+  beforeEach(() => {
+    cy.visit(`${environment.baseUrlFrontAdmin}`);
+    cy.viewport(600, 500);
+    cy.viewport(1000, 700);
+  });
+  it('Show main dashboard', () => {
+    //
+  });
 
-  it('should display welcome message', () => {
-    // Custom command example, see `../support/commands.ts` file
-    cy.login('my-email@something.com', 'myPassword');
-
-    // Function helper example, see `../support/app.po.ts` file
-    getGreeting().contains('Welcome to admin!');
+  it('Show categories', () => {
+    cy.visit('categories');
   });
 });

@@ -1,0 +1,21 @@
+import { Component, OnInit} from '@angular/core';
+import { ListProductsFacade } from '@esc/product/domain';
+
+@Component({
+  selector: 'product-list-products',
+  templateUrl: './list-products.component.html',
+  styleUrls: ['./list-products.component.scss']
+})
+export class ListProductsComponent implements OnInit {
+    
+
+
+    constructor(private listProductsFacade: ListProductsFacade) {
+    }
+
+
+    ngOnInit() {
+    }
+
+}
+

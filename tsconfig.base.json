@@ -17,9 +17,23 @@
     "paths": {
       "@esc/order/api": ["libs/order/api/src/index.ts"],
       "@esc/order/domain": ["libs/order/domain/src/index.ts"],
+      "@esc/order/feature-dashboard": [
+        "libs/order/feature-dashboard/src/index.ts"
+      ],
+      "@esc/order/feature-list-orders": [
+        "libs/order/feature-list-orders/src/index.ts"
+      ],
+      "@esc/order/feature-shell": ["libs/order/feature-shell/src/index.ts"],
       "@esc/order/models": ["libs/order/models/src/index.ts"],
       "@esc/product/api": ["libs/product/api/src/index.ts"],
       "@esc/product/domain": ["libs/product/domain/src/index.ts"],
+      "@esc/product/feature-list-categories": [
+        "libs/product/feature-list-categories/src/index.ts"
+      ],
+      "@esc/product/feature-list-products": [
+        "libs/product/feature-list-products/src/index.ts"
+      ],
+      "@esc/product/feature-shell": ["libs/product/feature-shell/src/index.ts"],
       "@esc/product/models": ["libs/product/models/src/index.ts"],
       "@esc/product/util-helpers": ["libs/product/util-helpers/src/index.ts"],
       "@esc/shared/ui-components": ["libs/shared/ui-components/src/index.ts"],
@@ -28,6 +42,16 @@
       "@esc/shared/util-models": ["libs/shared/util-models/src/index.ts"],
       "@esc/user/api": ["libs/user/api/src/index.ts"],
       "@esc/user/domain": ["libs/user/domain/src/index.ts"],
+      "@esc/user/feature-list-users": [
+        "libs/user/feature-list-users/src/index.ts"
+      ],
+      "@esc/user/feature-login-user": [
+        "libs/user/feature-login-user/src/index.ts"
+      ],
+      "@esc/user/feature-register-user": [
+        "libs/user/feature-register-user/src/index.ts"
+      ],
+      "@esc/user/feature-shell": ["libs/user/feature-shell/src/index.ts"],
       "@esc/user/models": ["libs/user/models/src/index.ts"]
     }
   },

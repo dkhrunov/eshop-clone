@@ -43,6 +43,15 @@
     "order-domain": {
       "tags": ["domain:order", "type:domain-logic"]
     },
+    "order-feature-dashboard": {
+      "tags": ["domain:order", "type:feature"]
+    },
+    "order-feature-list-orders": {
+      "tags": ["domain:order", "type:feature"]
+    },
+    "order-feature-shell": {
+      "tags": ["domain:order", "type:feature"]
+    },
     "order-models": {
       "tags": []
     },
@@ -54,6 +63,15 @@
     },
     "product-entities": {
       "tags": []
+    },
+    "product-feature-list-categories": {
+      "tags": ["domain:product", "type:feature"]
+    },
+    "product-feature-list-products": {
+      "tags": ["domain:product", "type:feature"]
+    },
+    "product-feature-shell": {
+      "tags": ["domain:product", "type:feature"]
     },
     "product-util-helpers": {
       "tags": ["domain:product", "type:util"]
@@ -85,6 +103,18 @@
     },
     "user-entities": {
       "tags": []
+    },
+    "user-feature-list-users": {
+      "tags": ["domain:user", "type:feature"]
+    },
+    "user-feature-login-user": {
+      "tags": ["domain:user", "type:feature"]
+    },
+    "user-feature-register-user": {
+      "tags": ["domain:user", "type:feature"]
+    },
+    "user-feature-shell": {
+      "tags": ["domain:user", "type:feature"]
     }
   }
 }

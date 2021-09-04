@@ -1,0 +1,33 @@
+:host {
+  @apply block m-2;
+
+  main {
+    @apply border rounded p-2 grid gap-4 grid-flow-row;
+
+    header {
+      h1 {
+        @apply text-2xl font-bold mb-0 text-gray-600;
+      }
+
+      h3 {
+        @apply text-sm mb-0 text-gray-600;
+      }
+    }
+
+    section {
+      @apply bg-gray-50 rounded-sm p-3 border;
+
+      button {
+        @apply grid items-center grid-flow-col;
+      }
+    }
+
+    nz-table {
+      @apply mb-4;
+    }
+
+    [nz-button] {
+      @apply rounded bg-green-400 ring-1 ring-green-400 border-0;
+    }
+  }
+}
