@@ -19,6 +19,7 @@ import {
 } from '@esc/product/models';
 import { CategoryService } from './category-api.service';
 import { CountResponse } from '@esc/shared/util-models';
+import { DeleteResult } from 'typeorm';
 
 @Controller('')
 export class ProductApiController {
@@ -82,6 +83,11 @@ export class ProductApiController {
   @Get('categories/:id')
   getCategoryById(@Param('id') id: string): Promise<CategoryEntity> {
     return this.categoryService.getCategoryById(id);
+  }
+
+  @Delete('categories/:id')
+  deleteCategoryById(@Param('id') id: string): Promise<DeleteResult> {
+    return this.categoryService.deleteCategoryById(id);
   }
 
   @Put('categories/:id')

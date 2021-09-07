@@ -9,7 +9,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 
 @Injectable()
 export class CategoryService {
@@ -70,5 +70,9 @@ export class CategoryService {
     await this.categoryRepository.update(id, dto);
 
     return await this.getCategoryById(id);
+  }
+
+  async deleteCategoryById(id: string): Promise<DeleteResult> {
+    return await this.categoryRepository.delete(id);
   }
 }

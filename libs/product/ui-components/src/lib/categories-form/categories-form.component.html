@@ -1,0 +1,107 @@
+<ui-main-wrapper
+  title="Add Category"
+  subtitle="You can add or edit categories here"
+>
+  <ui-button-bar>
+    <button
+      class="primary"
+      nz-button
+      nzType="primary"
+      nzSize="small"
+      [disabled]="form.invalid"
+      (click)="createCategory()"
+      data-cy="createCategoryButton"
+    >
+      <i nz-icon nzType="plus" nzTheme="outline"> </i>
+      Create
+    </button>
+
+    <button
+      nz-button
+      nzType="primary"
+      class="red"
+      nzDanger
+      nzSize="small"
+      [routerLink]="['..']"
+    >
+      <i nz-icon nzType="arrow-left" nzTheme="outline"></i>
+      Cancel
+    </button>
+  </ui-button-bar>
+
+  <ng-template #formTpl>
+    <form nz-form [nzLayout]="'vertical'" [formGroup]="form">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="10" nzFor="name">Name</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Name is required'">
+          <input
+            formControlName="name"
+            nz-input
+            data-cy="createCategoryName"
+            name="name"
+            type="text"
+            id="name"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="10" nzFor="icon">Icon</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Icon is required'">
+          <input
+            formControlName="icon"
+            nz-input
+            data-cy="createCategoryIcon"
+            name="icon"
+            type="icon"
+            id="icon"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="10" nzFor="color">Color</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Color is required'">
+          <input
+            formControlName="color"
+            nz-input
+            data-cy="createCategoryColor"
+            name="color"
+            type="text"
+            id="color"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="10" nzFor="image">Image</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Image is required'">
+          <input
+            formControlName="image"
+            nz-input
+            data-cy="createCategoryImage"
+            name="image"
+            type="text"
+            id="image"
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-template>
+
+  <nz-result
+    *ngIf="createdCategory$ | async as category; else formTpl"
+    [nzIcon]="'smile-twotone'"
+    [nzTitle]="'Great, category is created!'"
+  >
+    <div nz-result-extra [align]="'center'">
+      <button
+        data-cy="categoryFormGoBack"
+        nz-button
+        nzType="primary"
+        (click)="goBack()"
+      >
+        Go Back
+      </button>
+    </div>
+  </nz-result>
+</ui-main-wrapper>

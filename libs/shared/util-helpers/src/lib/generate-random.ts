@@ -5,13 +5,13 @@ import {
   CreateProductDto,
   ProductEntity,
 } from '@esc/product/models';
-import { OrderEntity, OrderItem, OrderItemEntity } from '@esc/order/models';
+import { OrderItem } from '@esc/order/models';
 
 const categoriesMap = new Map([
-  ['Computers', 'icon-computer'],
-  ['Health', 'icon-hearth'],
-  ['Electronics', 'icon-electronics'],
-  ['Beauty', 'icon-beauty'],
+  ['Computers', 'laptop'],
+  ['Health', 'heart'],
+  ['Electronics', 'camera'],
+  ['Beauty', 'woman'],
 ]);
 
 const newCategoryName = generateRandom().pickone([...categoriesMap.keys()]);

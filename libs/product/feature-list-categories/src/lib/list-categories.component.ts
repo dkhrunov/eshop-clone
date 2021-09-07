@@ -1,5 +1,13 @@
 import { Component } from '@angular/core';
 import { ListCategoriesFacade } from '@esc/product/domain';
+import { IconService } from '@ant-design/icons-angular';
+
+import {
+  LaptopOutline,
+  HeartOutline,
+  CameraOutline,
+  WomanOutline,
+} from '@ant-design/icons-angular/icons';
 
 @Component({
   selector: 'product-list-categories',
@@ -7,7 +15,14 @@ import { ListCategoriesFacade } from '@esc/product/domain';
   styleUrls: ['./list-categories.component.less'],
 })
 export class ListCategoriesComponent {
-  allCategories$ = this.listCategoriesFacade.allCategories$;
+  categories$ = this.listCategoriesFacade.categories$;
 
-  constructor(private listCategoriesFacade: ListCategoriesFacade) {}
+  constructor(
+    private iconService: IconService,
+    private listCategoriesFacade: ListCategoriesFacade
+  ) {
+    this.iconService.addIcon(
+      ...[LaptopOutline, HeartOutline, CameraOutline, WomanOutline]
+    );
+  }
 }

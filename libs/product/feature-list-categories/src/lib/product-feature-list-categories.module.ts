@@ -8,17 +8,31 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { ButtonBarModule, MainWrapperModule } from '@esc/shared/ui-components';
 
 @NgModule({
   imports: [
     CommonModule,
     ProductDomainModule,
-    RouterModule.forChild([{ path: '', component: ListCategoriesComponent }]),
+    RouterModule.forChild([
+      { path: '', component: ListCategoriesComponent },
+      {
+        path: 'form',
+        loadChildren: () =>
+          import('@esc/product/ui-components').then(
+            (m) => m.CategoriesFormModule
+          ),
+      },
+    ]),
     NzCardModule,
     NzPageHeaderModule,
     NzButtonModule,
     NzIconModule,
     NzTableModule,
+    NzSpaceModule,
+    ButtonBarModule,
+    MainWrapperModule,
   ],
   declarations: [ListCategoriesComponent],
   exports: [ListCategoriesComponent],

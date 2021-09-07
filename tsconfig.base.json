@@ -35,6 +35,7 @@
       ],
       "@esc/product/feature-shell": ["libs/product/feature-shell/src/index.ts"],
       "@esc/product/models": ["libs/product/models/src/index.ts"],
+      "@esc/product/ui-components": ["libs/product/ui-components/src/index.ts"],
       "@esc/product/util-helpers": ["libs/product/util-helpers/src/index.ts"],
       "@esc/shared/ui-components": ["libs/shared/ui-components/src/index.ts"],
       "@esc/shared/ui-pipes": ["libs/shared/ui-pipes/src/index.ts"],

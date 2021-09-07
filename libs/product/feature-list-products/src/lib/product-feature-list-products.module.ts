@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProductDomainModule } from '@esc/product/domain';
 import { ListProductsComponent } from './list-products.component';
 import { RouterModule } from '@angular/router';
+import { MainWrapperModule } from '@esc/shared/ui-components';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { RouterModule } from '@angular/router';
         component: ListProductsComponent,
       },
     ]),
+    MainWrapperModule,
   ],
   declarations: [ListProductsComponent],
   exports: [ListProductsComponent],

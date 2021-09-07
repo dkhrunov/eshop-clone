@@ -1,33 +1,23 @@
-:host {
-  @apply block m-2;
+ui-button-bar {
+  @apply justify-start;
+}
 
-  main {
-    @apply border rounded p-2 grid gap-4 grid-flow-row;
+button {
+  @apply grid items-center grid-flow-col  rounded;
+}
 
-    header {
-      h1 {
-        @apply text-2xl font-bold mb-0 text-gray-600;
-      }
+nz-table {
+  @apply mb-4;
 
-      h3 {
-        @apply text-sm mb-0 text-gray-600;
-      }
+  .circle {
+    @apply grid items-center justify-center;
+
+    .color {
+      @apply h-3 w-3 rounded-full inline-grid;
     }
+  }
 
-    section {
-      @apply bg-gray-50 rounded-sm p-3 border;
-
-      button {
-        @apply grid items-center grid-flow-col;
-      }
-    }
-
-    nz-table {
-      @apply mb-4;
-    }
-
-    [nz-button] {
-      @apply rounded bg-green-400 ring-1 ring-green-400 border-0;
-    }
+  i {
+    vertical-align: middle;
   }
 }

@@ -1,17 +1,12 @@
-<main>
-  <header>
-    <h1>Categories</h1>
-    <h3>List of all categories</h3>
-  </header>
-
-  <section>
-    <button nz-button nzType="primary" nzSize="small">
+<ui-main-wrapper title="Categories" subtitle="List of all categories">
+  <ui-button-bar>
+    <button nz-button nzType="primary" nzSize="small" [routerLink]="['form']">
       <i nz-icon nzType="plus" nzTheme="outline"></i>
       New
     </button>
-  </section>
+  </ui-button-bar>
 
-  <ng-container *ngIf="allCategories$ | async as categories">
+  <ng-container *ngIf="categories$ | async as categories">
     <nz-table
       [nzBordered]="true"
       [nzShowPagination]="false"
@@ -21,17 +16,36 @@
       <thead>
         <tr>
           <th>Name</th>
-          <th>Color</th>
-          <th>Icon</th>
+          <th [nzAlign]="'center'">Color</th>
+          <th [nzAlign]="'center'">Icon</th>
+          <th [nzAlign]="'center'"></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let data of basicTable.data">
+        <tr data-cy="category" *ngFor="let data of basicTable.data">
           <td>{{ data.name }}</td>
-          <td>{{ data.color }}</td>
-          <td>{{ data.icon }}</td>
+          <td [nzAlign]="'center'">
+            <div class="circle">
+              <span class="color" [style.background-color]="data.color"></span>
+            </div>
+          </td>
+          <td [nzAlign]="'center'">
+            <div>
+              <i nz-icon nzType="{{ data.icon }}" nzTheme="outline"></i>
+            </div>
+          </td>
+          <td [nzAlign]="'center'">
+            <nz-button-group nzSize="small">
+              <button nz-button nzDanger>
+                <i nz-icon nzType="delete" nzTheme="fill"></i>
+              </button>
+              <button nz-button nzDanger>
+                <i nz-icon nzType="edit" nzTheme="fill"></i>
+              </button>
+            </nz-button-group>
+          </td>
         </tr>
       </tbody>
     </nz-table>
   </ng-container>
-</main>
+</ui-main-wrapper>

@@ -13,11 +13,14 @@ import { UserFeatureShellModule } from '@esc/user/feature-shell';
 import { OrderFeatureShellModule } from '@esc/order/feature-shell';
 import { HttpClientModule } from '@angular/common/http';
 import { OrderFeatureDashboardModule } from '@esc/order/feature-dashboard';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HeaderModule,
     FooterModule,
     SidebarModule,
@@ -28,7 +31,7 @@ import { OrderFeatureDashboardModule } from '@esc/order/feature-dashboard';
     HttpClientModule,
     OrderFeatureDashboardModule,
   ],
-  providers: [],
+  providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -73,6 +73,9 @@
     "product-feature-shell": {
       "tags": ["domain:product", "type:feature"]
     },
+    "product-ui-components": {
+      "tags": ["domain:product", "type:ui"]
+    },
     "product-util-helpers": {
       "tags": ["domain:product", "type:util"]
     },
