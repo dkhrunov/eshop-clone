@@ -20,6 +20,7 @@ import {
 import {
   createCategoryOnServer,
   createProductOnServer,
+  deleteCategoryOnServer,
   deleteProductOnServer,
   getAllCategoriesFromServer,
   getAllProductsFromServer,
@@ -385,6 +386,23 @@ describe('Eshop Clone', () => {
         for (const { is_featured } of products) {
           expect(is_featured).to.be.eq(true);
         }
+      });
+    });
+
+    it('Delete Category', () => {
+      const [{ id }] = createdUsersOnServer;
+      const token = userTokensMap.get(id) as string;
+
+      getAllCategoriesFromServer().then(({ body: [category] }) => {
+        deleteCategoryOnServer(category.id, token).then(
+          ({ body: { categoryDeleted } }) => {
+            expect(categoryDeleted).to.be.eq(category.id);
+
+            getCategoryFromServer(category.id)
+              .its('body.message')
+              .should('eq', 'Not Found');
+          }
+        );
       });
     });
 

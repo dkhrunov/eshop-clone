@@ -67,6 +67,21 @@ export const updateCategoryOnServer = (
   });
 };
 
+export const deleteCategoryOnServer = (id: string, token: string) => {
+  cy.log('Delete category');
+  return cy.request({
+    url: `${baseUrlCategories}/${id}`,
+    method: 'DELETE',
+    body: {
+      id,
+    },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    failOnStatusCode: false,
+  });
+};
+
 export const createProductOnServer = (
   product: CreateProductDto,
   category: string,

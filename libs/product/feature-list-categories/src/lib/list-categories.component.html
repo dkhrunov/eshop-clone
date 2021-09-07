@@ -37,7 +37,13 @@
           <td [nzAlign]="'center'">
             <nz-button-group nzSize="small">
               <button nz-button nzDanger>
-                <i nz-icon nzType="delete" nzTheme="fill"></i>
+                <i
+                  nz-icon
+                  data-cy="deleteCategory"
+                  nzType="delete"
+                  nzTheme="fill"
+                  (click)="deleteCategory(data.id)"
+                ></i>
               </button>
               <button nz-button nzDanger>
                 <i nz-icon nzType="edit" nzTheme="fill"></i>

@@ -25,4 +25,8 @@ export class ListCategoriesComponent {
       ...[LaptopOutline, HeartOutline, CameraOutline, WomanOutline]
     );
   }
+
+  deleteCategory(id: string): void {
+    this.listCategoriesFacade.deleteCategory(id);
+  }
 }

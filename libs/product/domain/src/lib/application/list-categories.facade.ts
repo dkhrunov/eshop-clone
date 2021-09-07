@@ -13,4 +13,8 @@ export class ListCategoriesFacade {
   createCategory(category: CreateCategoryDto) {
     this.categoriesService.createCategory(category);
   }
+
+  deleteCategory(id: string) {
+    this.categoriesService.deleteCategory(id);
+  }
 }

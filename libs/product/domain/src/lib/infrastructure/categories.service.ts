@@ -1,7 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CategoryEntity, CreateCategoryDto } from '@esc/product/models';
-import { concatMap, merge, Observable, scan, shareReplay, Subject } from 'rxjs';
+import {
+  CategoryEntity,
+  CreateCategoryDto,
+  DeleteCategoryResponse,
+} from '@esc/product/models';
+import {
+  concatMap,
+  map,
+  merge,
+  Observable,
+  pluck,
+  scan,
+  shareReplay,
+  Subject,
+} from 'rxjs';
 import { environment } from '../../../../../../environments/environment';
 
 @Injectable({
@@ -15,6 +28,9 @@ export class CategoriesService {
   private createCategorySubject = new Subject<CreateCategoryDto>();
   createCategoryAction$ = this.createCategorySubject.asObservable();
 
+  private deleteCategorySubject = new Subject<string>();
+  deleteCategoryAction$ = this.deleteCategorySubject.asObservable();
+
   allCategories$ = this.http.get<CategoryEntity[]>(this.categoriesUrl);
 
   createdCategory$ = this.createCategoryAction$.pipe(
@@ -23,10 +39,20 @@ export class CategoriesService {
     })
   );
 
-  categories$ = merge(this.allCategories$, this.createdCategory$).pipe(
+  deletedCategory$ = this.deleteCategoryAction$.pipe(
+    concatMap((id) => this.deleteCategoryOnServer(id))
+  );
+
+  categories$ = merge(
+    this.allCategories$,
+    this.createdCategory$,
+    this.deletedCategory$
+  ).pipe(
     scan((categories, category) => {
       if (Array.isArray(category)) {
         return [...categories, ...category];
+      } else if (typeof category === 'string') {
+        return categories.filter((c) => c.id !== category);
       } else {
         const isCategoryExist = categories.find(
           (item) => item.id === category.id
@@ -42,9 +68,19 @@ export class CategoriesService {
     this.createCategorySubject.next(category);
   }
 
+  deleteCategory(id: string): void {
+    this.deleteCategorySubject.next(id);
+  }
+
   private createCategoryOnServer(
     category: CreateCategoryDto
   ): Observable<CategoryEntity> {
     return this.http.post<CategoryEntity>(this.categoriesUrl, category);
+  }
+
+  private deleteCategoryOnServer(id: string): Observable<string> {
+    return this.http
+      .delete<DeleteCategoryResponse>(`${this.categoriesUrl}/${id}`)
+      .pipe(pluck('categoryDeleted'));
   }
 }

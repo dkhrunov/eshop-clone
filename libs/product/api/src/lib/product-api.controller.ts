@@ -86,7 +86,9 @@ export class ProductApiController {
   }
 
   @Delete('categories/:id')
-  deleteCategoryById(@Param('id') id: string): Promise<DeleteResult> {
+  deleteCategoryById(
+    @Param('id') id: string
+  ): Promise<{ categoryDeleted: string }> {
     return this.categoryService.deleteCategoryById(id);
   }
 

@@ -37,7 +37,10 @@ export class ProductEntity extends CoreEntity {
   @Column()
   price!: number;
 
-  @ManyToOne(() => CategoryEntity, (category) => category.id, { eager: true })
+  @ManyToOne(() => CategoryEntity, (category) => category.id, {
+    eager: true,
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'category_id' })
   category!: string;
 
@@ -202,3 +205,7 @@ export const ImageTypesForUpload = new Map([
   ['image/jpeg', 'jpeg'],
   ['image/jpg', 'jpg'],
 ]);
+
+export interface DeleteCategoryResponse {
+  categoryDeleted: string;
+}

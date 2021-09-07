@@ -72,7 +72,13 @@ export class CategoryService {
     return await this.getCategoryById(id);
   }
 
-  async deleteCategoryById(id: string): Promise<DeleteResult> {
-    return await this.categoryRepository.delete(id);
+  async deleteCategoryById(id: string): Promise<{ categoryDeleted: string }> {
+    const result = await this.categoryRepository.delete(id);
+
+    if (result.affected) {
+      return { categoryDeleted: id };
+    }
+
+    throw new NotFoundException();
   }
 }

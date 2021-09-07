@@ -1,6 +1,5 @@
 import { environment } from '../../../../environments/environment';
 import { generateCategory } from '@esc/shared/util-helpers';
-import { should } from 'chai';
 
 describe('Admin App', () => {
   beforeEach(() => {
@@ -15,7 +14,7 @@ describe('Admin App', () => {
   it('List categories', () => {
     cy.visit('categories');
   });
-  it.only('Create category', () => {
+  it('Create category', () => {
     const { name, icon, color, image } = generateCategory();
 
     cy.visit('categories/form');
@@ -27,5 +26,24 @@ describe('Admin App', () => {
     cy.get('[data-cy=categoryFormGoBack]').should('be.visible').click();
 
     cy.get('[data-cy=category]').should('contain', name);
+  });
+
+  it('Delete Category', () => {
+    const { name, icon, color, image } = generateCategory();
+
+    cy.visit('categories/form');
+    cy.get('[data-cy=createCategoryName]').clear().type(name);
+    cy.get('[data-cy=createCategoryIcon]').clear().type(icon);
+    cy.get('[data-cy=createCategoryColor]').clear().type(color);
+    cy.get('[data-cy=createCategoryImage]').clear().type(image);
+    cy.get('[data-cy=createCategoryButton]').click();
+    cy.get('[data-cy=categoryFormGoBack]').should('be.visible').click();
+
+    cy.get('[data-cy=category]')
+      .contains(name)
+      .parent()
+      .find('[data-cy=deleteCategory]')
+      .click()
+      .should('not.exist');
   });
 });
