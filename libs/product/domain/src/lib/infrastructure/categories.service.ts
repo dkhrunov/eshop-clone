@@ -31,7 +31,9 @@ export class CategoriesService {
   private deleteCategorySubject = new Subject<string>();
   deleteCategoryAction$ = this.deleteCategorySubject.asObservable();
 
-  allCategories$ = this.http.get<CategoryEntity[]>(this.categoriesUrl);
+  allCategories$ = this.http
+    .get<CategoryEntity[]>(this.categoriesUrl)
+    .pipe(shareReplay());
 
   createdCategory$ = this.createCategoryAction$.pipe(
     concatMap((category) => {
@@ -48,19 +50,11 @@ export class CategoriesService {
     this.createdCategory$,
     this.deletedCategory$
   ).pipe(
-    scan((categories, category) => {
-      if (Array.isArray(category)) {
-        return [...categories, ...category];
-      } else if (typeof category === 'string') {
-        return categories.filter((c) => c.id !== category);
-      } else {
-        const isCategoryExist = categories.find(
-          (item) => item.id === category.id
-        );
-
-        return isCategoryExist ? [...categories] : [...categories, category];
-      }
-    }, [] as CategoryEntity[]),
+    scan(
+      (categories, category) =>
+        this.modifyCategoriesArray(categories, category),
+      [] as CategoryEntity[]
+    ),
     shareReplay()
   );
 
@@ -82,5 +76,21 @@ export class CategoriesService {
     return this.http
       .delete<DeleteCategoryResponse>(`${this.categoriesUrl}/${id}`)
       .pipe(pluck('categoryDeleted'));
+  }
+
+  private modifyCategoriesArray(
+    categories: CategoryEntity[],
+    value: unknown
+  ): CategoryEntity[] {
+    if (Array.isArray(value)) {
+      return [...categories, ...value];
+    } else if (typeof value === 'string') {
+      return categories.filter((c) => c.id !== value);
+    } else if (value instanceof CategoryEntity) {
+      const isCategoryExist = categories.find((item) => item.id === value.id);
+
+      return isCategoryExist ? [...categories] : [...categories, value];
+    }
+    return categories;
   }
 }

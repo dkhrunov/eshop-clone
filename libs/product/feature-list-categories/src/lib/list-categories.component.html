@@ -37,13 +37,21 @@
           <td [nzAlign]="'center'">
             <nz-button-group nzSize="small">
               <button nz-button nzDanger>
-                <i
-                  nz-icon
-                  data-cy="deleteCategory"
-                  nzType="delete"
-                  nzTheme="fill"
-                  (click)="deleteCategory(data.id)"
-                ></i>
+                <a
+                  nz-popconfirm
+                  nzPopconfirmTitle="Delete category?"
+                  nzOkText="Yes"
+                  nzCancelText="No"
+                  data-cy="deleteCategoryConfirmation"
+                  (nzOnConfirm)="deleteCategory(data.id)"
+                >
+                  <i
+                    nz-icon
+                    data-cy="deleteCategory"
+                    nzType="delete"
+                    nzTheme="fill"
+                  ></i>
+                </a>
               </button>
               <button nz-button nzDanger>
                 <i nz-icon nzType="edit" nzTheme="fill"></i>

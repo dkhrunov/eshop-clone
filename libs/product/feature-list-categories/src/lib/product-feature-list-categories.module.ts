@@ -10,6 +10,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { ButtonBarModule, MainWrapperModule } from '@esc/shared/ui-components';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { ButtonBarModule, MainWrapperModule } from '@esc/shared/ui-components';
     NzSpaceModule,
     ButtonBarModule,
     MainWrapperModule,
+    NzPopconfirmModule,
   ],
   declarations: [ListCategoriesComponent],
   exports: [ListCategoriesComponent],

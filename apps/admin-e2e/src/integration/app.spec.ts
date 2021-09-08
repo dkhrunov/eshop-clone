@@ -1,5 +1,7 @@
 import { environment } from '../../../../environments/environment';
 import { generateCategory } from '@esc/shared/util-helpers';
+import { createCategory } from '../support/categories.po';
+import { CreateCategoryDto } from '@esc/product/models';
 
 describe('Admin App', () => {
   beforeEach(() => {
@@ -8,42 +10,43 @@ describe('Admin App', () => {
     cy.viewport(1000, 700);
   });
   it('Show main dashboard', () => {
-    //
+    //TODO
   });
 
   it('List categories', () => {
     cy.visit('categories');
-  });
-  it('Create category', () => {
-    const { name, icon, color, image } = generateCategory();
-
-    cy.visit('categories/form');
-    cy.get('[data-cy=createCategoryName]').clear().type(name);
-    cy.get('[data-cy=createCategoryIcon]').clear().type(icon);
-    cy.get('[data-cy=createCategoryColor]').clear().type(color);
-    cy.get('[data-cy=createCategoryImage]').clear().type(image);
-    cy.get('[data-cy=createCategoryButton]').click();
-    cy.get('[data-cy=categoryFormGoBack]').should('be.visible').click();
-
-    cy.get('[data-cy=category]').should('contain', name);
+    cy.get('[data-cy=category]').each((category) => {
+      cy.wrap(category).should('be.visible');
+    });
   });
 
   it('Delete Category', () => {
-    const { name, icon, color, image } = generateCategory();
+    const category = generateCategory();
 
-    cy.visit('categories/form');
-    cy.get('[data-cy=createCategoryName]').clear().type(name);
-    cy.get('[data-cy=createCategoryIcon]').clear().type(icon);
-    cy.get('[data-cy=createCategoryColor]').clear().type(color);
-    cy.get('[data-cy=createCategoryImage]').clear().type(image);
-    cy.get('[data-cy=createCategoryButton]').click();
-    cy.get('[data-cy=categoryFormGoBack]').should('be.visible').click();
+    createCategory(category);
 
     cy.get('[data-cy=category]')
-      .contains(name)
+      .contains(category.name)
       .parent()
-      .find('[data-cy=deleteCategory]')
-      .click()
-      .should('not.exist');
+      .find('[data-cy=deleteCategoryConfirmation]')
+      .click();
+
+    cy.get('button').contains('No').click().should('not.exist');
+
+    cy.get('[data-cy=category]')
+      .contains(category.name)
+      .parent()
+      .find('[data-cy=deleteCategoryConfirmation]')
+      .click();
+
+    cy.get('button').contains('Yes').click().should('not.exist');
+  });
+
+  it('Create category', () => {
+    const category = generateCategory();
+
+    createCategory(category);
+
+    cy.get('[data-cy=category]').should('contain', category.name);
   });
 });
