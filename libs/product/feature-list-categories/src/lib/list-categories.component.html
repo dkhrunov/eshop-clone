@@ -15,7 +15,13 @@
     >
       <thead>
         <tr>
-          <th nzSortOrder="ascend" [nzSortFn]="sortByNameFn">Name</th>
+          <th
+            data-cy="categoryName"
+            [nzSortOrder]="null"
+            [nzSortFn]="sortByNameFn"
+          >
+            Name
+          </th>
           <th [nzAlign]="'center'">Color</th>
           <th [nzAlign]="'center'">Icon</th>
           <th [nzAlign]="'center'"></th>

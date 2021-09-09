@@ -1,8 +1,11 @@
 import { environment } from '@env/environment';
 import { generateCategory } from '@esc/shared/util-helpers';
+
 import {
   createCategory,
   deleteCategory,
+  getCategoriesList,
+  mapCategoriesToNames,
   updateCategory,
 } from '../support/categories.po';
 
@@ -16,47 +19,75 @@ describe('Admin App', () => {
     //TODO
   });
 
-  it('Delete Category', () => {
-    const category = generateCategory();
-    const { name } = category;
-
-    createCategory(category);
-
-    deleteCategory(name);
-
-    cy.get('button').contains('No').click().should('not.exist');
-
-    deleteCategory(name);
-
-    cy.get('button').contains('Yes').click().should('not.exist');
+  context('Products', () => {
+    it('List products', () => {
+      //
+    });
   });
 
-  it('Create category', () => {
-    const category = generateCategory();
-    const { name } = category;
+  context('Categories', () => {
+    it('Delete Category', () => {
+      const category = generateCategory();
+      const { name } = category;
 
-    createCategory(category);
+      createCategory(category);
 
-    cy.get('[data-cy=category]').should('contain', name);
-  });
+      deleteCategory(name);
 
-  it('Edit category', () => {
-    const category = generateCategory();
-    const { name } = category;
+      cy.get('button').contains('No').click().should('not.exist');
 
-    createCategory(category);
+      deleteCategory(name);
 
-    updateCategory(name, 'Updated Category');
+      cy.get('button').contains('Yes').click().should('not.exist');
+    });
 
-    updateCategory('Updated Category', name);
+    it('Create category', () => {
+      const category = generateCategory();
+      const { name } = category;
 
-    cy.contains(name);
-  });
+      createCategory(category);
 
-  it('List categories', () => {
-    cy.visit('categories');
-    cy.get('[data-cy=category]').each((category) => {
-      cy.wrap(category).should('be.visible');
+      cy.get('[data-cy=category]').should('contain', name);
+    });
+
+    it('Edit category', () => {
+      const category = generateCategory();
+      const { name } = category;
+
+      createCategory(category);
+
+      updateCategory(name, 'Updated Category');
+
+      updateCategory('Updated Category', name);
+
+      cy.contains(name);
+    });
+
+    it('List categories', () => {
+      cy.visit('categories');
+      getCategoriesList().each((category) => {
+        cy.wrap(category).should('be.visible');
+      });
+    });
+
+    it('Sort categories', () => {
+      cy.visit('categories');
+
+      getCategoriesList()
+        .then(mapCategoriesToNames)
+        .then((unsortedCategories) => {
+          const sortedCategories = unsortedCategories.slice().sort();
+          expect(unsortedCategories).not.to.be.deep.eq(sortedCategories);
+        });
+
+      cy.get('[data-cy=categoryName]').click();
+
+      getCategoriesList()
+        .then(mapCategoriesToNames)
+        .then((unsortedCategories) => {
+          const sortedCategories = unsortedCategories.slice().sort();
+          expect(unsortedCategories).to.be.deep.eq(sortedCategories);
+        });
     });
   });
 });

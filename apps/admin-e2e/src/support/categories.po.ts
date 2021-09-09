@@ -1,4 +1,5 @@
 import { CreateCategoryDto } from '@esc/product/models';
+const { _ } = Cypress;
 
 export const createCategory = ({
   name,
@@ -37,4 +38,12 @@ export const deleteCategory = (name: string): void => {
     .parent()
     .find('[data-cy=deleteCategoryConfirmation]')
     .click();
+};
+
+export const getCategoriesList = () => {
+  return cy.get('[data-cy=category]');
+};
+
+export const mapCategoriesToNames = (categories: JQuery<HTMLElement>) => {
+  return Array.from(categories, (category) => category.textContent);
 };
