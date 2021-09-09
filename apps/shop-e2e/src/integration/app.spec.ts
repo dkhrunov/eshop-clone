@@ -45,7 +45,7 @@ import {
 import { ProductEntity } from '@esc/product/models';
 import { OrderEntity, OrderItem } from '@esc/order/models';
 import { UserFromServer } from '@esc/user/models';
-import { environment } from '../../../../environments/environment';
+import { environment } from '@env/environment';
 
 describe('Eshop Clone', () => {
   const randomNumberOfProducts = generateRandom().integer({ min: 1, max: 3 });

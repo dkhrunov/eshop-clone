@@ -14,7 +14,7 @@ import {
   Subject,
   switchMap,
 } from 'rxjs';
-import { environment } from '../../../../../../environments/environment';
+import { environment } from '@env/environment';
 
 @Injectable({
   providedIn: 'root',

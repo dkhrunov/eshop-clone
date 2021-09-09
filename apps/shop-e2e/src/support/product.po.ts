@@ -7,7 +7,7 @@ import {
   UpdateCategoryDto,
   UpdateProductDto,
 } from '@esc/product/models';
-import { environment } from '../../../../environments/environment';
+import { environment } from '@env/environment';
 
 const baseUrlProducts = `${environment.baseUrlApi}/products`;
 const baseUrlCategories = `${environment.baseUrlApi}/categories`;

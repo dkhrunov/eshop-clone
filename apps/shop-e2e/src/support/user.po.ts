@@ -1,5 +1,5 @@
 import { RegisterUserDto, UserEntity, UserResponse } from '@esc/user/models';
-import { environment } from '../../../../environments/environment';
+import { environment } from '@env/environment';
 
 const baseUrlUsers = `${environment.baseUrlApi}/users`;
 

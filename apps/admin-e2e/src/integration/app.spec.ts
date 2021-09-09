@@ -1,4 +1,4 @@
-import { environment } from '../../../../environments/environment';
+import { environment } from '@env/environment';
 import { generateCategory } from '@esc/shared/util-helpers';
 import {
   createCategory,

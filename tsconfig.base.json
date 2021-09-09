@@ -92,6 +92,9 @@
       ],
       "@esc/user/models": [
         "libs/user/models/src/index.ts"
+      ],
+      "@env/*": [
+        "environments/*"
       ]
     }
   },

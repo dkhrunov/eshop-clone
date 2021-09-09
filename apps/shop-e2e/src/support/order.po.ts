@@ -1,6 +1,6 @@
 import { CreateOrderDto, OrderEntity } from '@esc/order/models';
 import { CountResponse } from '@esc/shared/util-models';
-import { environment } from '../../../../environments/environment';
+import { environment } from '@env/environment';
 
 const baseUrlOrders = `${environment.baseUrlApi}/orders`;
 
