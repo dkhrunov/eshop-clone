@@ -2,7 +2,15 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ListCategoriesFacade } from '@esc/product/domain';
-import { combineLatest, filter, mapTo, merge, pluck, take, tap } from 'rxjs';
+import {
+  combineLatest,
+  filter,
+  merge,
+  pluck,
+  shareReplay,
+  take,
+  tap,
+} from 'rxjs';
 
 @Component({
   selector: 'ui-categories-form',
@@ -16,20 +24,18 @@ export class CategoriesFormComponent {
     private listCategoriesFacade: ListCategoriesFacade,
     private router: Router,
     private route: ActivatedRoute
-  ) {
-    this.updateCategoryId = undefined;
-  }
+  ) {}
 
-  updateCategoryId: string | undefined;
+  updateCategoryId: string | undefined = undefined;
 
   categoryForEdit$ = combineLatest([
     this.listCategoriesFacade.categoryById$.pipe(
-      tap((category) => {
-        this.form.patchValue({
-          name: category.name,
-          icon: category.icon,
-          image: category.image,
-          color: category.color,
+      tap(({ name, icon, image, color }) => {
+        this.form.setValue({
+          name,
+          icon,
+          image,
+          color,
         });
       })
     ),
@@ -41,7 +47,7 @@ export class CategoriesFormComponent {
         this.listCategoriesFacade.getCategoryById(id);
       })
     ),
-  ]).pipe(take(1), mapTo('Save'));
+  ]).pipe(take(1), shareReplay(1));
 
   categorySaved$ = merge(
     this.listCategoriesFacade.createdCategory$,

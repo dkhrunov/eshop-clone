@@ -22,7 +22,10 @@ export const updateCategory = (name: string, newName: string) => {
       cy.get('[data-cy=editCategory]').click();
     });
 
-  cy.get('[data-cy=createCategoryName]').clear().type(newName);
+  cy.get('[data-cy=createCategoryName]')
+    .should('contain.value', name)
+    .clear()
+    .type(newName);
   cy.get('[data-cy=updateCategoryButton]').click();
   cy.get('[data-cy=categoryFormGoBack]').should('be.visible').click();
 };
