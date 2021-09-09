@@ -1,6 +1,6 @@
 import { environment } from '../../../../environments/environment';
 import { generateCategory } from '@esc/shared/util-helpers';
-import { createCategory } from '../support/categories.po';
+import { createCategory, updateCategory } from '../support/categories.po';
 import { CreateCategoryDto } from '@esc/product/models';
 
 describe('Admin App', () => {
@@ -11,13 +11,6 @@ describe('Admin App', () => {
   });
   it('Show main dashboard', () => {
     //TODO
-  });
-
-  it('List categories', () => {
-    cy.visit('categories');
-    cy.get('[data-cy=category]').each((category) => {
-      cy.wrap(category).should('be.visible');
-    });
   });
 
   it('Delete Category', () => {
@@ -48,5 +41,24 @@ describe('Admin App', () => {
     createCategory(category);
 
     cy.get('[data-cy=category]').should('contain', category.name);
+  });
+
+  it('Edit category', () => {
+    const category = generateCategory();
+
+    createCategory(category);
+
+    updateCategory(category.name, 'Updated Category');
+
+    updateCategory('Updated Category', category.name);
+
+    cy.contains(category.name);
+  });
+
+  it('List categories', () => {
+    cy.visit('categories');
+    cy.get('[data-cy=category]').each((category) => {
+      cy.wrap(category).should('be.visible');
+    });
   });
 });

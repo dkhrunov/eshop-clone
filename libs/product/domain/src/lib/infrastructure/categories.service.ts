@@ -14,6 +14,7 @@ import {
   scan,
   shareReplay,
   Subject,
+  switchMap,
 } from 'rxjs';
 import { environment } from '../../../../../../environments/environment';
 
@@ -31,9 +32,20 @@ export class CategoriesService {
   private deleteCategorySubject = new Subject<string>();
   deleteCategoryAction$ = this.deleteCategorySubject.asObservable();
 
-  allCategories$ = this.http
-    .get<CategoryEntity[]>(this.categoriesUrl)
-    .pipe(shareReplay());
+  private getCategorySubject = new Subject<string>();
+  getCategoryAction$ = this.getCategorySubject.asObservable();
+
+  private updateCategorySubject = new Subject<{
+    id: string;
+    category: CategoryEntity;
+  }>();
+  updateCategoryAction$ = this.updateCategorySubject.asObservable();
+
+  allCategories$ = this.http.get<CategoryEntity[]>(this.categoriesUrl);
+
+  categoryById$ = this.getCategoryAction$.pipe(
+    switchMap((id) => this.getCategoryFromServer(id))
+  );
 
   createdCategory$ = this.createCategoryAction$.pipe(
     concatMap((category) => {
@@ -45,17 +57,21 @@ export class CategoriesService {
     concatMap((id) => this.deleteCategoryOnServer(id))
   );
 
+  updatedCategory$ = this.updateCategoryAction$.pipe(
+    concatMap(({ id, category }) => this.updateCategoryOnServer(id, category))
+  );
+
   categories$ = merge(
     this.allCategories$,
     this.createdCategory$,
-    this.deletedCategory$
+    this.deletedCategory$,
+    this.updatedCategory$
   ).pipe(
     scan(
       (categories, category) =>
         this.modifyCategoriesArray(categories, category),
       [] as CategoryEntity[]
-    ),
-    shareReplay()
+    )
   );
 
   createCategory(category: CreateCategoryDto): void {
@@ -64,6 +80,14 @@ export class CategoriesService {
 
   deleteCategory(id: string): void {
     this.deleteCategorySubject.next(id);
+  }
+
+  getCategoryById(id: string): void {
+    this.getCategorySubject.next(id);
+  }
+
+  updateCategory(id: string, category: CategoryEntity): void {
+    this.updateCategorySubject.next({ id, category });
   }
 
   private createCategoryOnServer(
@@ -78,6 +102,20 @@ export class CategoriesService {
       .pipe(pluck('categoryDeleted'));
   }
 
+  private updateCategoryOnServer(
+    id: string,
+    category: CategoryEntity
+  ): Observable<CategoryEntity> {
+    return this.http.put<CategoryEntity>(
+      `${this.categoriesUrl}/${id}`,
+      category
+    );
+  }
+
+  private getCategoryFromServer(id: string): Observable<CategoryEntity> {
+    return this.http.get<CategoryEntity>(`${this.categoriesUrl}/${id}`);
+  }
+
   private modifyCategoriesArray(
     categories: CategoryEntity[],
     value: unknown
@@ -89,7 +127,16 @@ export class CategoriesService {
     } else if (value instanceof CategoryEntity) {
       const isCategoryExist = categories.find((item) => item.id === value.id);
 
-      return isCategoryExist ? [...categories] : [...categories, value];
+      if (isCategoryExist) {
+        return categories.map((category) => {
+          if (category.id === isCategoryExist.id) {
+            return isCategoryExist;
+          }
+          return category;
+        });
+      } else {
+        return [...categories, value];
+      }
     }
     return categories;
   }

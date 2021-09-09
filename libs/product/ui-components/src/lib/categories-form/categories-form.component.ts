@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ListCategoriesFacade } from '@esc/product/domain';
-import { tap } from 'rxjs';
+import { combineLatest, filter, mapTo, merge, pluck, take, tap } from 'rxjs';
 
 @Component({
   selector: 'ui-categories-form',
@@ -14,11 +14,40 @@ export class CategoriesFormComponent {
   constructor(
     private fb: FormBuilder,
     private listCategoriesFacade: ListCategoriesFacade,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    this.updateCategoryId = undefined;
+  }
 
-  createdCategory$ = this.listCategoriesFacade.createdCategory$.pipe(
-    tap((_) => {
+  updateCategoryId: string | undefined;
+
+  categoryForEdit$ = combineLatest([
+    this.listCategoriesFacade.categoryById$.pipe(
+      tap((category) => {
+        this.form.patchValue({
+          name: category.name,
+          icon: category.icon,
+          image: category.image,
+          color: category.color,
+        });
+      })
+    ),
+    this.route.params.pipe(
+      pluck('id'),
+      filter(Boolean),
+      tap((id) => {
+        this.updateCategoryId = id;
+        this.listCategoriesFacade.getCategoryById(id);
+      })
+    ),
+  ]).pipe(take(1), mapTo('Save'));
+
+  categorySaved$ = merge(
+    this.listCategoriesFacade.createdCategory$,
+    this.listCategoriesFacade.updatedCategory$
+  ).pipe(
+    tap(() => {
       this.form.reset();
     })
   );
@@ -30,6 +59,18 @@ export class CategoriesFormComponent {
     image: ['', Validators.required],
   });
 
+  updateCategory(): void {
+    if (this.form.invalid) {
+      return;
+    }
+
+    if (this.updateCategoryId) {
+      this.listCategoriesFacade.updateCategory(
+        this.updateCategoryId,
+        this.form.getRawValue()
+      );
+    }
+  }
   createCategory(): void {
     if (this.form.invalid) {
       return;

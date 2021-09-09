@@ -53,7 +53,12 @@
                   ></i>
                 </a>
               </button>
-              <button nz-button nzDanger>
+              <button
+                nz-button
+                nzDanger
+                data-cy="editCategory"
+                (click)="editCategory(data.id)"
+              >
                 <i nz-icon nzType="edit" nzTheme="fill"></i>
               </button>
             </nz-button-group>

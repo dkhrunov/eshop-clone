@@ -1,20 +1,42 @@
 <ui-main-wrapper
-  title="Add Category"
+  title="{{ (categoryForEdit$ | async) ? 'Edit' : 'Create' }} Category"
   subtitle="You can add or edit categories here"
 >
   <ui-button-bar>
-    <button
-      class="primary"
-      nz-button
-      nzType="primary"
-      nzSize="small"
-      [disabled]="form.invalid"
-      (click)="createCategory()"
-      data-cy="createCategoryButton"
+    <ng-container
+      [ngTemplateOutlet]="(categoryForEdit$ | async) ? editTpl : createTpl"
     >
-      <i nz-icon nzType="plus" nzTheme="outline"> </i>
-      Create
-    </button>
+    </ng-container>
+
+    <ng-template #createTpl>
+      <button
+        class="primary"
+        nz-button
+        nzType="primary"
+        nzSize="small"
+        [disabled]="form.invalid"
+        (click)="createCategory()"
+        data-cy="createCategoryButton"
+      >
+        <i nz-icon nzType="plus" nzTheme="outline"> </i>
+        Create
+      </button>
+    </ng-template>
+
+    <ng-template #editTpl>
+      <button
+        class="primary"
+        nz-button
+        nzType="primary"
+        nzSize="small"
+        [disabled]="form.invalid"
+        (click)="updateCategory()"
+        data-cy="updateCategoryButton"
+      >
+        <i nz-icon nzType="plus" nzTheme="outline"> </i>
+        Save
+      </button>
+    </ng-template>
 
     <button
       nz-button
@@ -22,7 +44,7 @@
       class="red"
       nzDanger
       nzSize="small"
-      [routerLink]="['..']"
+      [routerLink]="['/', 'categories']"
     >
       <i nz-icon nzType="arrow-left" nzTheme="outline"></i>
       Cancel
@@ -89,9 +111,9 @@
   </ng-template>
 
   <nz-result
-    *ngIf="createdCategory$ | async as category; else formTpl"
+    *ngIf="categorySaved$ | async as category; else formTpl"
     [nzIcon]="'smile-twotone'"
-    [nzTitle]="'Great, category is created!'"
+    [nzTitle]="'Great, category is saved!'"
   >
     <div nz-result-extra [align]="'center'">
       <button

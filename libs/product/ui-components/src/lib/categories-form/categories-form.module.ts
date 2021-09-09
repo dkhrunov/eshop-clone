@@ -23,7 +23,10 @@ import { NzResultModule } from 'ng-zorro-antd/result';
     FormsModule,
     NzInputModule,
     NzResultModule,
-    RouterModule.forChild([{ path: '', component: CategoriesFormComponent }]),
+    RouterModule.forChild([
+      { path: '', component: CategoriesFormComponent },
+      { path: ':id', component: CategoriesFormComponent },
+    ]),
   ],
   exports: [CategoriesFormComponent],
 })
