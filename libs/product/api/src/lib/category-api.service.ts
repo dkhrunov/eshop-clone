@@ -57,14 +57,6 @@ export class CategoryService {
   ): Promise<CategoryEntity> {
     const category = await this.getCategoryById(id);
 
-    const categoryExisting = await this.categoryRepository.findOne({
-      where: { name: dto.name },
-    });
-
-    if (categoryExisting) {
-      return categoryExisting;
-    }
-
     Object.assign(category, dto);
 
     await this.categoryRepository.update(id, dto);

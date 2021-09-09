@@ -7,12 +7,10 @@ import {
 } from '@esc/product/models';
 import {
   concatMap,
-  map,
   merge,
   Observable,
   pluck,
   scan,
-  shareReplay,
   Subject,
   switchMap,
 } from 'rxjs';
@@ -121,26 +119,43 @@ export class CategoriesService {
     value: unknown
   ): CategoryEntity[] {
     if (Array.isArray(value)) {
-      return [...categories, ...value];
-    } else if (typeof value === 'string') {
+      return this.mergeCategories(categories, value);
+    }
+
+    if (typeof value === 'string') {
       return categories.filter((c) => c.id !== value);
-    } else if (value instanceof CategoryEntity) {
+    }
+
+    if (value instanceof CategoryEntity) {
       const exsitedCategory = categories.find((item) => item.id === value.id);
 
-      if (exsitedCategory) {
-        return categories.map((category) => {
-          if (category.id === exsitedCategory.id) {
-            return {
-              ...exsitedCategory,
-              ...value,
-            };
-          }
-          return category;
-        });
-      } else {
-        return [...categories, value];
-      }
+      exsitedCategory
+        ? this.replaceCategoryInList(categories, exsitedCategory)
+        : [...categories, value];
     }
+
     return categories;
+  }
+
+  private mergeCategories(
+    categories: CategoryEntity[],
+    addCategories: CategoryEntity[]
+  ): CategoryEntity[] {
+    return [...categories, ...addCategories];
+  }
+
+  private replaceCategoryInList(
+    categories: CategoryEntity[],
+    categoryForReplace: CategoryEntity
+  ): CategoryEntity[] {
+    return categories.map((category) => {
+      if (category.id === categoryForReplace.id) {
+        return {
+          ...category,
+          ...categoryForReplace,
+        };
+      }
+      return category;
+    });
   }
 }

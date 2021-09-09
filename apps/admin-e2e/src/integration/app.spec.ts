@@ -1,7 +1,6 @@
 import { environment } from '../../../../environments/environment';
 import { generateCategory } from '@esc/shared/util-helpers';
 import { createCategory, updateCategory } from '../support/categories.po';
-import { CreateCategoryDto } from '@esc/product/models';
 
 describe('Admin App', () => {
   beforeEach(() => {
@@ -15,11 +14,12 @@ describe('Admin App', () => {
 
   it('Delete Category', () => {
     const category = generateCategory();
+    const { name } = category;
 
     createCategory(category);
 
     cy.get('[data-cy=category]')
-      .contains(category.name)
+      .contains(name)
       .parent()
       .find('[data-cy=deleteCategoryConfirmation]')
       .click();
@@ -27,7 +27,7 @@ describe('Admin App', () => {
     cy.get('button').contains('No').click().should('not.exist');
 
     cy.get('[data-cy=category]')
-      .contains(category.name)
+      .contains(name)
       .parent()
       .find('[data-cy=deleteCategoryConfirmation]')
       .click();
@@ -37,22 +37,24 @@ describe('Admin App', () => {
 
   it('Create category', () => {
     const category = generateCategory();
+    const { name } = category;
 
     createCategory(category);
 
-    cy.get('[data-cy=category]').should('contain', category.name);
+    cy.get('[data-cy=category]').should('contain', name);
   });
 
   it('Edit category', () => {
     const category = generateCategory();
+    const { name } = category;
 
     createCategory(category);
 
-    updateCategory(category.name, 'Updated Category');
+    updateCategory(name, 'Updated Category');
 
-    updateCategory('Updated Category', category.name);
+    updateCategory('Updated Category', name);
 
-    cy.contains(category.name);
+    cy.contains(name);
   });
 
   it('List categories', () => {
