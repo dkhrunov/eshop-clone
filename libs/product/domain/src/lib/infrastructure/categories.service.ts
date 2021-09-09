@@ -125,12 +125,15 @@ export class CategoriesService {
     } else if (typeof value === 'string') {
       return categories.filter((c) => c.id !== value);
     } else if (value instanceof CategoryEntity) {
-      const isCategoryExist = categories.find((item) => item.id === value.id);
+      const exsitedCategory = categories.find((item) => item.id === value.id);
 
-      if (isCategoryExist) {
+      if (exsitedCategory) {
         return categories.map((category) => {
-          if (category.id === isCategoryExist.id) {
-            return isCategoryExist;
+          if (category.id === exsitedCategory.id) {
+            return {
+              ...exsitedCategory,
+              ...value,
+            };
           }
           return category;
         });

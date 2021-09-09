@@ -60,23 +60,16 @@ export class CategoriesFormComponent {
   });
 
   updateCategory(): void {
-    if (this.form.invalid) {
-      return;
-    }
-
-    if (this.updateCategoryId) {
+    this.form.valid &&
+      this.updateCategoryId &&
       this.listCategoriesFacade.updateCategory(
         this.updateCategoryId,
         this.form.getRawValue()
       );
-    }
   }
   createCategory(): void {
-    if (this.form.invalid) {
-      return;
-    }
-
-    this.listCategoriesFacade.createCategory(this.form.getRawValue());
+    this.form.valid &&
+      this.listCategoriesFacade.createCategory(this.form.getRawValue());
   }
 
   goBack(): void {

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CategoryEntity, CreateCategoryDto } from '@esc/product/models';
 import { CategoriesService } from '../infrastructure/categories.service';
 
