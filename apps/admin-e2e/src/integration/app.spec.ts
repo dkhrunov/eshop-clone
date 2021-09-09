@@ -1,6 +1,10 @@
 import { environment } from '../../../../environments/environment';
 import { generateCategory } from '@esc/shared/util-helpers';
-import { createCategory, updateCategory } from '../support/categories.po';
+import {
+  createCategory,
+  deleteCategory,
+  updateCategory,
+} from '../support/categories.po';
 
 describe('Admin App', () => {
   beforeEach(() => {
@@ -18,19 +22,11 @@ describe('Admin App', () => {
 
     createCategory(category);
 
-    cy.get('[data-cy=category]')
-      .contains(name)
-      .parent()
-      .find('[data-cy=deleteCategoryConfirmation]')
-      .click();
+    deleteCategory(name);
 
     cy.get('button').contains('No').click().should('not.exist');
 
-    cy.get('[data-cy=category]')
-      .contains(name)
-      .parent()
-      .find('[data-cy=deleteCategoryConfirmation]')
-      .click();
+    deleteCategory(name);
 
     cy.get('button').contains('Yes').click().should('not.exist');
   });

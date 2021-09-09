@@ -15,7 +15,7 @@
     >
       <thead>
         <tr>
-          <th>Name</th>
+          <th nzSortOrder="ascend" [nzSortFn]="sortByNameFn">Name</th>
           <th [nzAlign]="'center'">Color</th>
           <th [nzAlign]="'center'">Icon</th>
           <th [nzAlign]="'center'"></th>
@@ -30,7 +30,7 @@
             </div>
           </td>
           <td [nzAlign]="'center'">
-            <div>
+            <div class="categoryIcon">
               <i nz-icon nzType="{{ data.icon }}" nzTheme="outline"></i>
             </div>
           </td>

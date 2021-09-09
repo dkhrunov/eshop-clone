@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ListCategoriesFacade } from '@esc/product/domain';
+import { CategoryEntity } from '@esc/product/models';
 
 @Component({
   selector: 'product-list-categories',
@@ -21,5 +22,9 @@ export class ListCategoriesComponent {
 
   editCategory(id: string): void {
     this.router.navigate(['categories', 'form', id]);
+  }
+
+  sortByNameFn(left: CategoryEntity, right: CategoryEntity): number {
+    return left.name.localeCompare(right.name);
   }
 }
