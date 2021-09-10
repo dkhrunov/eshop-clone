@@ -2,12 +2,15 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ListCategoriesFacade } from '@esc/product/domain';
+import { CategoryEntity } from '@esc/product/models';
 import {
   combineLatest,
   filter,
+  map,
   merge,
   pluck,
   shareReplay,
+  startWith,
   take,
   tap,
 } from 'rxjs';
@@ -65,6 +68,25 @@ export class CategoriesFormComponent {
     image: ['', Validators.required],
   });
 
+  formEdited$ = combineLatest([this.categoryForEdit$, this.form.valueChanges])
+    .pipe(
+      map(([[category], changes]) => {
+        for (const prop in changes) {
+          const formValue = prop.trim();
+
+          if (
+            category[formValue as keyof CategoryEntity] !==
+            changes[formValue as keyof CategoryEntity]
+          ) {
+            return true;
+          }
+        }
+
+        return false;
+      })
+    )
+    .pipe(startWith(false));
+
   updateCategory(): void {
     this.form.valid &&
       this.updateCategoryId &&
@@ -81,4 +103,6 @@ export class CategoriesFormComponent {
   goBack(): void {
     this.router.navigate(['categories']);
   }
+
+  // private compareCategoriesForChanges(old: )
 }

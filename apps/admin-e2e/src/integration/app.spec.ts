@@ -73,19 +73,23 @@ describe('Admin App', () => {
     it('Sort categories', () => {
       cy.visit('categories');
 
+      cy.get('[data-cy=categoryNameHeader]').click();
+
       getCategoriesList()
         .then(mapCategoriesToNames)
         .then((unsortedCategories) => {
           const sortedCategories = unsortedCategories.slice().sort();
-          expect(unsortedCategories).not.to.be.deep.eq(sortedCategories);
+          expect(unsortedCategories).to.be.deep.eq(sortedCategories);
         });
 
-      cy.get('[data-cy=categoryName]').click();
+      cy.get('[data-cy=categoryNameHeader]').click();
 
       getCategoriesList()
         .then(mapCategoriesToNames)
         .then((unsortedCategories) => {
-          const sortedCategories = unsortedCategories.slice().sort();
+          const sortedCategories = unsortedCategories
+            .slice()
+            .sort((a: string, b: string) => b.localeCompare(a));
           expect(unsortedCategories).to.be.deep.eq(sortedCategories);
         });
     });

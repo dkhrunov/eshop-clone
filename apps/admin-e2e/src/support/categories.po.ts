@@ -1,5 +1,4 @@
 import { CreateCategoryDto } from '@esc/product/models';
-const { _ } = Cypress;
 
 export const createCategory = ({
   name,
@@ -44,6 +43,8 @@ export const getCategoriesList = () => {
   return cy.get('[data-cy=category]');
 };
 
-export const mapCategoriesToNames = (categories: JQuery<HTMLElement>) => {
-  return Array.from(categories, (category) => category.textContent);
+export const mapCategoriesToNames = (
+  categories: JQuery<HTMLElement>
+): string[] => {
+  return Array.from(categories, (category) => category.textContent) as string[];
 };
