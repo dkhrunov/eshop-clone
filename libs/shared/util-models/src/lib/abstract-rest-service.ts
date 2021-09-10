@@ -1,5 +1,4 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
 import {
   concatMap,
   merge,
@@ -14,10 +13,7 @@ import { DeleteResponse } from './delete-response';
 import { CoreEntity } from '..';
 import { isEntity } from './isEntityGuard';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class AbstractRestService<E extends CoreEntity, D> {
+export abstract class AbstractRestService<E extends CoreEntity, D> {
   constructor(private http: HttpClient, private url: string) {}
 
   private resourceUrl = `${environment.baseUrlApi}/${this.url}`;

@@ -6,26 +6,26 @@ import { CategoriesService } from '../infrastructure/categories.service';
 export class ListCategoriesFacade {
   constructor(private categoriesService: CategoriesService) {}
 
-  categories$ = this.categoriesService.categories$;
+  categories$ = this.categoriesService.resources$;
 
-  createdCategory$ = this.categoriesService.createdCategory$;
+  createdCategory$ = this.categoriesService.created$;
 
-  updatedCategory$ = this.categoriesService.updatedCategory$;
+  updatedCategory$ = this.categoriesService.updated$;
 
-  categoryById$ = this.categoriesService.categoryById$;
+  categoryById$ = this.categoriesService.getById$;
 
   createCategory(category: CreateCategoryDto) {
-    this.categoriesService.createCategory(category);
+    this.categoriesService.create(category);
   }
 
   getCategoryById(id: string): void {
-    this.categoriesService.getCategoryById(id);
+    this.categoriesService.getById(id);
   }
 
   deleteCategory(id: string) {
-    this.categoriesService.deleteCategory(id);
+    this.categoriesService.delete(id);
   }
   updateCategory(id: string, category: CategoryEntity) {
-    this.categoriesService.updateCategory(id, category);
+    this.categoriesService.update(id, category);
   }
 }

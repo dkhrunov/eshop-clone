@@ -19,7 +19,7 @@ describe('Admin App', () => {
     //TODO
   });
 
-  context.only('Products', () => {
+  context('Products', () => {
     it('List products', () => {
       cy.visit('products');
     });
