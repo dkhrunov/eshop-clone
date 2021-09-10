@@ -1,4 +1,8 @@
-<ui-main-wrapper
-  title="Products"
-  subtitle="List of all products"
-></ui-main-wrapper>
+<ui-main-wrapper title="Products" subtitle="List of all products">
+  <ui-button-bar>
+    <button nz-button nzType="primary" nzSize="small" [routerLink]="['form']">
+      <i nz-icon nzType="plus" nzTheme="outline"></i>
+      New
+    </button>
+  </ui-button-bar>
+</ui-main-wrapper>

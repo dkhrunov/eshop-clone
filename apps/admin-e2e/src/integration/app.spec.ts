@@ -19,9 +19,9 @@ describe('Admin App', () => {
     //TODO
   });
 
-  context('Products', () => {
+  context.only('Products', () => {
     it('List products', () => {
-      //
+      cy.visit('products');
     });
   });
 
@@ -73,7 +73,7 @@ describe('Admin App', () => {
     it('Sort categories', () => {
       cy.visit('categories');
 
-      cy.get('[data-cy=categoryNameHeader]').click();
+      cy.get('[data-cy=sortTableByName]').click();
 
       getCategoriesList()
         .then(mapCategoriesToNames)
@@ -82,7 +82,7 @@ describe('Admin App', () => {
           expect(unsortedCategories).to.be.deep.eq(sortedCategories);
         });
 
-      cy.get('[data-cy=categoryNameHeader]').click();
+      cy.get('[data-cy=sortTableByName]').click();
 
       getCategoriesList()
         .then(mapCategoriesToNames)

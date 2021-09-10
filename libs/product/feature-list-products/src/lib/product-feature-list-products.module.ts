@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ProductDomainModule } from '@esc/product/domain';
 import { ListProductsComponent } from './list-products.component';
 import { RouterModule } from '@angular/router';
-import { MainWrapperModule } from '@esc/shared/ui-components';
+import { MainWrapperModule, ButtonBarModule } from '@esc/shared/ui-components';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 @NgModule({
   imports: [
@@ -16,6 +17,8 @@ import { MainWrapperModule } from '@esc/shared/ui-components';
       },
     ]),
     MainWrapperModule,
+    ButtonBarModule,
+    NzButtonModule,
   ],
   declarations: [ListProductsComponent],
   exports: [ListProductsComponent],

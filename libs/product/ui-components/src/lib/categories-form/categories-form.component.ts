@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ListCategoriesFacade } from '@esc/product/domain';
-import { CategoryEntity } from '@esc/product/models';
+import { CreateCategoryDto } from '@esc/product/models';
 import {
   combineLatest,
   filter,
@@ -64,7 +64,7 @@ export class CategoriesFormComponent {
   form = this.fb.group({
     name: ['', Validators.required],
     icon: ['', Validators.required],
-    color: ['', Validators.required],
+    color: ['#7a7a7a', Validators.required],
     image: ['', Validators.required],
   });
 
@@ -72,12 +72,15 @@ export class CategoriesFormComponent {
     .pipe(
       map(([[category], changes]) => {
         for (const prop in changes) {
-          const formValue = prop.trim();
+          const oldValue = String(
+            category[prop as keyof CreateCategoryDto]
+          ).trim();
 
-          if (
-            category[formValue as keyof CategoryEntity] !==
-            changes[formValue as keyof CategoryEntity]
-          ) {
+          const newValue = String(
+            changes[prop as keyof CreateCategoryDto]
+          ).trim();
+
+          if (oldValue !== newValue) {
             return true;
           }
         }
@@ -103,6 +106,4 @@ export class CategoriesFormComponent {
   goBack(): void {
     this.router.navigate(['categories']);
   }
-
-  // private compareCategoriesForChanges(old: )
 }
