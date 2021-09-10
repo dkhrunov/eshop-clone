@@ -206,6 +206,7 @@ export const ImageTypesForUpload = new Map([
   ['image/jpg', 'jpg'],
 ]);
 
+//TODO refactor to DeleteResponse
 export interface DeleteCategoryResponse {
   categoryDeleted: string;
 }

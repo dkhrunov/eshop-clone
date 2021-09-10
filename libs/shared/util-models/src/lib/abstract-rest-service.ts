@@ -1,11 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-  CategoryEntity,
-  CreateCategoryDto,
-  DeleteCategoryResponse,
-} from '@esc/product/models';
-import {
   concatMap,
   merge,
   Observable,
@@ -15,147 +10,132 @@ import {
   switchMap,
 } from 'rxjs';
 import { environment } from '@env/environment';
+import { DeleteResponse } from './delete-response';
+import { CoreEntity } from '..';
+import { isEntity } from './isEntityGuard';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CategoriesService {
-  constructor(private http: HttpClient) {}
+export class AbstractRestService<E extends CoreEntity, D> {
+  constructor(private http: HttpClient, private url: string) {}
 
-  private categoriesUrl = `${environment.baseUrlApi}/categories`;
+  private resourceUrl = `${environment.baseUrlApi}/${this.url}`;
 
-  private createCategorySubject = new Subject<CreateCategoryDto>();
-  createCategoryAction$ = this.createCategorySubject.asObservable();
+  private createSubject = new Subject<D>();
+  createAction$ = this.createSubject.asObservable();
 
-  private deleteCategorySubject = new Subject<string>();
-  deleteCategoryAction$ = this.deleteCategorySubject.asObservable();
+  private deleteSubject = new Subject<string>();
+  deleteAction$ = this.deleteSubject.asObservable();
 
-  private getCategorySubject = new Subject<string>();
-  getCategoryAction$ = this.getCategorySubject.asObservable();
+  private getSubject = new Subject<string>();
+  getAction$ = this.getSubject.asObservable();
 
-  private updateCategorySubject = new Subject<{
+  private updateSubject = new Subject<{
     id: string;
-    category: CategoryEntity;
+    entity: E;
   }>();
-  updateCategoryAction$ = this.updateCategorySubject.asObservable();
+  updateAction$ = this.updateSubject.asObservable();
 
-  allCategories$ = this.http.get<CategoryEntity[]>(this.categoriesUrl);
+  all$ = this.http.get<E[]>(this.resourceUrl);
 
-  categoryById$ = this.getCategoryAction$.pipe(
-    switchMap((id) => this.getCategoryFromServer(id))
+  getById$ = this.getAction$.pipe(
+    switchMap((id) => this.getResourceFromServer(id))
   );
 
-  createdCategory$ = this.createCategoryAction$.pipe(
-    concatMap((category) => {
-      return this.createCategoryOnServer(category);
+  created$ = this.createAction$.pipe(
+    concatMap((entity) => {
+      return this.createResourceOnServer(entity);
     })
   );
 
-  deletedCategory$ = this.deleteCategoryAction$.pipe(
-    concatMap((id) => this.deleteCategoryOnServer(id))
+  deleted$ = this.deleteAction$.pipe(
+    concatMap((id) => this.deleteResourceOnServer(id))
   );
 
-  updatedCategory$ = this.updateCategoryAction$.pipe(
-    concatMap(({ id, category }) => this.updateCategoryOnServer(id, category))
+  updated$ = this.updateAction$.pipe(
+    concatMap(({ id, entity }) => this.updateResourceOnServer(id, entity))
   );
 
-  categories$ = merge(
-    this.allCategories$,
-    this.createdCategory$,
-    this.deletedCategory$,
-    this.updatedCategory$
+  resources$ = merge(
+    this.all$,
+    this.created$,
+    this.deleted$,
+    this.updated$
   ).pipe(
     scan(
-      (categories, category) =>
-        this.modifyCategoriesArray(categories, category),
-      [] as CategoryEntity[]
+      (entities, entity) => this.modifyResourceArray(entities, entity),
+      [] as E[]
     )
   );
 
-  createCategory(category: CreateCategoryDto): void {
-    this.createCategorySubject.next(category);
+  create(entity: D): void {
+    this.createSubject.next(entity);
   }
 
-  deleteCategory(id: string): void {
-    this.deleteCategorySubject.next(id);
+  delete(id: string): void {
+    this.deleteSubject.next(id);
   }
 
-  getCategoryById(id: string): void {
-    this.getCategorySubject.next(id);
+  getById(id: string): void {
+    this.getSubject.next(id);
   }
 
-  updateCategory(id: string, category: CategoryEntity): void {
-    this.updateCategorySubject.next({ id, category });
+  update(id: string, entity: E): void {
+    this.updateSubject.next({ id, entity });
   }
 
-  private createCategoryOnServer(
-    category: CreateCategoryDto
-  ): Observable<CategoryEntity> {
-    return this.http.post<CategoryEntity>(this.categoriesUrl, category);
+  private createResourceOnServer(entity: D): Observable<E> {
+    return this.http.post<E>(this.resourceUrl, entity);
   }
 
-  private deleteCategoryOnServer(id: string): Observable<string> {
+  private deleteResourceOnServer(id: string): Observable<string> {
     return this.http
-      .delete<DeleteCategoryResponse>(`${this.categoriesUrl}/${id}`)
-      .pipe(pluck('categoryDeleted'));
+      .delete<DeleteResponse>(`${this.resourceUrl}/${id}`)
+      .pipe(pluck('entityDeleted'));
   }
 
-  private updateCategoryOnServer(
-    id: string,
-    category: CategoryEntity
-  ): Observable<CategoryEntity> {
-    return this.http.put<CategoryEntity>(
-      `${this.categoriesUrl}/${id}`,
-      category
-    );
+  private updateResourceOnServer(id: string, entity: E): Observable<E> {
+    return this.http.put<E>(`${this.resourceUrl}/${id}`, entity);
   }
 
-  private getCategoryFromServer(id: string): Observable<CategoryEntity> {
-    return this.http.get<CategoryEntity>(`${this.categoriesUrl}/${id}`);
+  private getResourceFromServer(id: string): Observable<E> {
+    return this.http.get<E>(`${this.resourceUrl}/${id}`);
   }
 
-  private modifyCategoriesArray(
-    categories: CategoryEntity[],
-    value: unknown
-  ): CategoryEntity[] {
+  private modifyResourceArray(entities: E[], value: unknown): E[] {
     if (Array.isArray(value)) {
-      return this.mergeCategories(categories, value);
+      return this.mergeResources(entities, value);
     }
 
     if (typeof value === 'string') {
-      return categories.filter((c) => c.id !== value);
+      return entities.filter((c) => c.id !== value);
     }
 
-    if (value instanceof CategoryEntity) {
-      const exsitedCategory = categories.find((item) => item.id === value.id);
+    if (isEntity(value)) {
+      const exsitedResource = entities.find((item) => item.id === value.id);
 
-      exsitedCategory
-        ? this.replaceCategoryInList(categories, exsitedCategory)
-        : [...categories, value];
+      exsitedResource
+        ? this.replaceResourceInList(entities, exsitedResource)
+        : [...entities, value];
     }
 
-    return categories;
+    return entities;
   }
 
-  private mergeCategories(
-    categories: CategoryEntity[],
-    addCategories: CategoryEntity[]
-  ): CategoryEntity[] {
-    return [...categories, ...addCategories];
+  private mergeResources(entities: E[], entityToAdd: E[]): E[] {
+    return [...entities, ...entityToAdd];
   }
 
-  private replaceCategoryInList(
-    categories: CategoryEntity[],
-    categoryForReplace: CategoryEntity
-  ): CategoryEntity[] {
-    return categories.map((category) => {
-      if (category.id === categoryForReplace.id) {
+  private replaceResourceInList(entities: E[], entityForReplace: E): E[] {
+    return entities.map((entity) => {
+      if (entity.id === entityForReplace.id) {
         return {
-          ...category,
-          ...categoryForReplace,
+          ...entity,
+          ...entityForReplace,
         };
       }
-      return category;
+      return entity;
     });
   }
 }
