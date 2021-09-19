@@ -15,7 +15,7 @@ import { diskStorage } from 'multer';
 import { Express, Request, Response } from 'express';
 import { getImageUrl, imageFileFilter } from '@esc/product/util-helpers';
 import { ProductApiService } from './product-api.service';
-import { ProductEntity } from '@esc/product/models';
+import { ProductEntity, UploadImageResponse } from '@esc/product/models';
 
 @Controller('uploads')
 export class UploadImagesController {
@@ -30,7 +30,10 @@ export class UploadImagesController {
       }),
     })
   )
-  uploadImage(@UploadedFile() image: Express.Multer.File, @Req() req: Request) {
+  uploadImage(
+    @UploadedFile() image: Express.Multer.File,
+    @Req() req: Request
+  ): UploadImageResponse {
     return {
       imageUrl: getImageUrl(req, image),
     };

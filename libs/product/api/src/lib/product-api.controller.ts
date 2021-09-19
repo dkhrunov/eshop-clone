@@ -18,8 +18,7 @@ import {
   UpdateProductDto,
 } from '@esc/product/models';
 import { CategoryService } from './category-api.service';
-import { CountResponse } from '@esc/shared/util-models';
-import { DeleteResult } from 'typeorm';
+import { CountResponse, DeleteResponse } from '@esc/shared/util-models';
 
 @Controller('')
 export class ProductApiController {
@@ -66,7 +65,7 @@ export class ProductApiController {
   }
 
   @Delete('products/:id')
-  deleteProduct(@Param('id') id: string): Promise<void> {
+  deleteProduct(@Param('id') id: string): Promise<DeleteResponse> {
     return this.productApiService.deleteProduct(id);
   }
 

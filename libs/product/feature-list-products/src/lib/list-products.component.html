@@ -1,8 +1,85 @@
 <ui-main-wrapper title="Products" subtitle="List of all products">
   <ui-button-bar>
-    <button nz-button nzType="primary" nzSize="small" [routerLink]="['form']">
+    <button
+      data-cy="createProductButton"
+      nz-button
+      nzType="primary"
+      nzSize="small"
+      [routerLink]="['form']"
+    >
       <i nz-icon nzType="plus" nzTheme="outline"></i>
       New
     </button>
   </ui-button-bar>
+
+  <ng-container *ngIf="products$ | async as products">
+    <nz-table
+      [nzBordered]="true"
+      [nzShowPagination]="true"
+      #basicTable
+      [nzData]="products"
+    >
+      <thead>
+        <tr>
+          <th data-cy="sortTableByName">Name</th>
+          <th [nzAlign]="'center'">Image</th>
+          <th [nzAlign]="'center'">Price</th>
+          <th [nzAlign]="'center'">Stock</th>
+          <th [nzAlign]="'center'">Category</th>
+          <th
+            [nzAlign]="'center'"
+            [nzSortOrder]="'ascend'"
+            [nzSortFn]="sortByDateFn"
+          >
+            Created
+          </th>
+          <th [nzAlign]="'center'"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-cy="product" *ngFor="let data of basicTable.data">
+          <td>{{ data.name }}</td>
+          <td>
+            <img class="productPreview" [src]="data.image" alt="" />
+          </td>
+          <td>{{ data.price }}</td>
+
+          <td>{{ data.countInStock }}</td>
+          <td>{{ data.category | extractCategory }}</td>
+
+          <td>{{ data.dateCreated | date: 'shortDate' }}</td>
+
+          <td [nzAlign]="'center'">
+            <nz-button-group nzSize="small">
+              <button nz-button nzDanger>
+                <a
+                  nz-popconfirm
+                  nzPopconfirmTitle="Delete product?"
+                  nzOkText="Yes"
+                  nzCancelText="No"
+                  data-cy="deleteProductConfirmation"
+                  (nzOnConfirm)="deleteProduct(data.id)"
+                >
+                  <i
+                    nz-icon
+                    data-cy="deleteProduct"
+                    nzType="delete"
+                    nzTheme="fill"
+                  ></i>
+                </a>
+              </button>
+              <button
+                nz-button
+                nzDanger
+                data-cy="editProduct"
+                (click)="editProduct(data.id)"
+              >
+                <i nz-icon nzType="edit" nzTheme="fill"></i>
+              </button>
+            </nz-button-group>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </ng-container>
 </ui-main-wrapper>

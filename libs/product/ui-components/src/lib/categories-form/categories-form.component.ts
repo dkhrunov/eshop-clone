@@ -2,7 +2,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ListCategoriesFacade } from '@esc/product/domain';
-import { CreateCategoryDto } from '@esc/product/models';
+import { CategoryEntity, CreateCategoryDto } from '@esc/product/models';
+import { isFormEdited } from '@esc/shared/util-helpers';
 import {
   combineLatest,
   filter,
@@ -70,23 +71,9 @@ export class CategoriesFormComponent {
 
   formEdited$ = combineLatest([this.categoryForEdit$, this.form.valueChanges])
     .pipe(
-      map(([[category], changes]) => {
-        for (const prop in changes) {
-          const oldValue = String(
-            category[prop as keyof CreateCategoryDto]
-          ).trim();
-
-          const newValue = String(
-            changes[prop as keyof CreateCategoryDto]
-          ).trim();
-
-          if (oldValue !== newValue) {
-            return true;
-          }
-        }
-
-        return false;
-      })
+      map(([[category], changes]) =>
+        isFormEdited<CategoryEntity, CreateCategoryDto>(category, changes)
+      )
     )
     .pipe(startWith(false));
 

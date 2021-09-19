@@ -16,18 +16,16 @@ const categoriesMap = new Map([
 
 const newCategoryName = generateRandom().pickone([...categoriesMap.keys()]);
 
-export const generateProduct = (): CreateProductDto => {
+export const generateProduct = () => {
   return {
-    name: generateRandom().name(),
+    name: generateRandom().sentence({ words: 2, punctuation: false }),
     description: generateRandom().sentence(),
-    rich_description: generateRandom().paragraph(),
-    image: generateRandom().url(),
+    richDescription: generateRandom().sentence(),
+    image: 'https://picsum.photos/500/300',
     brand: generateRandom().animal(),
-    price: generateRandom().integer({ min: 1, max: 10_000 }),
+    price: generateRandom().integer({ min: 1, max: 1000 }),
     countInStock: generateRandom().integer({ min: 1, max: 254 }),
-    rating: generateRandom().integer({ min: 0, max: 10 }),
-    num_reviews: generateRandom().integer({ min: 0, max: 1000 }),
-    is_featured: generateRandom().bool(),
+    isFeatured: generateRandom().bool(),
   };
 };
 

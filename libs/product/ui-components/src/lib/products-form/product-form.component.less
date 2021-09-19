@@ -1,0 +1,39 @@
+ui-button-bar {
+  @apply justify-end;
+
+  button {
+    @apply grid items-center grid-flow-col rounded;
+  }
+}
+
+form {
+  @apply grid gap-3 items-start;
+  grid-template-columns: repeat(3, 1fr);
+
+  nz-form-item {
+    @apply grid-flow-row grid;
+
+    nz-form-control {
+      input {
+        @apply outline-none ring-0;
+      }
+    }
+
+    nz-input-number {
+      @apply w-full;
+    }
+
+    &.description {
+      @apply mb-4;
+      grid-column: 1 / -1;
+    }
+
+    quill-editor {
+      @apply mb-14;
+    }
+
+    input[name='image'] {
+      @apply mb-4;
+    }
+  }
+}

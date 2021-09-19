@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import { CategoryEntity, CreateCategoryDto } from '@esc/product/models';
 import { CategoriesService } from '../infrastructure/categories.service';
+import { ImageService } from '../infrastructure/image.service';
 
 @Injectable({ providedIn: 'root' })
 export class ListCategoriesFacade {
-  constructor(private categoriesService: CategoriesService) {}
+  constructor(
+    private categoriesService: CategoriesService,
+    private imageService: ImageService
+  ) {}
 
   categories$ = this.categoriesService.resources$;
 
@@ -14,7 +18,13 @@ export class ListCategoriesFacade {
 
   categoryById$ = this.categoriesService.getById$;
 
-  createCategory(category: CreateCategoryDto) {
+  uploadedImageUrl$ = this.imageService.uploadedImageUrl$;
+
+  uploadImage(image: FormData): void {
+    this.imageService.uploadImage(image);
+  }
+
+  createCategory(category: CreateCategoryDto): void {
     this.categoriesService.create(category);
   }
 
@@ -22,10 +32,10 @@ export class ListCategoriesFacade {
     this.categoriesService.getById(id);
   }
 
-  deleteCategory(id: string) {
+  deleteCategory(id: string): void {
     this.categoriesService.delete(id);
   }
-  updateCategory(id: string, category: CategoryEntity) {
+  updateCategory(id: string, category: CategoryEntity): void {
     this.categoriesService.update(id, category);
   }
 }

@@ -1,5 +1,6 @@
 import { environment } from '@env/environment';
-import { generateCategory } from '@esc/shared/util-helpers';
+import { CreateProductDto } from '@esc/product/models';
+import { generateCategory, generateProduct } from '@esc/shared/util-helpers';
 
 import {
   createCategory,
@@ -8,21 +9,21 @@ import {
   mapCategoriesToNames,
   updateCategory,
 } from '../support/categories.po';
+import {
+  createProduct,
+  deleteProduct,
+  getProductsList,
+  updateProduct,
+} from '../support/products.po';
 
 describe('Admin App', () => {
   beforeEach(() => {
     cy.visit(`${environment.baseUrlFrontAdmin}`);
     cy.viewport(600, 500);
-    cy.viewport(1000, 700);
+    cy.viewport(1000, 800);
   });
   it('Show main dashboard', () => {
     //TODO
-  });
-
-  context('Products', () => {
-    it('List products', () => {
-      cy.visit('products');
-    });
   });
 
   context('Categories', () => {
@@ -92,6 +93,42 @@ describe('Admin App', () => {
             .sort((a: string, b: string) => b.localeCompare(a));
           expect(unsortedCategories).to.be.deep.eq(sortedCategories);
         });
+    });
+  });
+
+  context('Products', () => {
+    it('List products', () => {
+      cy.visit('products');
+    });
+    it('Create product', () => {
+      const product = generateProduct();
+
+      createProduct(product);
+
+      getProductsList().should('contain', product.name);
+    });
+    it('Delete product', () => {
+      const product = generateProduct();
+      const { name } = product;
+
+      createProduct(product);
+
+      deleteProduct(name);
+
+      cy.get('button').contains('Yes').click().should('not.exist');
+    });
+
+    it('Edit product', () => {
+      const product = generateProduct();
+      const { name } = product;
+
+      createProduct(product);
+
+      updateProduct(name, 'Updated Product');
+
+      updateProduct('Updated Product', name);
+
+      cy.contains(name);
     });
   });
 });

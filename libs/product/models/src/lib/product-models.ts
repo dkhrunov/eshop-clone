@@ -23,7 +23,7 @@ export class ProductEntity extends CoreEntity {
   description!: string;
 
   @Column({ default: '' })
-  rich_description!: string;
+  richDescription!: string;
 
   @Column()
   image!: string;
@@ -54,7 +54,7 @@ export class ProductEntity extends CoreEntity {
   num_reviews!: number;
 
   @Column({ type: 'boolean' })
-  is_featured!: boolean;
+  isFeatured!: boolean;
 }
 
 export type ProductEntityWithCategory = ProductEntity & {
@@ -71,10 +71,9 @@ export class CreateProductDto {
   description?: string;
 
   @IsString()
-  rich_description?: string;
+  richDescription?: string;
 
   @IsNotEmpty()
-  @IsUrl()
   image?: string;
 
   @IsOptional()
@@ -97,17 +96,8 @@ export class CreateProductDto {
   @IsUUID()
   category?: string;
 
-  @IsNumber()
-  @Min(0)
-  @Max(10)
-  rating?: number;
-
-  @IsNumber()
-  @Min(0)
-  num_reviews?: number;
-
   @IsBoolean()
-  is_featured?: boolean;
+  isFeatured?: boolean;
 }
 
 export class UpdateProductDto {
@@ -121,10 +111,9 @@ export class UpdateProductDto {
 
   @IsOptional()
   @IsString()
-  rich_description?: string;
+  richDescription?: string;
 
   @IsOptional()
-  @IsUrl()
   image?: string;
 
   @IsOptional()
@@ -160,7 +149,7 @@ export class UpdateProductDto {
 
   @IsOptional()
   @IsBoolean()
-  is_featured?: boolean;
+  isFeatured?: boolean;
 }
 
 @Entity('category')
@@ -209,4 +198,8 @@ export const ImageTypesForUpload = new Map([
 //TODO refactor to DeleteResponse
 export interface DeleteCategoryResponse {
   categoryDeleted: string;
+}
+
+export interface UploadImageResponse {
+  imageUrl: string;
 }

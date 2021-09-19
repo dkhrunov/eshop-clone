@@ -664,6 +664,51 @@
         }
       }
     },
+    "product-ui-pipes": {
+      "projectType": "library",
+      "root": "libs/product/ui-pipes",
+      "sourceRoot": "libs/product/ui-pipes/src",
+      "prefix": "pipes",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:ng-packagr-lite",
+          "outputs": [
+            "dist/libs/product/ui-pipes"
+          ],
+          "options": {
+            "project": "libs/product/ui-pipes/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/product/ui-pipes/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/product/ui-pipes/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/product/ui-pipes"
+          ],
+          "options": {
+            "jestConfig": "libs/product/ui-pipes/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/product/ui-pipes/src/**/*.ts",
+              "libs/product/ui-pipes/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "product-util-helpers": {
       "projectType": "library",
       "root": "libs/product/util-helpers",

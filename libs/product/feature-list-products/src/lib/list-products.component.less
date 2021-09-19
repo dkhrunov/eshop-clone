@@ -5,3 +5,23 @@ ui-button-bar {
 button {
   @apply grid items-center grid-flow-col  rounded;
 }
+
+nz-table {
+  @apply mb-4;
+
+  i {
+    vertical-align: middle;
+  }
+
+  .productPreview {
+    @apply mx-auto;
+    width: clamp(40px, 100px, 200px);
+  }
+
+  .categoryIcon {
+    i {
+      @apply text-lg;
+      stroke-width: 2rem;
+    }
+  }
+}

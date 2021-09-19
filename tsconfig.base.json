@@ -12,12 +12,16 @@
     "module": "esnext",
     "lib": [
       "es2019",
-      "dom"
+      "dom",
+      "DOM.Iterable"
     ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@env/*": [
+        "environments/*"
+      ],
       "@esc/order/api": [
         "libs/order/api/src/index.ts"
       ],
@@ -57,6 +61,9 @@
       "@esc/product/ui-components": [
         "libs/product/ui-components/src/index.ts"
       ],
+      "@esc/product/ui-pipes": [
+        "libs/product/ui-pipes/src/index.ts"
+      ],
       "@esc/product/util-helpers": [
         "libs/product/util-helpers/src/index.ts"
       ],
@@ -92,9 +99,6 @@
       ],
       "@esc/user/models": [
         "libs/user/models/src/index.ts"
-      ],
-      "@env/*": [
-        "environments/*"
       ]
     }
   },

@@ -12,6 +12,7 @@ import {
 import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CountResponse, ErrorMessages } from '@esc/shared/util-models';
+import { DeleteResponse } from '@esc/shared/util-models';
 
 @Injectable()
 export class ProductApiService {
@@ -51,7 +52,7 @@ export class ProductApiService {
   async getFeaturedProducts(limit?: number): Promise<ProductEntity[]> {
     const query = this.productRepository
       .createQueryBuilder('featured_products')
-      .where('is_featured = true');
+      .where('isFeatured = true');
 
     limit && query.limit(limit);
 
@@ -97,10 +98,14 @@ export class ProductApiService {
     return await this.getProduct(id);
   }
 
-  async deleteProduct(id: string): Promise<void> {
+  async deleteProduct(id: string): Promise<DeleteResponse> {
     const result = await this.productRepository.delete(id);
 
     if (!result.affected) throw new NotFoundException();
+
+    return {
+      entityDeleted: id,
+    };
   }
 
   async addImagesToProduct(id: string, images: string[]) {

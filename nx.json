@@ -76,6 +76,9 @@
     "product-ui-components": {
       "tags": ["domain:product", "type:ui"]
     },
+    "product-ui-pipes": {
+      "tags": ["domain:product", "type:ui"]
+    },
     "product-util-helpers": {
       "tags": ["domain:product", "type:util"]
     },

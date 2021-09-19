@@ -1,0 +1,189 @@
+<ui-main-wrapper
+  title="{{ (productForEdit$ | async) ? 'Edit' : 'Create' }} Product"
+  subtitle="Create of edit product"
+>
+  <ui-button-bar>
+    <ng-container
+      [ngTemplateOutlet]="(productForEdit$ | async) ? editTpl : createTpl"
+    >
+    </ng-container>
+
+    <ng-template #createTpl>
+      <button
+        class="primary"
+        nz-button
+        nzType="primary"
+        nzSize="small"
+        [disabled]="form.invalid"
+        (click)="createProduct()"
+        data-cy="createProductButton"
+      >
+        <i nz-icon nzType="plus" nzTheme="outline"> </i>
+        Create
+      </button>
+    </ng-template>
+
+    <ng-template #editTpl>
+      <button
+        class="primary"
+        nz-button
+        nzType="primary"
+        nzSize="small"
+        [disabled]="(formEdited$ | async) === false"
+        (click)="updateProduct()"
+        data-cy="updateProductButton"
+      >
+        <i nz-icon nzType="plus" nzTheme="outline"> </i>
+        Save
+      </button>
+    </ng-template>
+
+    <button
+      nz-button
+      nzType="primary"
+      class="red"
+      nzDanger
+      nzSize="small"
+      [routerLink]="['/', 'products']"
+    >
+      <i nz-icon nzType="arrow-left" nzTheme="outline"></i>
+      Cancel
+    </button>
+  </ui-button-bar>
+
+  <ng-template #formTpl>
+    <form nz-form [nzLayout]="'vertical'" [formGroup]="form">
+      <nz-form-item>
+        <nz-form-label nzFor="name">Name</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Name is required'">
+          <input
+            data-cy="createProductName"
+            nz-input
+            type="text"
+            id="name"
+            formControlName="name"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="brand">Brand</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Brand is required'">
+          <input
+            data-cy="createProductBrand"
+            nz-input
+            type="text"
+            id="brand"
+            formControlName="brand"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="price">Price</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Price is required'">
+          <nz-input-number
+            data-cy="createProductPrice"
+            [nzMin]="0"
+            [nzStep]="1"
+            formControlName="price"
+          ></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="countInStock">Count In Stock</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Count in stock required'">
+          <nz-input-number
+            data-cy="createProductCountInStock"
+            [nzMin]="0"
+            [nzStep]="1"
+            formControlName="countInStock"
+          ></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="category">Category</nz-form-label>
+        <nz-select
+          data-cy="createProductCategory"
+          id="category"
+          nzShowSearch
+          nzAllowClear
+          [ngModel]="(categoryForEdit$ | async)?.id"
+          nzPlaceHolder="Select a category"
+          formControlName="category"
+        >
+          <nz-option
+            *ngFor="let category of categories$ | async"
+            [nzLabel]="category.name"
+            [nzValue]="category.id"
+          >
+          </nz-option>
+        </nz-select>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="category">Is Featured</nz-form-label>
+        <nz-switch
+          data-cy="createProductIsFeatured"
+          formControlName="isFeatured"
+        ></nz-switch>
+      </nz-form-item>
+
+      <nz-form-item class="description">
+        <nz-form-label nzFor="description">Description</nz-form-label>
+
+        <textarea
+          data-cy="createProductDescription"
+          formControlName="description"
+          id="description"
+          rows="4"
+          nz-input
+        ></textarea>
+      </nz-form-item>
+
+      <nz-form-item class="description">
+        <nz-form-label nzFor="richDescription">Rich Description</nz-form-label>
+
+        <quill-editor
+          data-cy="createProductRichDescription"
+          formControlName="richDescription"
+        ></quill-editor>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="mainImage">Main Image</nz-form-label>
+
+        <input
+          data-cy="createProductImage"
+          type="file"
+          accept="image/*"
+          name="image"
+          id="mainImage"
+          (change)="uploadImage($event)"
+        />
+
+        <img [src]="uploadedImageUrl$ | async" />
+      </nz-form-item>
+    </form>
+  </ng-template>
+
+  <nz-result
+    data-cy="productResult"
+    *ngIf="productSaved$ | async; else formTpl"
+    [nzIcon]="'smile-twotone'"
+    [nzTitle]="'Great, product is saved!'"
+  >
+    <div nz-result-extra [align]="'center'">
+      <button
+        data-cy="productFormGoBack"
+        nz-button
+        nzType="primary"
+        (click)="goBack()"
+      >
+        Go Back
+      </button>
+    </div>
+  </nz-result>
+</ui-main-wrapper>

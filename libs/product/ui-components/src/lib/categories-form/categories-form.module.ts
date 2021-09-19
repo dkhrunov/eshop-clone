@@ -9,6 +9,8 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzResultModule } from 'ng-zorro-antd/result';
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
 
 @NgModule({
   declarations: [CategoriesFormComponent],
@@ -23,6 +25,8 @@ import { NzResultModule } from 'ng-zorro-antd/result';
     FormsModule,
     NzInputModule,
     NzResultModule,
+    NzSkeletonModule,
+    NzSwitchModule,
     RouterModule.forChild([
       { path: '', component: CategoriesFormComponent },
       { path: ':id', component: CategoriesFormComponent },

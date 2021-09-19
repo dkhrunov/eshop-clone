@@ -26,7 +26,7 @@ export const createCategoryOnServer = (
   token: string
 ) => {
   cy.log('Create category');
-  return cy.request({
+  return cy.request<CategoryEntity>({
     url: baseUrlCategories,
     method: 'POST',
     body: {

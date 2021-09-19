@@ -9,12 +9,12 @@ import { CategoryEntity } from '@esc/product/models';
   styleUrls: ['./list-categories.component.less'],
 })
 export class ListCategoriesComponent {
-  categories$ = this.listCategoriesFacade.categories$;
-
   constructor(
     private listCategoriesFacade: ListCategoriesFacade,
     private router: Router
   ) {}
+
+  categories$ = this.listCategoriesFacade.categories$;
 
   deleteCategory(id: string): void {
     this.listCategoriesFacade.deleteCategory(id);

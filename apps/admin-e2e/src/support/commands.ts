@@ -8,6 +8,8 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 
+import 'cypress-file-upload';
+
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace Cypress {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

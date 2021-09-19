@@ -383,8 +383,8 @@ describe('Eshop Clone', () => {
     });
     it('Get All Featured Products', () => {
       getFeaturedProducts().then(({ body: products }) => {
-        for (const { is_featured } of products) {
-          expect(is_featured).to.be.eq(true);
+        for (const { isFeatured } of products) {
+          expect(isFeatured).to.be.eq(true);
         }
       });
     });
@@ -410,8 +410,8 @@ describe('Eshop Clone', () => {
       const limit = generateRandom().integer({ min: 3, max: 10 });
 
       getFeaturedProducts(limit).then(({ body: products }) => {
-        for (const { is_featured } of products) {
-          expect(is_featured).to.be.eq(true);
+        for (const { isFeatured } of products) {
+          expect(isFeatured).to.be.eq(true);
         }
 
         expect(products).to.have.length.of.at.most(limit);
