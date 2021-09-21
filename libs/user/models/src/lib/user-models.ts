@@ -29,7 +29,7 @@ export class UserEntity extends CoreEntity {
   street!: string;
 
   @Column({ nullable: true })
-  apartment!: number;
+  apartment!: string;
 
   @Column({ nullable: true })
   city!: string;
@@ -37,7 +37,7 @@ export class UserEntity extends CoreEntity {
   @Column({ length: 10, nullable: true })
   zip!: string;
 
-  @Column({ length: 15, nullable: true })
+  @Column({ length: 30, nullable: true })
   country!: string;
 
   @Column({ nullable: true })
@@ -71,8 +71,8 @@ export class RegisterUserDto {
   @IsBoolean()
   isAdmin!: boolean;
 
-  @IsNumber()
-  apartment!: number;
+  @IsString()
+  apartment!: string;
 
   @IsString()
   zip!: string;
@@ -82,6 +82,9 @@ export class RegisterUserDto {
 
   @IsString()
   country!: string;
+
+  @IsString()
+  street!: string;
 }
 export class UpdateUserDto {
   @IsOptional()
@@ -105,7 +108,7 @@ export class UpdateUserDto {
   isAdmin?: boolean;
 
   @IsOptional()
-  apartment?: number;
+  apartment?: string;
 
   @IsOptional()
   @IsString()

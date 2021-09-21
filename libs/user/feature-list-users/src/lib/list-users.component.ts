@@ -20,16 +20,16 @@ export class ListUsersComponent {
   ) {}
 
   form = this.fb.group({
-    name: ['Name', Validators.required],
-    email: ['email@email.com', Validators.required],
-    password: ['password', Validators.required],
-    phone: ['42342342342', Validators.required],
-    isAdmin: [true, Validators.required],
-    street: ['Street', Validators.required],
-    apartment: [345, Validators.required],
-    zip: ['32424', Validators.required],
-    city: ['City', Validators.required],
-    country: ['Russia', Validators.required],
+    name: ['', Validators.required],
+    email: ['', Validators.required],
+    password: ['', Validators.required],
+    phone: ['', Validators.required],
+    isAdmin: [false, Validators.required],
+    street: ['', Validators.required],
+    apartment: [0, Validators.required],
+    zip: ['', Validators.required],
+    city: ['', Validators.required],
+    country: ['', Validators.required],
   });
 
   editUserMode = false;
@@ -48,6 +48,7 @@ export class ListUsersComponent {
       nzOnOk: () => this.deleteUser(id),
       nzCancelText: 'No',
       nzOnCancel: () => console.log('Cancel'),
+      nzClassName: 'deleteConfirm',
     });
   }
 
@@ -65,8 +66,7 @@ export class ListUsersComponent {
       this.listUsersFacade.registerUser(this.form.getRawValue());
     }
 
-    this.editUserMode = false;
-    this.updateUserMode = false;
+    this.resetForm();
   }
 
   showNotification(message: string): void {

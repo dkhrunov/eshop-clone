@@ -1,6 +1,10 @@
 import { environment } from '@env/environment';
 import { CreateProductDto } from '@esc/product/models';
-import { generateCategory, generateProduct } from '@esc/shared/util-helpers';
+import {
+  generateCategory,
+  generateProduct,
+  generateUser,
+} from '@esc/shared/util-helpers';
 
 import {
   createCategory,
@@ -15,6 +19,7 @@ import {
   getProductsList,
   updateProduct,
 } from '../support/products.po';
+import { createUser, listUsers } from '../support/users.po';
 
 describe('Admin App', () => {
   beforeEach(() => {
@@ -132,9 +137,77 @@ describe('Admin App', () => {
     });
   });
 
-  context('Users', () => {
+  context.only('Users', () => {
     it('List users', () => {
       cy.visit('users');
+    });
+
+    it('Create User', () => {
+      const newUser = generateUser();
+
+      createUser(newUser);
+
+      cy.visit('users');
+
+      listUsers().should('contain', newUser.name);
+    });
+
+    it('Update User', () => {
+      const newUser = generateUser();
+
+      createUser(newUser);
+
+      cy.visit('users');
+
+      listUsers()
+        .contains(newUser.name)
+        .parent('tr')
+        .within(() => {
+          cy.get('[data-cy=editUser]').click();
+        });
+
+      cy.get('[data-cy=registerUserName]')
+        .should('contain.value', newUser.name)
+        .clear()
+        .type('Updated Name');
+
+      cy.get('[data-cy=saveUserButton]').click();
+
+      listUsers()
+        .contains('Updated Name')
+        .parent('tr')
+        .within(() => {
+          cy.get('[data-cy=editUser]').click();
+        });
+
+      cy.get('[data-cy=registerUserName]')
+        .should('contain.value', 'Updated Name')
+        .clear()
+        .type(newUser.name);
+
+      cy.get('[data-cy=saveUserButton]').click();
+
+      listUsers().contains(newUser.name);
+    });
+
+    it('Delete User', () => {
+      cy.visit('users');
+
+      listUsers()
+        .then(({ length }) => length)
+        .then((length) => {
+          listUsers()
+            .first()
+            .within(() => {
+              cy.get('[data-cy=deleteUser]').click();
+            });
+
+          cy.get('.deleteConfirm').within(() => {
+            cy.get('button').contains('Yes').click();
+          });
+
+          listUsers().should('have.length', length - 1);
+        });
     });
   });
 });

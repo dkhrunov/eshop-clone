@@ -5,10 +5,7 @@ import { isCategory } from '@esc/shared/util-models';
   name: 'extractCategory',
 })
 export class ExtractCategoryNamePipe implements PipeTransform {
-  transform(value: unknown): string | undefined {
-    if (isCategory(value)) {
-      return value.name;
-    }
-    return undefined;
+  transform(value: unknown): string {
+    return isCategory(value) ? value.name : 'None';
   }
 }

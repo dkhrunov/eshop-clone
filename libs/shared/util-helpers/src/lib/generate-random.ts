@@ -64,12 +64,12 @@ export const generateUser = () => {
     email: generateRandom().email(),
     password: generateRandom().string(),
     street: generateRandom().street(),
-    apartment: generateRandom().integer({ min: 1, max: 50 }),
+    apartment: generateRandom().integer({ min: 1, max: 50 }).toString(),
     city: generateRandom().city(),
     zip: generateRandom().zip(),
-    country: generateRandom().country(),
+    country: generateRandom().country({ full: true }),
     phone: generateRandom().phone({ mobile: true }),
-    isAdmin: true,
+    isAdmin: generateRandom().bool(),
   };
 };
 

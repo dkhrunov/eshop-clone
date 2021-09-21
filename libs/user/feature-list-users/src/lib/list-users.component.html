@@ -29,7 +29,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr data-cy="product" *ngFor="let data of basicTable.data">
+        <tr data-cy="user" *ngFor="let data of basicTable.data">
           <td>{{ data.name }}</td>
           <td>
             {{ data.email }}
@@ -76,21 +76,32 @@
   [(nzVisible)]="editUserMode"
   nzTitle="{{ updateUserMode ? 'Update' : 'Create' }} User"
   (nzOnCancel)="resetForm()"
-  (nzOnOk)="saveUser()"
 >
   <ng-container *nzModalContent>
     <form [nzLayout]="'vertical'" [formGroup]="form" nz-form>
       <nz-form-item>
         <nz-form-label nzFor="name">Name</nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="name" type="text" id="name" />
+          <input
+            data-cy="registerUserName"
+            nz-input
+            formControlName="name"
+            type="text"
+            id="name"
+          />
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
         <nz-form-label nzFor="email">E-mail</nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="email" type="email" id="email" />
+          <input
+            data-cy="registerUserEmail"
+            nz-input
+            formControlName="email"
+            type="email"
+            id="email"
+          />
         </nz-form-control>
       </nz-form-item>
 
@@ -98,9 +109,10 @@
         <nz-form-label nzFor="password">Password</nz-form-label>
         <nz-form-control>
           <input
+            data-cy="registerUserPassword"
             nz-input
             formControlName="password"
-            type="pass"
+            type="password"
             id="password"
           />
         </nz-form-control>
@@ -109,14 +121,26 @@
       <nz-form-item>
         <nz-form-label nzFor="phone">Phone</nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="phone" type="text" id="phone" />
+          <input
+            data-cy="registerUserPhone"
+            nz-input
+            formControlName="phone"
+            type="text"
+            id="phone"
+          />
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
         <nz-form-label nzFor="street">Street</nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="street" type="text" id="street" />
+          <input
+            data-cy="registerUserStreet"
+            nz-input
+            formControlName="street"
+            type="text"
+            id="street"
+          />
         </nz-form-control>
       </nz-form-item>
 
@@ -124,6 +148,7 @@
         <nz-form-label nzFor="apartment">Apartment</nz-form-label>
         <nz-form-control>
           <input
+            data-cy="registerUserApartment"
             nz-input
             formControlName="apartment"
             type="text"
@@ -135,14 +160,26 @@
       <nz-form-item>
         <nz-form-label nzFor="zip">Zip Code</nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="zip" type="text" id="zip" />
+          <input
+            data-cy="registerUserZip"
+            nz-input
+            formControlName="zip"
+            type="text"
+            id="zip"
+          />
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
         <nz-form-label nzFor="city">City</nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="city" type="text" id="city" />
+          <input
+            data-cy="registerUserCity"
+            nz-input
+            formControlName="city"
+            type="text"
+            id="city"
+          />
         </nz-form-control>
       </nz-form-item>
 
@@ -150,7 +187,10 @@
         <nz-form-label nzFor="isAdmin">Is Admin</nz-form-label>
 
         <nz-form-control>
-          <nz-switch formControlName="isAdmin"></nz-switch>
+          <nz-switch
+            data-cy="registerUserIsAdmin"
+            formControlName="isAdmin"
+          ></nz-switch>
         </nz-form-control>
       </nz-form-item>
 
@@ -158,6 +198,7 @@
         <nz-form-label nzFor="country">Country</nz-form-label>
         <nz-form-control>
           <nz-select
+            data-cy="registerUserCountry"
             formControlName="country"
             nzShowSearch
             nzAllowClear
@@ -166,11 +207,23 @@
             <nz-option
               *ngFor="let country of countries$ | async | keyvalue"
               nzLabel="{{ country.value }}"
-              nzValue="{{ country.key }}"
+              nzValue="{{ country.value }}"
             ></nz-option>
           </nz-select>
         </nz-form-control>
       </nz-form-item>
     </form>
   </ng-container>
+
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="resetForm()">Cancel</button>
+    <button
+      data-cy="saveUserButton"
+      nz-button
+      nzType="primary"
+      (click)="saveUser()"
+    >
+      Submit
+    </button>
+  </div>
 </nz-modal>
