@@ -60,6 +60,7 @@
     "date-fns": "^2.23.0",
     "form-data": "^4.0.0",
     "fs-extra": "^10.0.0",
+    "i18n-iso-countries": "^6.8.0",
     "nestjs-form-data": "^1.4.7",
     "ng-zorro-antd": "^12.0.1",
     "ngx-quill": "^14.3.0",

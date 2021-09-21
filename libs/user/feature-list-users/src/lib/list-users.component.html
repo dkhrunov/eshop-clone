@@ -163,9 +163,11 @@
             nzAllowClear
             nzPlaceHolder="Select a country"
           >
-            <nz-option nzLabel="Russia" nzValue="Russia"></nz-option>
-            <nz-option nzLabel="China" nzValue="China"></nz-option>
-            <nz-option nzLabel="Germany" nzValue="Germany"></nz-option>
+            <nz-option
+              *ngFor="let country of countries$ | async | keyvalue"
+              nzLabel="{{ country.value }}"
+              nzValue="{{ country.key }}"
+            ></nz-option>
           </nz-select>
         </nz-form-control>
       </nz-form-item>

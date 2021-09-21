@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ListUsersFacade } from '@esc/user/domain';
-import { UpdateUserDto, UserEntity } from '@esc/user/models';
+import { UserEntity } from '@esc/user/models';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { tap } from 'rxjs';
 
 @Component({
   selector: 'user-list-users',
@@ -36,6 +35,7 @@ export class ListUsersComponent {
   editUserMode = false;
   updateUserMode = false;
   updateUserId: string | undefined = undefined;
+  countries$ = this.listUsersFacade.countries$;
 
   users$ = this.listUsersFacade.users$;
 
@@ -67,10 +67,6 @@ export class ListUsersComponent {
 
     this.editUserMode = false;
     this.updateUserMode = false;
-  }
-
-  updateUser(user: UpdateUserDto): void {
-    console.log(user);
   }
 
   showNotification(message: string): void {

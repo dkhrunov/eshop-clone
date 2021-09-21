@@ -132,7 +132,7 @@ describe('Admin App', () => {
     });
   });
 
-  context.only('Users', () => {
+  context('Users', () => {
     it('List users', () => {
       cy.visit('users');
     });
