@@ -9,14 +9,14 @@ import {
   switchMap,
 } from 'rxjs';
 import { environment } from '@env/environment';
-import { DeleteResponse } from './delete-response';
+import { DeleteResponse } from './api-responses';
 import { CoreEntity } from '..';
 import { isEntity } from './isEntityGuard';
 
 export abstract class AbstractRestService<E extends CoreEntity, D> {
-  constructor(private http: HttpClient, private url: string) {}
+  constructor(protected http: HttpClient, private url: string) {}
 
-  private resourceUrl = `${environment.baseUrlApi}/${this.url}`;
+  protected resourceUrl = `${environment.baseUrlApi}/${this.url}`;
 
   private createSubject = new Subject<D>();
   createAction$ = this.createSubject.asObservable();
@@ -29,7 +29,7 @@ export abstract class AbstractRestService<E extends CoreEntity, D> {
 
   private updateSubject = new Subject<{
     id: string;
-    entity: E;
+    entity: Partial<E>;
   }>();
   updateAction$ = this.updateSubject.asObservable();
 
@@ -77,7 +77,7 @@ export abstract class AbstractRestService<E extends CoreEntity, D> {
     this.getSubject.next(id);
   }
 
-  update(id: string, entity: E): void {
+  update(id: string, entity: Partial<E>): void {
     this.updateSubject.next({ id, entity });
   }
 
@@ -91,7 +91,10 @@ export abstract class AbstractRestService<E extends CoreEntity, D> {
       .pipe(pluck('entityDeleted'));
   }
 
-  private updateResourceOnServer(id: string, entity: E): Observable<E> {
+  private updateResourceOnServer(
+    id: string,
+    entity: Partial<E>
+  ): Observable<E> {
     return this.http.put<E>(`${this.resourceUrl}/${id}`, entity);
   }
 
@@ -109,21 +112,26 @@ export abstract class AbstractRestService<E extends CoreEntity, D> {
     }
 
     if (isEntity(value)) {
-      const exsitedResource = entities.find((item) => item.id === value.id);
+      const existedResource = entities.find((item) => item.id === value.id);
 
-      exsitedResource
-        ? this.replaceResourceInList(entities, exsitedResource)
-        : [...entities, value];
+      if (existedResource) {
+        return this.replaceResourceInList(entities, value);
+      } else {
+        return [...entities, value] as E[];
+      }
     }
 
-    return entities;
+    return [];
   }
 
   private mergeResources(entities: E[], entityToAdd: E[]): E[] {
     return [...entities, ...entityToAdd];
   }
 
-  private replaceResourceInList(entities: E[], entityForReplace: E): E[] {
+  private replaceResourceInList(
+    entities: E[],
+    entityForReplace: InstanceType<typeof CoreEntity>
+  ): E[] {
     return entities.map((entity) => {
       if (entity.id === entityForReplace.id) {
         return {

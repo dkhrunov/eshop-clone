@@ -1,11 +1,11 @@
-import { RegisterUserDto, UserEntity, UserResponse } from '@esc/user/models';
+import { RegisterUserDto, UserEntity, UserFromServer } from '@esc/user/models';
 import { environment } from '@env/environment';
 
 const baseUrlUsers = `${environment.baseUrlApi}/users`;
 
 export const registerUserOnServer = (user: RegisterUserDto) => {
   cy.log('Register user');
-  return cy.request<UserResponse>({
+  return cy.request<UserFromServer>({
     url: `${baseUrlUsers}`,
     method: 'POST',
     body: {
@@ -83,7 +83,7 @@ export const updateUserOnServer = (
 ) => {
   cy.log('Update user on server');
 
-  return cy.request<UserResponse>({
+  return cy.request<UserFromServer>({
     url: `${baseUrlUsers}/${id}`,
     method: 'PUT',
     body: {

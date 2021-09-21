@@ -74,7 +74,7 @@ describe('Eshop Clone', () => {
     cy.visit('/');
 
     for (const user of generatedUsers) {
-      registerUserOnServer(user).then(({ body: { user: newUser } }) => {
+      registerUserOnServer(user).then(({ body: newUser }) => {
         createdUsersOnServer.push(newUser);
 
         loginUserOnServer(user.email, user.password).then(
@@ -140,13 +140,15 @@ describe('Eshop Clone', () => {
       const userForDelete = generateUser();
       userForDelete.name = 'User for delete';
 
-      registerUserOnServer(userForDelete).then(({ body: { user } }) => {
+      registerUserOnServer(userForDelete).then(({ body: user }) => {
         getUserFromServer(user.id, token).its('body').should('deep.include', {
           id: user.id,
           name: 'User for delete',
         });
 
-        deleteUserOnServer(user.id, token).its('body.affected').should('eq', 1);
+        deleteUserOnServer(user.id, token)
+          .its('body.entityDeleted')
+          .should('eq', user.id);
 
         getUserFromServer(user.id, token)
           .its('body.message')
@@ -198,7 +200,7 @@ describe('Eshop Clone', () => {
           name: 'Updated Name',
         },
         token
-      ).then(({ body: { user } }) => {
+      ).then(({ body: user }) => {
         expect(user.name).to.equal('Updated Name');
 
         updateUserOnServer(
@@ -208,7 +210,7 @@ describe('Eshop Clone', () => {
           },
           token
         )
-          .its('body.user.name')
+          .its('body.name')
           .should('eq', name);
       });
     });

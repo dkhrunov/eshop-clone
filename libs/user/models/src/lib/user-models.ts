@@ -12,13 +12,14 @@ import { hash } from 'bcrypt';
 import { Request } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 import { CoreEntity } from '@esc/shared/util-models';
+import { Transform } from 'stream';
 
 @Entity('user')
 export class UserEntity extends CoreEntity {
   @Column({ length: 40 })
   name!: string;
 
-  @Column({ length: 20 })
+  @Column({ length: 20, unique: true })
   email!: string;
 
   @Column({ select: false })
@@ -43,7 +44,7 @@ export class UserEntity extends CoreEntity {
   phone!: string;
 
   @Column({ type: 'boolean', default: false })
-  is_admin!: boolean;
+  isAdmin!: boolean;
 
   @BeforeInsert()
   async hashPassword() {
@@ -68,7 +69,7 @@ export class RegisterUserDto {
   phone!: string;
 
   @IsBoolean()
-  is_admin!: boolean;
+  isAdmin!: boolean;
 
   @IsNumber()
   apartment!: number;
@@ -101,10 +102,9 @@ export class UpdateUserDto {
 
   @IsOptional()
   @IsBoolean()
-  is_admin?: boolean;
+  isAdmin?: boolean;
 
   @IsOptional()
-  @IsNumber()
   apartment?: number;
 
   @IsOptional()
@@ -128,10 +128,6 @@ export class LoginUserDto {
   @IsNotEmpty()
   @IsString()
   password!: string;
-}
-
-export interface UserResponse {
-  user: UserFromServer;
 }
 
 export type UserFromServer = Omit<UserEntity, 'password' | 'hashPassword'>;

@@ -1,6 +1,5 @@
 import {
   RegisterUserDto,
-  UserResponse,
   UserEntity,
   UpdateUserDto,
   LoginUserDto,
@@ -15,11 +14,15 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hash, compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { CountResponse, ErrorMessages } from '@esc/shared/util-models';
+import {
+  CountResponse,
+  DeleteResponse,
+  ErrorMessages,
+} from '@esc/shared/util-models';
 
 @Injectable()
 export class UserApiService {
@@ -29,21 +32,22 @@ export class UserApiService {
     private jwtService: JwtService
   ) {}
 
-  async registerUser(dto: RegisterUserDto): Promise<UserResponse> {
-    const isUserExist = await this.userRepository.findOne({
+  async registerUser(dto: RegisterUserDto): Promise<UserFromServer> {
+    const existedUser = await this.userRepository.findOne({
       where: { email: dto.email },
     });
 
-    if (isUserExist) {
+    if (existedUser) {
       throw new ConflictException(ErrorMessages.USER_ALREADY_EXIST);
     }
 
     const newUser = this.userRepository.create(dto);
 
     try {
-      const { password, ...user } = await this.userRepository.save(newUser);
+      const { password, hashPassword, ...user } =
+        await this.userRepository.save(newUser);
 
-      return this.createUserResponse(user);
+      return user;
     } catch (error) {
       throw new InternalServerErrorException();
     }
@@ -65,10 +69,7 @@ export class UserApiService {
     return user;
   }
 
-  async updateUser(
-    id: string,
-    dto: UpdateUserDto
-  ): Promise<UserResponse | UpdateResult> {
+  async updateUser(id: string, dto: UpdateUserDto): Promise<UserFromServer> {
     const isUserExist = await this.userRepository.findOne(id, {
       select: ['password'],
     });
@@ -92,9 +93,10 @@ export class UserApiService {
 
     if (result.affected) {
       const updatedUser = (await this.userRepository.findOne(id)) as UserEntity;
-      return this.createUserResponse(updatedUser);
+
+      return updatedUser;
     } else {
-      return result;
+      throw new NotFoundException();
     }
   }
 
@@ -103,14 +105,14 @@ export class UserApiService {
 
     const user = await this.userRepository.findOne({
       where: { email },
-      select: ['password', 'id', 'email', 'is_admin'],
+      select: ['password', 'id', 'email', 'isAdmin'],
     });
 
     if (!user || !(await this.isPasswordValid(password, user.password))) {
       throw new BadRequestException(ErrorMessages.INVALID_CREDENTIALS);
     }
 
-    const payload: JwtUserPayload = { userId: user.id, isAdmin: user.is_admin };
+    const payload: JwtUserPayload = { userId: user.id, isAdmin: user.isAdmin };
 
     const token = this.jwtService.sign(payload);
 
@@ -125,14 +127,16 @@ export class UserApiService {
     return { user_count };
   }
 
-  async deleteUser(id: string): Promise<DeleteResult> {
+  async deleteUser(id: string): Promise<DeleteResponse> {
     const result = await this.userRepository.delete(id);
 
     if (!result) {
       throw new InternalServerErrorException();
     }
 
-    return result;
+    return {
+      entityDeleted: id,
+    };
   }
 
   private async isPasswordValid(
@@ -142,11 +146,11 @@ export class UserApiService {
     return compare(password, hash);
   }
 
-  private createUserResponse(user: UserFromServer): UserResponse {
-    return {
-      user: {
-        ...user,
-      },
-    };
+  async isUserExist(email: string): Promise<boolean> {
+    const existedUser = await this.userRepository.findOne({
+      where: { email },
+    });
+
+    return !!existedUser;
   }
 }

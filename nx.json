@@ -121,6 +121,9 @@
     },
     "user-feature-shell": {
       "tags": ["domain:user", "type:feature"]
+    },
+    "user-util-helpers": {
+      "tags": ["domain:user", "type:util"]
     }
   }
 }

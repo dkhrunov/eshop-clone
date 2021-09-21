@@ -1,2 +1,174 @@
-<h1>user-list-users</h1>
+<ui-main-wrapper title="Users" subtitle="List of all users">
+  <ui-button-bar>
+    <button
+      data-cy="createUserButton"
+      nz-button
+      nzType="primary"
+      nzSize="small"
+      (click)="editUserMode = true"
+    >
+      <i nz-icon nzType="plus" nzTheme="outline"></i>
+      New
+    </button>
+  </ui-button-bar>
 
+  <ng-container *ngIf="users$ | async as users">
+    <nz-table
+      [nzBordered]="true"
+      [nzShowPagination]="true"
+      #basicTable
+      [nzData]="users"
+    >
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th [nzAlign]="'center'">Is Admin</th>
+          <th>Country</th>
+          <th [nzAlign]="'center'"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-cy="product" *ngFor="let data of basicTable.data">
+          <td>{{ data.name }}</td>
+          <td>
+            {{ data.email }}
+          </td>
+          <td [nzAlign]="'center'">
+            <nz-tag nzColor="{{ data.isAdmin ? 'success' : 'error' }}">
+              <i
+                nz-icon
+                nzType="{{ data.isAdmin ? 'check' : 'close' }}-circle"
+              ></i>
+              <span>{{ data.isAdmin ? 'Yes' : 'No' }}</span>
+            </nz-tag>
+          </td>
+
+          <td>{{ data.country }}</td>
+
+          <td [nzAlign]="'center'">
+            <nz-button-group nzSize="small">
+              <button nz-button nzDanger (click)="showDeleteConfirm(data.id)">
+                <i
+                  nz-icon
+                  data-cy="deleteUser"
+                  nzType="delete"
+                  nzTheme="fill"
+                ></i>
+              </button>
+              <button
+                nz-button
+                nzDanger
+                data-cy="editUser"
+                (click)="editUser(data)"
+              >
+                <i nz-icon nzType="edit" nzTheme="fill"></i>
+              </button>
+            </nz-button-group>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </ng-container>
+</ui-main-wrapper>
+
+<nz-modal
+  [(nzVisible)]="editUserMode"
+  nzTitle="{{ updateUserMode ? 'Update' : 'Create' }} User"
+  (nzOnCancel)="resetForm()"
+  (nzOnOk)="saveUser()"
+>
+  <ng-container *nzModalContent>
+    <form [nzLayout]="'vertical'" [formGroup]="form" nz-form>
+      <nz-form-item>
+        <nz-form-label nzFor="name">Name</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="name" type="text" id="name" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="email">E-mail</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="email" type="email" id="email" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="password">Password</nz-form-label>
+        <nz-form-control>
+          <input
+            nz-input
+            formControlName="password"
+            type="pass"
+            id="password"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="phone">Phone</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="phone" type="text" id="phone" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="street">Street</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="street" type="text" id="street" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="apartment">Apartment</nz-form-label>
+        <nz-form-control>
+          <input
+            nz-input
+            formControlName="apartment"
+            type="text"
+            id="apartment"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="zip">Zip Code</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="zip" type="text" id="zip" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="city">City</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="city" type="text" id="city" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="isAdmin">Is Admin</nz-form-label>
+
+        <nz-form-control>
+          <nz-switch formControlName="isAdmin"></nz-switch>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="country">Country</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="country"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Select a country"
+          >
+            <nz-option nzLabel="Russia" nzValue="Russia"></nz-option>
+            <nz-option nzLabel="China" nzValue="China"></nz-option>
+            <nz-option nzLabel="Germany" nzValue="Germany"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

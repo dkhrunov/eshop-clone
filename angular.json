@@ -1318,6 +1318,51 @@
           }
         }
       }
+    },
+    "user-util-helpers": {
+      "projectType": "library",
+      "root": "libs/user/util-helpers",
+      "sourceRoot": "libs/user/util-helpers/src",
+      "prefix": "helpers",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:ng-packagr-lite",
+          "outputs": [
+            "dist/libs/user/util-helpers"
+          ],
+          "options": {
+            "project": "libs/user/util-helpers/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/user/util-helpers/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/user/util-helpers/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/user/util-helpers"
+          ],
+          "options": {
+            "jestConfig": "libs/user/util-helpers/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/user/util-helpers/src/**/*.ts",
+              "libs/user/util-helpers/src/**/*.html"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {

@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ListProductsFacade } from '@esc/product/domain';
-import { ProductEntity } from '@esc/product/models';
-import { compareDesc } from 'date-fns';
+import { sortByDateFn } from '@esc/shared/util-helpers';
 
 @Component({
   selector: 'product-list-produ32cts',
   templateUrl: './list-products.component.html',
   styleUrls: ['./list-products.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListProductsComponent {
   constructor(
@@ -17,12 +17,7 @@ export class ListProductsComponent {
 
   products$ = this.listProductsFacade.products$;
 
-  sortByDateFn(left: ProductEntity, right: ProductEntity): number {
-    const leftDate = new Date(left.dateCreated);
-    const rightDate = new Date(right.dateCreated);
-
-    return compareDesc(leftDate, rightDate);
-  }
+  sortByDateFn = sortByDateFn;
 
   deleteProduct(id: string): void {
     this.listProductsFacade.deleteProduct(id);

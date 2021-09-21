@@ -28,7 +28,7 @@ export class AuthMiddleware implements NestMiddleware {
       const decodedToken: JwtUserPayload = this.jwtService.verify(token);
       const user = await this.userRepository.findOne(decodedToken.userId);
 
-      if (user && user.is_admin) {
+      if (user && user.isAdmin) {
         req.user = user;
 
         next();

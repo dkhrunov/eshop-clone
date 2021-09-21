@@ -131,4 +131,10 @@ describe('Admin App', () => {
       cy.contains(name);
     });
   });
+
+  context.only('Users', () => {
+    it('List users', () => {
+      cy.visit('users');
+    });
+  });
 });
