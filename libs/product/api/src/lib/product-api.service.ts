@@ -51,8 +51,8 @@ export class ProductApiService {
 
   async getFeaturedProducts(limit?: number): Promise<ProductEntity[]> {
     const query = this.productRepository
-      .createQueryBuilder('featured_products')
-      .where('isFeatured = true');
+      .createQueryBuilder('product')
+      .where('product.isFeatured = :isFeatured', { isFeatured: true });
 
     limit && query.limit(limit);
 

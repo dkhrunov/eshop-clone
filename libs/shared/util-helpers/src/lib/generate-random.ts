@@ -1,10 +1,6 @@
 import { Chance as generateRandom } from 'chance';
 import { sub } from 'date-fns';
-import {
-  CategoryEntity,
-  CreateProductDto,
-  ProductEntity,
-} from '@esc/product/models';
+import { CategoryEntity, ProductEntity } from '@esc/product/models';
 import { OrderItem } from '@esc/order/models';
 
 const categoriesMap = new Map([
@@ -69,7 +65,7 @@ export const generateUser = () => {
     zip: generateRandom().zip(),
     country: generateRandom().country({ full: true }),
     phone: generateRandom().phone({ mobile: true }),
-    isAdmin: generateRandom().bool(),
+    isAdmin: true,
   };
 };
 

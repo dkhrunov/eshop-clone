@@ -41,26 +41,8 @@ describe('Admin App', () => {
     cy.saveLocalStorage();
   });
 
-  it('Show main dashboard', () => {
-    //TODO
-  });
-
   context('Users', () => {
-    it('Register User', () => {
-      cy.visit('register');
-
-      const newUser = generateUser();
-      const { email, password } = newUser;
-
-      registerUser(newUser);
-
-      cy.url().should('contain', 'login');
-
-      loginUser({ email, password });
-
-      cy.url().should('contain', 'dashboard');
-    });
-    it('Login User', () => {
+    it('Register / Login User', () => {
       cy.visit('register');
 
       const newUser = generateUser();
@@ -145,6 +127,10 @@ describe('Admin App', () => {
           listUsers().should('have.length', length - 1);
         });
     });
+  });
+
+  it('Show main dashboard', () => {
+    //TODO
   });
 
   context('Categories', () => {
