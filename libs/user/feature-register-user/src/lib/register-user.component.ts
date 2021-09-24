@@ -32,15 +32,16 @@ export class RegisterUserComponent {
   );
 
   form = this.fb.group({
-    name: ['iromashko', Validators.required],
-    email: ['iromashko5@me.com', [Validators.required, Validators.email]],
-    password: ['123456', [Validators.required]],
-    passwordConfirmation: ['123456', [Validators.required]],
+    name: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
+    passwordConfirmation: ['', [Validators.required]],
   });
 
   registerUser(): void {
-    this.loadingSubject.next(true);
-    this.form.valid &&
+    if (this.form.valid) {
+      this.loadingSubject.next(true);
       this.registerUserFacade.registerUser(this.form.getRawValue());
+    }
   }
 }

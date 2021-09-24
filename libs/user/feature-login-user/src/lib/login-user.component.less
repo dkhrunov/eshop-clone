@@ -3,7 +3,7 @@
 
   section {
     @apply bg-gray-100 grid shadow-2xl;
-    width: clamp(400px, 50vw, 70vw);
+    width: clamp(500px, 50vw, 70vw);
     min-height: 400px;
     grid: 'image form' / 1fr 1fr;
 
@@ -26,6 +26,10 @@
       input {
         @apply ml-1;
       }
+    }
+
+    @media screen and (max-width: 700px) {
+      grid: 'image' 'form' / 1fr;
     }
   }
 }

@@ -7,11 +7,12 @@
     </header>
 
     <nz-form-item>
-      <nz-form-control nzErrorTip="Please input your Name!">
+      <nz-form-control nzHasFeedback nzErrorTip="Please input your Name!">
         <nz-input-group nzPrefixIcon="user">
           <input
             type="text"
             nz-input
+            data-cy="registerUserName"
             formControlName="name"
             placeholder="Name"
           />
@@ -20,11 +21,12 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-control nzErrorTip="Please input your email!">
+      <nz-form-control nzHasFeedback nzErrorTip="Please input your email!">
         <nz-input-group nzPrefixIcon="user">
           <input
             type="text"
             nz-input
+            data-cy="registerUserEmail"
             formControlName="email"
             placeholder="Email"
           />
@@ -33,11 +35,12 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-control nzErrorTip="Please input your Password!">
+      <nz-form-control nzHasFeedback nzErrorTip="Please input your Password!">
         <nz-input-group nzPrefixIcon="lock">
           <input
             type="password"
             nz-input
+            data-cy="registerUserPassword"
             formControlName="password"
             placeholder="Password"
           />
@@ -46,11 +49,12 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-control nzErrorTip="Please input your Password Confirmation!">
+      <nz-form-control nzHasFeedback nzErrorTip="Passwords do not match!">
         <nz-input-group nzPrefixIcon="lock">
           <input
             type="password"
             nz-input
+            data-cy="registerUserPasswordConfirmation"
             formControlName="passwordConfirmation"
             placeholder="Confirm Password"
           />
@@ -62,6 +66,7 @@
       [nzLoading]="loading$ | async"
       nz-button
       nzBlock
+      data-cy="registerUserSubmit"
       [nzType]="'primary'"
     >
       Register

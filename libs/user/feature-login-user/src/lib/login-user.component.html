@@ -11,6 +11,7 @@
         <nz-input-group nzPrefixIcon="user">
           <input
             type="text"
+            data-cy="loginUserEmail"
             nz-input
             formControlName="email"
             placeholder="Email"
@@ -23,6 +24,7 @@
         <nz-input-group nzPrefixIcon="lock">
           <input
             type="password"
+            data-cy="loginUserPassword"
             nz-input
             formControlName="password"
             placeholder="Password"
@@ -34,6 +36,7 @@
     <button
       [nzLoading]="loading$ | async"
       nz-button
+      data-cy="loginUserSubmit"
       nzBlock
       [nzType]="'primary'"
     >

@@ -41,7 +41,7 @@ export class UserEntity extends CoreEntity {
   @Column({ nullable: true })
   phone!: string;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ type: 'boolean', default: true })
   isAdmin!: boolean;
 
   @BeforeInsert()

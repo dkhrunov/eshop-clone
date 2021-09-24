@@ -9,6 +9,7 @@
 // ***********************************************
 
 import 'cypress-file-upload';
+import 'cypress-localstorage-commands';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace Cypress {

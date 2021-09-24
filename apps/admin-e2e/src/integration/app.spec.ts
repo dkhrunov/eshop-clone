@@ -18,16 +18,133 @@ import {
   getProductsList,
   updateProduct,
 } from '../support/products.po';
-import { createUser, listUsers } from '../support/users.po';
+import {
+  createUser,
+  listUsers,
+  loginUser,
+  registerUser,
+} from '../support/users.po';
 
 describe('Admin App', () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
   beforeEach(() => {
     cy.visit(`${environment.baseUrlFrontAdmin}`);
     cy.viewport(600, 500);
     cy.viewport(1000, 800);
+    cy.restoreLocalStorage();
   });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   it('Show main dashboard', () => {
     //TODO
+  });
+
+  context('Users', () => {
+    it('Register User', () => {
+      cy.visit('register');
+
+      const newUser = generateUser();
+      const { email, password } = newUser;
+
+      registerUser(newUser);
+
+      cy.url().should('contain', 'login');
+
+      loginUser({ email, password });
+
+      cy.url().should('contain', 'dashboard');
+    });
+    it('Login User', () => {
+      cy.visit('register');
+
+      const newUser = generateUser();
+
+      registerUser(newUser);
+
+      cy.url().should('contain', 'login');
+
+      loginUser({ email: newUser.email, password: newUser.password });
+
+      cy.url().should('contain', 'dashboard');
+    });
+
+    it('List users', () => {
+      cy.visit('users');
+    });
+
+    it('Create User', () => {
+      const newUser = generateUser();
+
+      createUser(newUser);
+
+      cy.visit('users');
+
+      listUsers().should('contain', newUser.name);
+    });
+
+    it('Update User', () => {
+      const newUser = generateUser();
+
+      createUser(newUser);
+
+      cy.visit('users');
+
+      listUsers()
+        .contains(newUser.name)
+        .parent('tr')
+        .within(() => {
+          cy.get('[data-cy=editUser]').click();
+        });
+
+      cy.get('[data-cy=registerUserName]')
+        .should('contain.value', newUser.name)
+        .clear()
+        .type('Updated Name');
+
+      cy.get('[data-cy=saveUserButton]').click();
+
+      listUsers()
+        .contains('Updated Name')
+        .parent('tr')
+        .within(() => {
+          cy.get('[data-cy=editUser]').click();
+        });
+
+      cy.get('[data-cy=registerUserName]')
+        .should('contain.value', 'Updated Name')
+        .clear()
+        .type(newUser.name);
+
+      cy.get('[data-cy=saveUserButton]').click();
+
+      listUsers().contains(newUser.name);
+    });
+
+    it('Delete User', () => {
+      cy.visit('users');
+
+      listUsers()
+        .then(({ length }) => length)
+        .then((length) => {
+          listUsers()
+            .first()
+            .within(() => {
+              cy.get('[data-cy=deleteUser]').click();
+            });
+
+          cy.get('.deleteConfirm').within(() => {
+            cy.get('button').contains('Yes').click();
+          });
+
+          listUsers().should('have.length', length - 1);
+        });
+    });
   });
 
   context('Categories', () => {
@@ -133,87 +250,6 @@ describe('Admin App', () => {
       updateProduct('Updated Product', name);
 
       cy.contains(name);
-    });
-  });
-
-  context('Users', () => {
-    it('List users', () => {
-      cy.visit('users');
-    });
-
-    it('Create User', () => {
-      const newUser = generateUser();
-
-      createUser(newUser);
-
-      cy.visit('users');
-
-      listUsers().should('contain', newUser.name);
-    });
-
-    it('Update User', () => {
-      const newUser = generateUser();
-
-      createUser(newUser);
-
-      cy.visit('users');
-
-      listUsers()
-        .contains(newUser.name)
-        .parent('tr')
-        .within(() => {
-          cy.get('[data-cy=editUser]').click();
-        });
-
-      cy.get('[data-cy=registerUserName]')
-        .should('contain.value', newUser.name)
-        .clear()
-        .type('Updated Name');
-
-      cy.get('[data-cy=saveUserButton]').click();
-
-      listUsers()
-        .contains('Updated Name')
-        .parent('tr')
-        .within(() => {
-          cy.get('[data-cy=editUser]').click();
-        });
-
-      cy.get('[data-cy=registerUserName]')
-        .should('contain.value', 'Updated Name')
-        .clear()
-        .type(newUser.name);
-
-      cy.get('[data-cy=saveUserButton]').click();
-
-      listUsers().contains(newUser.name);
-    });
-
-    it('Delete User', () => {
-      cy.visit('users');
-
-      listUsers()
-        .then(({ length }) => length)
-        .then((length) => {
-          listUsers()
-            .first()
-            .within(() => {
-              cy.get('[data-cy=deleteUser]').click();
-            });
-
-          cy.get('.deleteConfirm').within(() => {
-            cy.get('button').contains('Yes').click();
-          });
-
-          listUsers().should('have.length', length - 1);
-        });
-    });
-
-    it.only('Register User', () => {
-      cy.visit('register');
-    });
-    it.only('Login User', () => {
-      cy.visit('login');
     });
   });
 

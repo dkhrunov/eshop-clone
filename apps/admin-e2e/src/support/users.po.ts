@@ -1,4 +1,4 @@
-import { RegisterUserDto, UpdateUserDto } from '@esc/user/models';
+import { LoginUserDto, RegisterUserDto, UpdateUserDto } from '@esc/user/models';
 
 export const createUser = (user: RegisterUserDto) => {
   cy.visit('users');
@@ -36,6 +36,20 @@ export const listUsers = () => {
   return cy.get('[data-cy=user]');
 };
 
-export const updateUser = (user: UpdateUserDto) => {
-  //
+export const registerUser = (user: RegisterUserDto): void => {
+  const { name, email, password } = user;
+
+  cy.get('[data-cy=registerUserName]').type(name);
+  cy.get('[data-cy=registerUserEmail]').type(email);
+  cy.get('[data-cy=registerUserPassword]').type(password);
+  cy.get('[data-cy=registerUserPasswordConfirmation]').type(password);
+  cy.get('[data-cy=registerUserSubmit]').click();
+};
+
+export const loginUser = ({ email, password }: LoginUserDto) => {
+  cy.get('[data-cy=loginUserEmail]').type(email);
+  cy.get('[data-cy=loginUserPassword]').type(password);
+  cy.get('[data-cy=loginUserSubmit]').click();
+
+  cy.getLocalStorage('token');
 };
