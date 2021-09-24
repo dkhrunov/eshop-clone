@@ -1,4 +1,8 @@
 :host {
-  @apply grid min-h-full;
-  grid-template-columns: auto 1fr;
+  @apply grid min-h-full grid-flow-col;
+  grid: 'sidebar main' / auto 1fr;
+
+  main {
+    grid-area: main;
+  }
 }

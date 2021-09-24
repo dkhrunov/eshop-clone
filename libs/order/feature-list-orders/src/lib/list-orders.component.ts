@@ -1,21 +1,14 @@
-import { Component, OnInit} from '@angular/core';
+import { Component } from '@angular/core';
 import { ListOrdersFacade } from '@esc/order/domain';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'order-list-orders',
   templateUrl: './list-orders.component.html',
-  styleUrls: ['./list-orders.component.scss']
+  styleUrls: ['./list-orders.component.less'],
 })
-export class ListOrdersComponent implements OnInit {
-    
+export class ListOrdersComponent {
+  constructor(private listOrdersFacade: ListOrdersFacade) {}
 
-
-    constructor(private listOrdersFacade: ListOrdersFacade) {
-    }
-
-
-    ngOnInit() {
-    }
-
+  orders$ = this.listOrdersFacade.orders$.pipe(tap(console.log));
 }
-

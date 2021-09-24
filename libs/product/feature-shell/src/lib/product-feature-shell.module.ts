@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductDomainModule } from '@esc/product/domain';
 import { RouterModule } from '@angular/router';
-import { ShellComponent } from './shell.component';
+import { AuthGuard } from '@esc/shared/util-guards';
 
 @NgModule({
   imports: [
@@ -11,6 +11,7 @@ import { ShellComponent } from './shell.component';
     RouterModule.forChild([
       {
         path: 'products',
+        canActivate: [AuthGuard],
         loadChildren: () =>
           import('@esc/product/feature-list-products').then(
             (m) => m.ProductFeatureListProductsModule
@@ -18,6 +19,7 @@ import { ShellComponent } from './shell.component';
       },
       {
         path: 'categories',
+        canActivate: [AuthGuard],
         loadChildren: () =>
           import('@esc/product/feature-list-categories').then(
             (m) => m.ProductFeatureListCategoriesModule
@@ -25,7 +27,5 @@ import { ShellComponent } from './shell.component';
       },
     ]),
   ],
-  declarations: [ShellComponent],
-  exports: [ShellComponent],
 })
 export class ProductFeatureShellModule {}

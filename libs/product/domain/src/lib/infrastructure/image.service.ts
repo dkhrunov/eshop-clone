@@ -1,5 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
-import { PRODUCTS_URL } from './productsUrl.token';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { concatMap, Observable, Subject } from 'rxjs';
 import { UploadImageResponse } from '@esc/product/models';

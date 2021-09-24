@@ -844,6 +844,51 @@
         }
       }
     },
+    "shared-util-guards": {
+      "projectType": "library",
+      "root": "libs/shared/util-guards",
+      "sourceRoot": "libs/shared/util-guards/src",
+      "prefix": "guards",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:ng-packagr-lite",
+          "outputs": [
+            "dist/libs/shared/util-guards"
+          ],
+          "options": {
+            "project": "libs/shared/util-guards/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/shared/util-guards/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/shared/util-guards/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/shared/util-guards"
+          ],
+          "options": {
+            "jestConfig": "libs/shared/util-guards/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/util-guards/src/**/*.ts",
+              "libs/shared/util-guards/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "shared-util-helpers": {
       "projectType": "library",
       "root": "libs/shared/util-helpers",
@@ -889,6 +934,51 @@
         }
       }
     },
+    "shared-util-interceptors": {
+      "projectType": "library",
+      "root": "libs/shared/util-interceptors",
+      "sourceRoot": "libs/shared/util-interceptors/src",
+      "prefix": "interceptors",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:ng-packagr-lite",
+          "outputs": [
+            "dist/libs/shared/util-interceptors"
+          ],
+          "options": {
+            "project": "libs/shared/util-interceptors/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/shared/util-interceptors/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/shared/util-interceptors/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/shared/util-interceptors"
+          ],
+          "options": {
+            "jestConfig": "libs/shared/util-interceptors/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/util-interceptors/src/**/*.ts",
+              "libs/shared/util-interceptors/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "shared-util-models": {
       "projectType": "library",
       "root": "libs/shared/util-models",
@@ -929,6 +1019,51 @@
             "lintFilePatterns": [
               "libs/shared/util-models/src/**/*.ts",
               "libs/shared/util-models/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "shared-util-services": {
+      "projectType": "library",
+      "root": "libs/shared/util-services",
+      "sourceRoot": "libs/shared/util-services/src",
+      "prefix": "services",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:ng-packagr-lite",
+          "outputs": [
+            "dist/libs/shared/util-services"
+          ],
+          "options": {
+            "project": "libs/shared/util-services/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/shared/util-services/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/shared/util-services/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/shared/util-services"
+          ],
+          "options": {
+            "jestConfig": "libs/shared/util-services/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/util-services/src/**/*.ts",
+              "libs/shared/util-services/src/**/*.html"
             ]
           }
         }

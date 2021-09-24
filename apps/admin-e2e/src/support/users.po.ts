@@ -6,13 +6,15 @@ export const createUser = (user: RegisterUserDto) => {
   cy.get('[data-cy=registerUserName]').type(user.name, { force: true });
   cy.get('[data-cy=registerUserEmail]').type(user.email);
   cy.get('[data-cy=registerUserPassword]').type(user.password);
-  cy.get('[data-cy=registerUserPhone]').type(user.phone);
-  cy.get('[data-cy=registerUserStreet]').type(user.street);
-  cy.get('[data-cy=registerUserApartment]')
-    .clear()
-    .type(user.apartment.toString());
-  cy.get('[data-cy=registerUserZip]').type(user.zip);
-  cy.get('[data-cy=registerUserCity]').type(user.city);
+  user.phone && cy.get('[data-cy=registerUserPhone]').type(user.phone);
+  user.street && cy.get('[data-cy=registerUserStreet]').type(user.street);
+  user.apartment &&
+    cy
+      .get('[data-cy=registerUserApartment]')
+      .clear()
+      .type(user.apartment.toString());
+  user.zip && cy.get('[data-cy=registerUserZip]').type(user.zip);
+  user.city && cy.get('[data-cy=registerUserCity]').type(user.city);
 
   user.isAdmin && cy.get('[data-cy=registerUserIsAdmin]').click();
 

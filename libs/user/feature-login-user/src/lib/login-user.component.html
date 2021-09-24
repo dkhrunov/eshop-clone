@@ -1,2 +1,43 @@
-<h1>user-login-user</h1>
+<section>
+  <img src="https://source.unsplash.com/800x800/?nature,water" />
 
+  <form nz-form [formGroup]="form" (ngSubmit)="loginUser()">
+    <header>
+      <h1>Login User</h1>
+    </header>
+
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Please input your email!">
+        <nz-input-group nzPrefixIcon="user">
+          <input
+            type="text"
+            nz-input
+            formControlName="email"
+            placeholder="Email"
+          />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Please input your Password!">
+        <nz-input-group nzPrefixIcon="lock">
+          <input
+            type="password"
+            nz-input
+            formControlName="password"
+            placeholder="Password"
+          />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <button
+      [nzLoading]="loading$ | async"
+      nz-button
+      nzBlock
+      [nzType]="'primary'"
+    >
+      Log in
+    </button>
+  </form>
+</section>

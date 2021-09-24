@@ -1,5 +1,4 @@
 import { environment } from '@env/environment';
-import { CreateProductDto } from '@esc/product/models';
 import {
   generateCategory,
   generateProduct,
@@ -137,7 +136,7 @@ describe('Admin App', () => {
     });
   });
 
-  context.only('Users', () => {
+  context('Users', () => {
     it('List users', () => {
       cy.visit('users');
     });
@@ -208,6 +207,19 @@ describe('Admin App', () => {
 
           listUsers().should('have.length', length - 1);
         });
+    });
+
+    it.only('Register User', () => {
+      cy.visit('register');
+    });
+    it.only('Login User', () => {
+      cy.visit('login');
+    });
+  });
+
+  context('Orders', () => {
+    it('List Orders', () => {
+      cy.visit('orders');
     });
   });
 });

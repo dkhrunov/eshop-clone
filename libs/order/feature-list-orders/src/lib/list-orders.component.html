@@ -1,2 +1,49 @@
-<h1>order-list-orders</h1>
+<ui-main-wrapper title="Orders" subtitle="List of all orders">
+  <ng-container *ngIf="orders$ | async as orders">
+    <nz-table
+      [nzBordered]="true"
+      [nzShowPagination]="true"
+      #basicTable
+      [nzData]="orders"
+    >
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Total Price</th>
+          <th>Date Ordered</th>
+          <th>Status</th>
+          <th [nzAlign]="'center'"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-cy="user" *ngFor="let data of basicTable.data">
+          <td>{{ data.user }}</td>
+          <td>
+            {{ data.totalPrice | currency }}
+          </td>
+          <td>
+            {{ data.dateCreated }}
+          </td>
 
+          <td>{{ data.status }}</td>
+
+          <td [nzAlign]="'center'">
+            <nz-button-group nzSize="small">
+              <button nz-button nzDanger (click)="({})">
+                <i
+                  nz-icon
+                  data-cy="deleteUser"
+                  nzType="delete"
+                  nzTheme="fill"
+                ></i>
+              </button>
+              <button nz-button nzDanger data-cy="editUser" (click)="({})">
+                <i nz-icon nzType="edit" nzTheme="fill"></i>
+              </button>
+            </nz-button-group>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </ng-container>
+</ui-main-wrapper>

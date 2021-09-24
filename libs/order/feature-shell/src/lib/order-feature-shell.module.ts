@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrderDomainModule } from '@esc/order/domain';
-import { ShellComponent } from './shell.component';
 import { RouterModule } from '@angular/router';
+import { AuthGuard } from '@esc/shared/util-guards';
 
 @NgModule({
   imports: [
@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
     RouterModule.forChild([
       {
         path: 'dashboard',
+        canActivate: [AuthGuard],
         loadChildren: () =>
           import('@esc/order/feature-dashboard').then(
             (m) => m.OrderFeatureDashboardModule
@@ -18,6 +19,7 @@ import { RouterModule } from '@angular/router';
       },
       {
         path: 'orders',
+        canActivate: [AuthGuard],
         loadChildren: () =>
           import('@esc/order/feature-list-orders').then(
             (m) => m.OrderFeatureListOrdersModule
@@ -30,7 +32,5 @@ import { RouterModule } from '@angular/router';
       },
     ]),
   ],
-  declarations: [ShellComponent],
-  exports: [ShellComponent],
 })
 export class OrderFeatureShellModule {}

@@ -22,7 +22,10 @@ export class OrderApiController {
   constructor(private orderApiService: OrderApiService) {}
 
   @Post()
-  createOrder(@Body() dto: CreateOrderDto, @GetUser('id') id: string) {
+  createOrder(
+    @Body() dto: CreateOrderDto,
+    @GetUser('id') id: string
+  ): Promise<OrderEntity> {
     return this.orderApiService.createOrder(dto, id);
   }
 

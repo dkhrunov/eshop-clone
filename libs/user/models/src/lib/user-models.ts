@@ -4,7 +4,6 @@ import {
   IsEmail,
   IsMobilePhone,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -12,7 +11,6 @@ import { hash } from 'bcrypt';
 import { Request } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 import { CoreEntity } from '@esc/shared/util-models';
-import { Transform } from 'stream';
 
 @Entity('user')
 export class UserEntity extends CoreEntity {
@@ -65,26 +63,33 @@ export class RegisterUserDto {
   @IsString()
   password!: string;
 
+  @IsOptional()
   @IsMobilePhone()
-  phone!: string;
+  phone?: string;
 
+  @IsOptional()
   @IsBoolean()
-  isAdmin!: boolean;
+  isAdmin?: boolean;
 
+  @IsOptional()
   @IsString()
-  apartment!: string;
+  apartment?: string;
 
+  @IsOptional()
   @IsString()
-  zip!: string;
+  zip?: string;
 
+  @IsOptional()
   @IsString()
-  city!: string;
+  city?: string;
 
+  @IsOptional()
   @IsString()
-  country!: string;
+  country?: string;
 
+  @IsOptional()
   @IsString()
-  street!: string;
+  street?: string;
 }
 export class UpdateUserDto {
   @IsOptional()

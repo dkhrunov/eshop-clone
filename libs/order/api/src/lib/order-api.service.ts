@@ -20,7 +20,7 @@ export class OrderApiService {
     private readonly itemRepository: Repository<OrderItemEntity>
   ) {}
 
-  async createOrder(dto: CreateOrderDto, userId: string) {
+  async createOrder(dto: CreateOrderDto, userId: string): Promise<OrderEntity> {
     const newOrder = this.orderRepository.create(dto);
     newOrder.user = userId;
     newOrder.totalPrice = 0;

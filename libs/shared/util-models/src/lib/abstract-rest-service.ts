@@ -14,7 +14,7 @@ import { CoreEntity } from '..';
 import { isEntity } from './isEntityGuard';
 
 export abstract class AbstractRestService<E extends CoreEntity, D> {
-  constructor(protected http: HttpClient, private url: string) {}
+  constructor(protected http: HttpClient, protected url: string) {}
 
   protected resourceUrl = `${environment.baseUrlApi}/${this.url}`;
 

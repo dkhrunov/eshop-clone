@@ -88,10 +88,19 @@
     "shared-ui-pipes": {
       "tags": ["domain:shared", "type:ui"]
     },
+    "shared-util-guards": {
+      "tags": ["domain:shared", "type:util"]
+    },
     "shared-util-helpers": {
       "tags": ["domain:shared", "type:util"]
     },
+    "shared-util-interceptors": {
+      "tags": ["domain:shared", "type:util"]
+    },
     "shared-util-models": {
+      "tags": ["domain:shared", "type:util"]
+    },
+    "shared-util-services": {
       "tags": ["domain:shared", "type:util"]
     },
     "shop": {

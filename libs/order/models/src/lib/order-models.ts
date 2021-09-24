@@ -3,10 +3,8 @@ import {
   Entity,
   JoinColumn,
   JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
-  OneToOne,
 } from 'typeorm';
 import { CoreEntity } from '@esc/shared/util-models';
 import { ProductEntity } from '@esc/product/models';

@@ -1,4 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { IconService } from '@ant-design/icons-angular';
 import {
   HomeOutline,
@@ -27,5 +32,11 @@ export class SidebarComponent {
         UsergroupAddOutline,
       ]
     );
+  }
+
+  @Output() logoutUser = new EventEmitter();
+
+  logout(): void {
+    this.logoutUser.emit();
   }
 }

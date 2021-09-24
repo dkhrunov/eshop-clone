@@ -1,4 +1,4 @@
-<ui-sidebar></ui-sidebar>
+<ui-sidebar *ngIf="showSidebar$ | async" (logoutUser)="logout()"></ui-sidebar>
 
 <main>
   <router-outlet></router-outlet>

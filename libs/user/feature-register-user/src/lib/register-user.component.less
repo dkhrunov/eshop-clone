@@ -1,0 +1,31 @@
+:host {
+  @apply grid h-full place-content-center bg-gradient-to-tr to-gray-300 from-gray-600;
+
+  section {
+    @apply bg-gray-100 grid shadow-2xl;
+    width: clamp(400px, 50vw, 70vw);
+    min-height: 400px;
+    grid: 'image form' / 1fr 1fr;
+
+    img {
+      @apply bg-cover h-full object-cover;
+    }
+
+    form {
+      @apply p-5 px-6 lg:px-12 self-center;
+      grid-area: form;
+
+      header {
+        @apply mb-6 text-center;
+
+        h1 {
+          @apply font-extrabold text-xs md:text-lg;
+        }
+      }
+
+      input {
+        @apply ml-1;
+      }
+    }
+  }
+}
