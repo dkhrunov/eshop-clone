@@ -7,6 +7,13 @@ import { ButtonBarModule, MainWrapperModule } from '@esc/shared/ui-components';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTableModule } from 'ng-zorro-antd/table';
+import { SharedUiPipesModule } from '@esc/shared/ui-pipes';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -17,6 +24,13 @@ import { NzTableModule } from 'ng-zorro-antd/table';
     NzButtonModule,
     NzIconModule,
     NzTableModule,
+    NzTagModule,
+    NzDrawerModule,
+    SharedUiPipesModule,
+    NzDividerModule,
+    NzDescriptionsModule,
+    NzSelectModule,
+    FormsModule,
     RouterModule.forChild([{ path: '', component: ListOrdersComponent }]),
   ],
   declarations: [ListOrdersComponent],

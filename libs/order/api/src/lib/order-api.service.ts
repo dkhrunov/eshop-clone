@@ -7,7 +7,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductEntity } from '@esc/product/models';
-import { CountResponse } from '@esc/shared/util-models';
+import { CountResponse, DeleteResponse } from '@esc/shared/util-models';
 
 @Injectable()
 export class OrderApiService {
@@ -28,9 +28,9 @@ export class OrderApiService {
     for (const item of newOrder.orderItems) {
       const product = await this.productRepository.findOne(item.id);
 
-      if (!product) throw new NotFoundException();
-
-      newOrder.totalPrice += product.price * item.quantity;
+      if (product) {
+        newOrder.totalPrice += product.price * item.quantity;
+      }
 
       await this.itemRepository.save(item);
     }
@@ -64,12 +64,14 @@ export class OrderApiService {
     return await this.orderRepository.save(order);
   }
 
-  async deleteOrder(id: string): Promise<DeleteResult> {
+  async deleteOrder(id: string): Promise<DeleteResponse> {
     const result = await this.orderRepository.delete(id);
 
     if (!result.affected) throw new NotFoundException();
 
-    return result;
+    return {
+      entityDeleted: id,
+    };
   }
 
   async getTotalSales(): Promise<CountResponse> {

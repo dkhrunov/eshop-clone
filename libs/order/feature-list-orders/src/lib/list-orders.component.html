@@ -16,29 +16,52 @@
         </tr>
       </thead>
       <tbody>
-        <tr data-cy="user" *ngFor="let data of basicTable.data">
-          <td>{{ data.user }}</td>
+        <tr data-cy="order" *ngFor="let data of basicTable.data">
+          <td>{{ data.user | getUsername }}</td>
           <td>
             {{ data.totalPrice | currency }}
           </td>
           <td>
-            {{ data.dateCreated }}
+            {{ data.dateCreated | date: 'short' }}
           </td>
 
-          <td>{{ data.status }}</td>
+          <td>
+            <ng-container [ngSwitch]="data.status">
+              <nz-tag nzColor="success" *ngSwitchCase="'DELIVERED'">{{
+                data.status
+              }}</nz-tag>
+              <nz-tag nzColor="warning" *ngSwitchCase="'PENDING'">{{
+                data.status
+              }}</nz-tag>
+              <nz-tag nzColor="default" *ngSwitchCase="'PROCESSED'">{{
+                data.status
+              }}</nz-tag>
+              <nz-tag nzColor="processing" *ngSwitchCase="'SHIPPED'">{{
+                data.status
+              }}</nz-tag>
+              <nz-tag nzColor="error" *ngSwitchCase="'FAILED'">{{
+                data.status
+              }}</nz-tag>
+            </ng-container>
+          </td>
 
           <td [nzAlign]="'center'">
             <nz-button-group nzSize="small">
-              <button nz-button nzDanger (click)="({})">
+              <button nz-button nzDanger (click)="deleteOrder(data.id)">
                 <i
                   nz-icon
-                  data-cy="deleteUser"
+                  data-cy="deleteOrder"
                   nzType="delete"
                   nzTheme="fill"
                 ></i>
               </button>
-              <button nz-button nzDanger data-cy="editUser" (click)="({})">
-                <i nz-icon nzType="edit" nzTheme="fill"></i>
+              <button
+                nz-button
+                nzDanger
+                data-cy="editOrder"
+                (click)="showOrder(data)"
+              >
+                <i nz-icon nzType="eye" nzTheme="fill"></i>
               </button>
             </nz-button-group>
           </td>
@@ -47,3 +70,87 @@
     </nz-table>
   </ng-container>
 </ui-main-wrapper>
+
+<nz-drawer
+  [nzVisible]="editMode"
+  [nzWidth]="640"
+  [nzClosable]="true"
+  (nzOnClose)="closeOrder()"
+>
+  <ng-container *nzDrawerContent>
+    <nz-descriptions nzLayout="vertical" [nzColumn]="2" nzTitle="Order Details">
+      <nz-descriptions-item nzTitle="Order Id" [nzSpan]="1">{{
+        selectedOrder?.id
+      }}</nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Order Status" [nzSpan]="1">
+        <nz-select
+          nzShowSearch
+          nzAllowClear
+          nzPlaceHolder="Edit status"
+          [ngModel]="selectedOrder?.status"
+          [nzLoading]="updateStatusLoading$ | async"
+          (ngModelChange)="updateOrderStatus($event)"
+          data-cy="selectOrderStatus"
+        >
+          <nz-option
+            data-cy="orderStatus"
+            *ngFor="let status of orderStatuses"
+            nzLabel="{{ status }}"
+            nzValue="{{ status }}"
+          ></nz-option>
+        </nz-select>
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Order Date" [nzSpan]="1">{{
+        selectedOrder?.dateCreated | date: 'short'
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Total Price" [nzSpan]="1">{{
+        selectedOrder?.totalPrice | currency
+      }}</nz-descriptions-item>
+    </nz-descriptions>
+
+    <nz-divider></nz-divider>
+
+    <h1 class="orderItems__title">Order Items</h1>
+    <nz-table
+      [nzShowPagination]="false"
+      #basicTable
+      nzSize="middle"
+      [nzData]="selectedOrderItems!"
+    >
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Brand</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data">
+          <td>{{ data.name }}</td>
+          <td>{{ data.brand }}</td>
+          <td>{{ data.price | currency }}</td>
+          <td>{{ data.quantity }}</td>
+          <td>{{ data.price * data.quantity | currency }}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+    <nz-divider></nz-divider>
+    <nz-descriptions [nzColumn]="2" nzTitle="Order Address">
+      <nz-descriptions-item nzTitle="Order Address" [nzSpan]="1">{{
+        selectedOrder?.shippingAddressOne
+      }}</nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Customer Name" [nzSpan]="1">{{
+        selectedOrder?.user | getUsername
+      }}</nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Customer Phone" [nzSpan]="2">
+        {{ selectedOrder?.phone }}
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </ng-container>
+</nz-drawer>

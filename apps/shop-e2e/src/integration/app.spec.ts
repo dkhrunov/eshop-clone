@@ -615,8 +615,8 @@ describe('Eshop Clone', () => {
       const newOrder = generateOrder(orderItems);
 
       createOrderOnServer(newOrder, token).then(({ body: { id } }) => {
-        deleteOrderOnServer(id, token).then(({ body: { affected } }) => {
-          expect(affected).to.be.eql(1);
+        deleteOrderOnServer(id, token).then(({ body: { entityDeleted } }) => {
+          expect(entityDeleted).to.be.eql(id);
         });
       });
     });

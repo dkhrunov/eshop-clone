@@ -10,6 +10,7 @@ import {
   Max,
   Min,
 } from 'class-validator';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { CoreEntity } from '@esc/shared/util-models';
 
 @Entity('product')

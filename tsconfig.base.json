@@ -62,7 +62,8 @@
       ],
       "@esc/user/feature-shell": ["libs/user/feature-shell/src/index.ts"],
       "@esc/user/models": ["libs/user/models/src/index.ts"],
-      "@esc/user/util-helpers": ["libs/user/util-helpers/src/index.ts"]
+      "@esc/user/util-helpers": ["libs/user/util-helpers/src/index.ts"],
+      "path": ["./node_modules/path-browserify"]
     }
   },
   "exclude": ["node_modules", "tmp"]

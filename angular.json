@@ -9,9 +9,7 @@
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/admin",
             "index": "apps/admin/src/index.html",
@@ -28,9 +26,7 @@
               "apps/admin/src/favicon.ico",
               "apps/admin/src/assets"
             ],
-            "styles": [
-              "apps/admin/src/styles.less"
-            ],
+            "styles": ["apps/admin/src/styles.less"],
             "scripts": []
           },
           "configurations": {
@@ -95,7 +91,8 @@
               "apps/admin/src/**/*.ts",
               "apps/admin/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -120,10 +117,9 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/admin-e2e/**/*.{js,ts}"
-            ]
-          }
+            "lintFilePatterns": ["apps/admin-e2e/**/*.{js,ts}"]
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -134,16 +130,12 @@
       "architect": {
         "build": {
           "builder": "@nrwl/node:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/api",
             "main": "apps/api/src/main.ts",
             "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": [
-              "apps/api/src/assets"
-            ]
+            "assets": ["apps/api/src/assets"]
           },
           "configurations": {
             "production": {
@@ -168,16 +160,13 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/api/**/*.ts"
-            ]
-          }
+            "lintFilePatterns": ["apps/api/**/*.ts"]
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/api"
-          ],
+          "outputs": ["coverage/apps/api"],
           "options": {
             "jestConfig": "apps/api/jest.config.js",
             "passWithNoTests": true
@@ -193,10 +182,9 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "libs/order/api/**/*.ts"
-            ]
-          }
+            "lintFilePatterns": ["libs/order/api/**/*.ts"]
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -208,9 +196,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/order/domain"
-          ],
+          "outputs": ["dist/libs/order/domain"],
           "options": {
             "project": "libs/order/domain/ng-package.json"
           },
@@ -226,9 +212,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/order/domain"
-          ],
+          "outputs": ["coverage/libs/order/domain"],
           "options": {
             "jestConfig": "libs/order/domain/jest.config.js",
             "passWithNoTests": true
@@ -241,7 +225,8 @@
               "libs/order/domain/src/**/*.ts",
               "libs/order/domain/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -253,9 +238,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/order/feature-dashboard"
-          ],
+          "outputs": ["dist/libs/order/feature-dashboard"],
           "options": {
             "project": "libs/order/feature-dashboard/ng-package.json"
           },
@@ -271,9 +254,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/order/feature-dashboard"
-          ],
+          "outputs": ["coverage/libs/order/feature-dashboard"],
           "options": {
             "jestConfig": "libs/order/feature-dashboard/jest.config.js",
             "passWithNoTests": true
@@ -286,7 +267,8 @@
               "libs/order/feature-dashboard/src/**/*.ts",
               "libs/order/feature-dashboard/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -298,9 +280,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/order/feature-list-orders"
-          ],
+          "outputs": ["dist/libs/order/feature-list-orders"],
           "options": {
             "project": "libs/order/feature-list-orders/ng-package.json"
           },
@@ -316,9 +296,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/order/feature-list-orders"
-          ],
+          "outputs": ["coverage/libs/order/feature-list-orders"],
           "options": {
             "jestConfig": "libs/order/feature-list-orders/jest.config.js",
             "passWithNoTests": true
@@ -331,7 +309,8 @@
               "libs/order/feature-list-orders/src/**/*.ts",
               "libs/order/feature-list-orders/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -343,9 +322,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/order/feature-shell"
-          ],
+          "outputs": ["dist/libs/order/feature-shell"],
           "options": {
             "project": "libs/order/feature-shell/ng-package.json"
           },
@@ -361,9 +338,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/order/feature-shell"
-          ],
+          "outputs": ["coverage/libs/order/feature-shell"],
           "options": {
             "jestConfig": "libs/order/feature-shell/jest.config.js",
             "passWithNoTests": true
@@ -376,7 +351,8 @@
               "libs/order/feature-shell/src/**/*.ts",
               "libs/order/feature-shell/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -387,24 +363,19 @@
       "architect": {
         "build": {
           "builder": "@nrwl/workspace:tsc",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/libs/order/models",
             "main": "libs/order/models/src/index.ts",
             "tsConfig": "libs/order/models/tsconfig.lib.json",
-            "assets": [
-              "libs/order/models/*.md"
-            ]
+            "assets": ["libs/order/models/*.md"]
           }
         },
         "lint": {
           "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "libs/order/models/**/*.ts"
-            ]
+            "lintFilePatterns": ["libs/order/models/**/*.ts"]
           }
         }
       }
@@ -417,10 +388,9 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "libs/product/api/**/*.ts"
-            ]
-          }
+            "lintFilePatterns": ["libs/product/api/**/*.ts"]
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -432,9 +402,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/product/domain"
-          ],
+          "outputs": ["dist/libs/product/domain"],
           "options": {
             "project": "libs/product/domain/ng-package.json"
           },
@@ -450,9 +418,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/product/domain"
-          ],
+          "outputs": ["coverage/libs/product/domain"],
           "options": {
             "jestConfig": "libs/product/domain/jest.config.js",
             "passWithNoTests": true
@@ -465,22 +431,8 @@
               "libs/product/domain/src/**/*.ts",
               "libs/product/domain/src/**/*.html"
             ]
-          }
-        }
-      }
-    },
-    "product-entities": {
-      "root": "libs/product/entities",
-      "sourceRoot": "libs/product/entities/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/product/entities/**/*.ts"
-            ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -492,9 +444,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/product/feature-list-categories"
-          ],
+          "outputs": ["dist/libs/product/feature-list-categories"],
           "options": {
             "project": "libs/product/feature-list-categories/ng-package.json"
           },
@@ -510,9 +460,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/product/feature-list-categories"
-          ],
+          "outputs": ["coverage/libs/product/feature-list-categories"],
           "options": {
             "jestConfig": "libs/product/feature-list-categories/jest.config.js",
             "passWithNoTests": true
@@ -525,7 +473,8 @@
               "libs/product/feature-list-categories/src/**/*.ts",
               "libs/product/feature-list-categories/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -537,9 +486,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/product/feature-list-products"
-          ],
+          "outputs": ["dist/libs/product/feature-list-products"],
           "options": {
             "project": "libs/product/feature-list-products/ng-package.json"
           },
@@ -555,9 +502,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/product/feature-list-products"
-          ],
+          "outputs": ["coverage/libs/product/feature-list-products"],
           "options": {
             "jestConfig": "libs/product/feature-list-products/jest.config.js",
             "passWithNoTests": true
@@ -570,7 +515,8 @@
               "libs/product/feature-list-products/src/**/*.ts",
               "libs/product/feature-list-products/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -582,9 +528,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/product/feature-shell"
-          ],
+          "outputs": ["dist/libs/product/feature-shell"],
           "options": {
             "project": "libs/product/feature-shell/ng-package.json"
           },
@@ -600,9 +544,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/product/feature-shell"
-          ],
+          "outputs": ["coverage/libs/product/feature-shell"],
           "options": {
             "jestConfig": "libs/product/feature-shell/jest.config.js",
             "passWithNoTests": true
@@ -615,6 +557,31 @@
               "libs/product/feature-shell/src/**/*.ts",
               "libs/product/feature-shell/src/**/*.html"
             ]
+          },
+          "outputs": ["{options.outputFile}"]
+        }
+      }
+    },
+    "product-models": {
+      "root": "libs/product/models",
+      "sourceRoot": "libs/product/models/src",
+      "projectType": "library",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/workspace:tsc",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/product/models",
+            "main": "libs/product/models/src/index.ts",
+            "tsConfig": "libs/product/models/tsconfig.lib.json",
+            "assets": ["libs/product/models/*.md"]
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/product/models/**/*.ts"]
           }
         }
       }
@@ -627,9 +594,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/product/ui-components"
-          ],
+          "outputs": ["dist/libs/product/ui-components"],
           "options": {
             "project": "libs/product/ui-components/ng-package.json"
           },
@@ -645,9 +610,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/product/ui-components"
-          ],
+          "outputs": ["coverage/libs/product/ui-components"],
           "options": {
             "jestConfig": "libs/product/ui-components/jest.config.js",
             "passWithNoTests": true
@@ -660,7 +623,8 @@
               "libs/product/ui-components/src/**/*.ts",
               "libs/product/ui-components/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -672,9 +636,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/product/ui-pipes"
-          ],
+          "outputs": ["dist/libs/product/ui-pipes"],
           "options": {
             "project": "libs/product/ui-pipes/ng-package.json"
           },
@@ -690,9 +652,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/product/ui-pipes"
-          ],
+          "outputs": ["coverage/libs/product/ui-pipes"],
           "options": {
             "jestConfig": "libs/product/ui-pipes/jest.config.js",
             "passWithNoTests": true
@@ -705,7 +665,8 @@
               "libs/product/ui-pipes/src/**/*.ts",
               "libs/product/ui-pipes/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -717,9 +678,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/product/util-helpers"
-          ],
+          "outputs": ["dist/libs/product/util-helpers"],
           "options": {
             "project": "libs/product/util-helpers/ng-package.json"
           },
@@ -735,9 +694,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/product/util-helpers"
-          ],
+          "outputs": ["coverage/libs/product/util-helpers"],
           "options": {
             "jestConfig": "libs/product/util-helpers/jest.config.js",
             "passWithNoTests": true
@@ -750,7 +707,8 @@
               "libs/product/util-helpers/src/**/*.ts",
               "libs/product/util-helpers/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -762,9 +720,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/shared/ui-components"
-          ],
+          "outputs": ["dist/libs/shared/ui-components"],
           "options": {
             "project": "libs/shared/ui-components/ng-package.json"
           },
@@ -780,9 +736,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/shared/ui-components"
-          ],
+          "outputs": ["coverage/libs/shared/ui-components"],
           "options": {
             "jestConfig": "libs/shared/ui-components/jest.config.js",
             "passWithNoTests": true
@@ -795,7 +749,8 @@
               "libs/shared/ui-components/src/**/*.ts",
               "libs/shared/ui-components/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -807,9 +762,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/shared/ui-pipes"
-          ],
+          "outputs": ["dist/libs/shared/ui-pipes"],
           "options": {
             "project": "libs/shared/ui-pipes/ng-package.json"
           },
@@ -825,9 +778,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/shared/ui-pipes"
-          ],
+          "outputs": ["coverage/libs/shared/ui-pipes"],
           "options": {
             "jestConfig": "libs/shared/ui-pipes/jest.config.js",
             "passWithNoTests": true
@@ -840,7 +791,8 @@
               "libs/shared/ui-pipes/src/**/*.ts",
               "libs/shared/ui-pipes/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -852,9 +804,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/shared/util-guards"
-          ],
+          "outputs": ["dist/libs/shared/util-guards"],
           "options": {
             "project": "libs/shared/util-guards/ng-package.json"
           },
@@ -870,9 +820,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/shared/util-guards"
-          ],
+          "outputs": ["coverage/libs/shared/util-guards"],
           "options": {
             "jestConfig": "libs/shared/util-guards/jest.config.js",
             "passWithNoTests": true
@@ -885,7 +833,8 @@
               "libs/shared/util-guards/src/**/*.ts",
               "libs/shared/util-guards/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -897,9 +846,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/shared/util-helpers"
-          ],
+          "outputs": ["dist/libs/shared/util-helpers"],
           "options": {
             "project": "libs/shared/util-helpers/ng-package.json"
           },
@@ -915,9 +862,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/shared/util-helpers"
-          ],
+          "outputs": ["coverage/libs/shared/util-helpers"],
           "options": {
             "jestConfig": "libs/shared/util-helpers/jest.config.js",
             "passWithNoTests": true
@@ -930,7 +875,8 @@
               "libs/shared/util-helpers/src/**/*.ts",
               "libs/shared/util-helpers/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -942,9 +888,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/shared/util-interceptors"
-          ],
+          "outputs": ["dist/libs/shared/util-interceptors"],
           "options": {
             "project": "libs/shared/util-interceptors/ng-package.json"
           },
@@ -960,9 +904,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/shared/util-interceptors"
-          ],
+          "outputs": ["coverage/libs/shared/util-interceptors"],
           "options": {
             "jestConfig": "libs/shared/util-interceptors/jest.config.js",
             "passWithNoTests": true
@@ -975,7 +917,8 @@
               "libs/shared/util-interceptors/src/**/*.ts",
               "libs/shared/util-interceptors/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -987,9 +930,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/shared/util-models"
-          ],
+          "outputs": ["dist/libs/shared/util-models"],
           "options": {
             "project": "libs/shared/util-models/ng-package.json"
           },
@@ -1005,9 +946,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/shared/util-models"
-          ],
+          "outputs": ["coverage/libs/shared/util-models"],
           "options": {
             "jestConfig": "libs/shared/util-models/jest.config.js",
             "passWithNoTests": true
@@ -1020,7 +959,8 @@
               "libs/shared/util-models/src/**/*.ts",
               "libs/shared/util-models/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -1032,9 +972,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/shared/util-services"
-          ],
+          "outputs": ["dist/libs/shared/util-services"],
           "options": {
             "project": "libs/shared/util-services/ng-package.json"
           },
@@ -1050,9 +988,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/shared/util-services"
-          ],
+          "outputs": ["coverage/libs/shared/util-services"],
           "options": {
             "jestConfig": "libs/shared/util-services/jest.config.js",
             "passWithNoTests": true
@@ -1065,7 +1001,8 @@
               "libs/shared/util-services/src/**/*.ts",
               "libs/shared/util-services/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -1077,9 +1014,7 @@
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/shop",
             "index": "apps/shop/src/index.html",
@@ -1087,13 +1022,8 @@
             "polyfills": "apps/shop/src/polyfills.ts",
             "tsConfig": "apps/shop/tsconfig.app.json",
             "inlineStyleLanguage": "less",
-            "assets": [
-              "apps/shop/src/favicon.ico",
-              "apps/shop/src/assets"
-            ],
-            "styles": [
-              "apps/shop/src/styles.less"
-            ],
+            "assets": ["apps/shop/src/favicon.ico", "apps/shop/src/assets"],
+            "styles": ["apps/shop/src/styles.less"],
             "scripts": []
           },
           "configurations": {
@@ -1157,13 +1087,12 @@
               "apps/shop/src/**/*.ts",
               "apps/shop/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/shop"
-          ],
+          "outputs": ["coverage/apps/shop"],
           "options": {
             "jestConfig": "apps/shop/jest.config.js",
             "passWithNoTests": true
@@ -1192,10 +1121,9 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/shop-e2e/**/*.{js,ts}"
-            ]
-          }
+            "lintFilePatterns": ["apps/shop-e2e/**/*.{js,ts}"]
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -1207,10 +1135,9 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "libs/user/api/**/*.ts"
-            ]
-          }
+            "lintFilePatterns": ["libs/user/api/**/*.ts"]
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -1222,9 +1149,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/user/domain"
-          ],
+          "outputs": ["dist/libs/user/domain"],
           "options": {
             "project": "libs/user/domain/ng-package.json"
           },
@@ -1240,9 +1165,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/user/domain"
-          ],
+          "outputs": ["coverage/libs/user/domain"],
           "options": {
             "jestConfig": "libs/user/domain/jest.config.js",
             "passWithNoTests": true
@@ -1255,22 +1178,8 @@
               "libs/user/domain/src/**/*.ts",
               "libs/user/domain/src/**/*.html"
             ]
-          }
-        }
-      }
-    },
-    "user-entities": {
-      "root": "libs/user/entities",
-      "sourceRoot": "libs/user/entities/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/user/entities/**/*.ts"
-            ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -1282,9 +1191,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/user/feature-list-users"
-          ],
+          "outputs": ["dist/libs/user/feature-list-users"],
           "options": {
             "project": "libs/user/feature-list-users/ng-package.json"
           },
@@ -1300,9 +1207,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/user/feature-list-users"
-          ],
+          "outputs": ["coverage/libs/user/feature-list-users"],
           "options": {
             "jestConfig": "libs/user/feature-list-users/jest.config.js",
             "passWithNoTests": true
@@ -1315,7 +1220,8 @@
               "libs/user/feature-list-users/src/**/*.ts",
               "libs/user/feature-list-users/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -1327,9 +1233,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/user/feature-login-user"
-          ],
+          "outputs": ["dist/libs/user/feature-login-user"],
           "options": {
             "project": "libs/user/feature-login-user/ng-package.json"
           },
@@ -1345,9 +1249,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/user/feature-login-user"
-          ],
+          "outputs": ["coverage/libs/user/feature-login-user"],
           "options": {
             "jestConfig": "libs/user/feature-login-user/jest.config.js",
             "passWithNoTests": true
@@ -1360,7 +1262,8 @@
               "libs/user/feature-login-user/src/**/*.ts",
               "libs/user/feature-login-user/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -1372,9 +1275,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/user/feature-register-user"
-          ],
+          "outputs": ["dist/libs/user/feature-register-user"],
           "options": {
             "project": "libs/user/feature-register-user/ng-package.json"
           },
@@ -1390,9 +1291,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/user/feature-register-user"
-          ],
+          "outputs": ["coverage/libs/user/feature-register-user"],
           "options": {
             "jestConfig": "libs/user/feature-register-user/jest.config.js",
             "passWithNoTests": true
@@ -1405,7 +1304,8 @@
               "libs/user/feature-register-user/src/**/*.ts",
               "libs/user/feature-register-user/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -1417,9 +1317,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/user/feature-shell"
-          ],
+          "outputs": ["dist/libs/user/feature-shell"],
           "options": {
             "project": "libs/user/feature-shell/ng-package.json"
           },
@@ -1435,9 +1333,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/user/feature-shell"
-          ],
+          "outputs": ["coverage/libs/user/feature-shell"],
           "options": {
             "jestConfig": "libs/user/feature-shell/jest.config.js",
             "passWithNoTests": true
@@ -1450,7 +1346,22 @@
               "libs/user/feature-shell/src/**/*.ts",
               "libs/user/feature-shell/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
+        }
+      }
+    },
+    "user-models": {
+      "root": "libs/user/models",
+      "sourceRoot": "libs/user/models/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/user/models/**/*.ts"]
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },
@@ -1462,9 +1373,7 @@
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": [
-            "dist/libs/user/util-helpers"
-          ],
+          "outputs": ["dist/libs/user/util-helpers"],
           "options": {
             "project": "libs/user/util-helpers/ng-package.json"
           },
@@ -1480,9 +1389,7 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/user/util-helpers"
-          ],
+          "outputs": ["coverage/libs/user/util-helpers"],
           "options": {
             "jestConfig": "libs/user/util-helpers/jest.config.js",
             "passWithNoTests": true
@@ -1495,7 +1402,8 @@
               "libs/user/util-helpers/src/**/*.ts",
               "libs/user/util-helpers/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     }

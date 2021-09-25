@@ -1,5 +1,5 @@
 import { CreateOrderDto, OrderEntity } from '@esc/order/models';
-import { CountResponse } from '@esc/shared/util-models';
+import { CountResponse, DeleteResponse } from '@esc/shared/util-models';
 import { environment } from '@env/environment';
 
 const baseUrlOrders = `${environment.baseUrlApi}/orders`;
@@ -62,7 +62,7 @@ export const updateOrderStatus = (
 
 export const deleteOrderOnServer = (id: string, token: string) => {
   cy.log('Delete order');
-  return cy.request({
+  return cy.request<DeleteResponse>({
     url: `${baseUrlOrders}/${id}`,
     method: 'DELETE',
     headers: {

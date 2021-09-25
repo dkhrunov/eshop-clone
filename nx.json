@@ -53,16 +53,13 @@
       "tags": ["domain:order", "type:feature"]
     },
     "order-models": {
-      "tags": []
+      "tags": ["domain:shared"]
     },
     "product-api": {
       "tags": []
     },
     "product-domain": {
       "tags": ["domain:product", "type:domain-logic"]
-    },
-    "product-entities": {
-      "tags": []
     },
     "product-feature-list-categories": {
       "tags": ["domain:product", "type:feature"]
@@ -72,6 +69,9 @@
     },
     "product-feature-shell": {
       "tags": ["domain:product", "type:feature"]
+    },
+    "product-models": {
+      "tags": []
     },
     "product-ui-components": {
       "tags": ["domain:product", "type:ui"]
@@ -116,9 +116,6 @@
     "user-domain": {
       "tags": ["domain:user", "type:domain-logic"]
     },
-    "user-entities": {
-      "tags": []
-    },
     "user-feature-list-users": {
       "tags": ["domain:user", "type:feature"]
     },
@@ -130,6 +127,9 @@
     },
     "user-feature-shell": {
       "tags": ["domain:user", "type:feature"]
+    },
+    "user-models": {
+      "tags": []
     },
     "user-util-helpers": {
       "tags": ["domain:user", "type:util"]

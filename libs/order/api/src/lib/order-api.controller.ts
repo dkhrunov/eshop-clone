@@ -15,8 +15,7 @@ import {
   UpdateOrderStatus,
 } from '@esc/order/models';
 import { GetUser } from '@esc/user/api';
-import { DeleteResult } from 'typeorm';
-import { CountResponse } from '@esc/shared/util-models';
+import { CountResponse, DeleteResponse } from '@esc/shared/util-models';
 @Controller('orders')
 export class OrderApiController {
   constructor(private orderApiService: OrderApiService) {}
@@ -63,7 +62,7 @@ export class OrderApiController {
   }
 
   @Delete(':id')
-  deleteOrder(@Param('id') id: string): Promise<DeleteResult> {
+  deleteOrder(@Param('id') id: string): Promise<DeleteResponse> {
     return this.orderApiService.deleteOrder(id);
   }
 }

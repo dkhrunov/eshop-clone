@@ -1,3 +1,4 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import {
   Column,
   Entity,
@@ -23,7 +24,11 @@ export enum OrderStatus {
   PENDING = 'PENDING',
   SHIPPED = 'SHIPPED',
   DELIVERED = 'DELIVERED',
+  PROCESSED = 'PROCESSED',
+  FAILED = 'FAILED',
 }
+
+export const OrderStatusList = Object.keys(OrderStatus);
 @Entity('order')
 export class OrderEntity extends CoreEntity {
   @Column()

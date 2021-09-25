@@ -12,6 +12,7 @@ import {
   mapCategoriesToNames,
   updateCategory,
 } from '../support/categories.po';
+import { getOrders } from '../support/orders.po';
 import {
   createProduct,
   deleteProduct,
@@ -242,6 +243,24 @@ describe('Admin App', () => {
   context('Orders', () => {
     it('List Orders', () => {
       cy.visit('orders');
+    });
+
+    it('Update order status', () => {
+      cy.visit('orders');
+
+      getOrders()
+        .first()
+        .within(() => {
+          cy.get('[data-cy=editOrder]').click();
+        });
+
+      cy.get('[data-cy=selectOrderStatus]').click();
+      cy.get('nz-option-item')
+        .not('.ant-select-item-option-selected')
+        .first()
+        .click();
+
+      cy.get('.ant-drawer-close').click();
     });
   });
 });
