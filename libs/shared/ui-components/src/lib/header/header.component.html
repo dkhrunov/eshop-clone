@@ -1,1 +1,50 @@
-<p>header works!</p>
+<header>
+  <div class="logo">
+    <img src="assets/logo.png" alt="logo" />
+  </div>
+
+  <div class="search">
+    <nz-input-group [nzSuffix]="inputClearTpl" [nzPrefix]="prefixTemplateUser">
+      <input
+        type="text"
+        nz-input
+        [(ngModel)]="inputValue"
+        placeholder="Find Product"
+      />
+    </nz-input-group>
+
+    <ng-template #inputClearTpl>
+      <i
+        nz-icon
+        class="ant-input-clear-icon"
+        nzTheme="fill"
+        nzType="close-circle"
+        *ngIf="inputValue"
+        (click)="inputValue = null"
+      ></i>
+    </ng-template>
+
+    <ng-template #prefixTemplateUser
+      ><i nz-icon nzType="search"></i
+    ></ng-template>
+  </div>
+
+  <nav>
+    <ul>
+      <li>
+        <a href="#">Home</a>
+      </li>
+      <li>
+        <a href="#">Products</a>
+      </li>
+      <li>
+        <a href="#">Contact</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="cart">
+    <i nz-icon nzType="user" nzTheme="outline"></i>
+    <i nz-icon nzType="shopping-cart" nzTheme="outline"></i>
+  </div>
+</header>

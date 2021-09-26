@@ -1,3 +1,39 @@
-:host {
-  display: block;
+header {
+  @apply grid md:grid-flow-col sm:grid-flow-row justify-center md:justify-around items-center pt-2;
+
+  .logo {
+    img {
+      @apply w-32;
+    }
+  }
+
+  .search {
+    @apply rounded-md w-52;
+
+    nz-input-group {
+      @apply rounded-md outline-none;
+
+      .ant-input {
+        @apply ml-1;
+      }
+    }
+  }
+
+  nav {
+    ul {
+      @apply grid grid-flow-col mb-0 justify-center gap-4;
+
+      a {
+        @apply text-gray-500;
+      }
+    }
+  }
+
+  .cart {
+    @apply grid items-center grid-flow-col justify-center gap-2;
+
+    i {
+      @apply text-gray-500;
+    }
+  }
 }

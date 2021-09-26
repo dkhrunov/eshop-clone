@@ -109,10 +109,6 @@ describe('Eshop Clone', () => {
     }
   });
 
-  context('Shop', () => {
-    //
-  });
-
   context('Users API', () => {
     it('Register User', () => {
       const newUser = generateUser();
@@ -646,6 +642,12 @@ describe('Eshop Clone', () => {
           expect(user).to.deep.include({ id: userId });
         }
       });
+    });
+  });
+
+  context.only('Shop', () => {
+    it('Show main page', () => {
+      cy.visit(`${environment.baseUrlFrontShop}`);
     });
   });
 });

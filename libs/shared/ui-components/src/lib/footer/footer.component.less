@@ -1,3 +1,11 @@
 :host {
-  display: block;
+  @apply grid grid-flow-col items-center justify-between text-gray-500 bg-yellow-100 px-2;
+
+  ul {
+    @apply grid grid-flow-col justify-center gap-2 my-4;
+
+    i {
+      @apply text-gray-700;
+    }
+  }
 }
