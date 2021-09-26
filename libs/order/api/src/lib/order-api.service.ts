@@ -4,7 +4,7 @@ import {
   OrderItemEntity,
 } from '@esc/order/models';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DeleteResult, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductEntity } from '@esc/product/models';
 import { CountResponse, DeleteResponse } from '@esc/shared/util-models';
@@ -81,7 +81,7 @@ export class OrderApiService {
       .getRawOne();
 
     return {
-      total_sales: parseInt(total_sales),
+      total_sales: parseInt(total_sales) ?? 0,
     };
   }
 

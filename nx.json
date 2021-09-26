@@ -55,6 +55,9 @@
     "order-models": {
       "tags": ["domain:shared"]
     },
+    "order-ui-components": {
+      "tags": ["domain:order", "type:ui"]
+    },
     "product-api": {
       "tags": []
     },

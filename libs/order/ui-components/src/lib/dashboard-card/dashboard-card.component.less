@@ -1,0 +1,24 @@
+:host {
+  @apply grid rounded border border-gray-500 text-3xl text-gray-500 p-2 gap-2 justify-center px-5 text-center;
+  grid: 'icon .' 'title value' / 1fr 1fr;
+
+  i {
+    grid-area: icon;
+    @apply text-6xl justify-self-center;
+
+    &.loadingIcon {
+      @apply text-2xl self-end;
+      grid-area: value;
+    }
+  }
+
+  h2 {
+    @apply mb-0 text-2xl text-gray-500 self-end;
+    grid-area: title;
+  }
+
+  p {
+    grid-area: value;
+    @apply text-2xl mb-0 self-end justify-self-center;
+  }
+}

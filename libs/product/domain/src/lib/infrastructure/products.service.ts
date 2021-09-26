@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { CreateProductDto, ProductEntity } from '@esc/product/models';
-import { AbstractRestService } from '@esc/shared/util-models';
+import { AbstractRestService, CountResponse } from '@esc/shared/util-models';
+import { pluck } from 'rxjs';
 import { PRODUCTS_URL } from './productsUrl.token';
 
 @Injectable({
@@ -14,4 +15,8 @@ export class ProductsService extends AbstractRestService<
   constructor(http: HttpClient, @Inject(PRODUCTS_URL) url: string) {
     super(http, url);
   }
+
+  productCount$ = this.http
+    .get<CountResponse>(`${this.resourceUrl}/count`)
+    .pipe(pluck('product_count'));
 }

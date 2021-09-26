@@ -1,4 +1,3 @@
-import { environment } from '@env/environment';
 import {
   generateCategory,
   generateProduct,
@@ -32,7 +31,6 @@ describe('Admin App', () => {
   });
 
   beforeEach(() => {
-    cy.visit(`${environment.baseUrlFrontAdmin}`);
     cy.viewport(600, 500);
     cy.viewport(1000, 800);
     cy.restoreLocalStorage();
@@ -128,10 +126,6 @@ describe('Admin App', () => {
           listUsers().should('have.length', length - 1);
         });
     });
-  });
-
-  it('Show main dashboard', () => {
-    //TODO
   });
 
   context('Categories', () => {
@@ -261,6 +255,12 @@ describe('Admin App', () => {
         .click();
 
       cy.get('.ant-drawer-close').click();
+    });
+  });
+
+  context('Dashboard', () => {
+    it('Show main dashboard', () => {
+      cy.visit('dashboard');
     });
   });
 });

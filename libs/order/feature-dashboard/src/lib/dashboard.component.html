@@ -1,4 +1,27 @@
-<ui-main-wrapper
-  title="Dashboard"
-  subtitle="Eshop Statistics"
-></ui-main-wrapper>
+<ui-main-wrapper title="Dashboard" subtitle="Latest Updates">
+  <section>
+    <components-dashboard-card
+      title="Orders"
+      icon="shopping-cart"
+      value="{{ ordersCount$ | async }}"
+    ></components-dashboard-card>
+
+    <components-dashboard-card
+      title="Customers"
+      icon="usergroup-add"
+      value="{{ userCount$ | async }}"
+    ></components-dashboard-card>
+
+    <components-dashboard-card
+      title="Products"
+      icon="folder"
+      value="{{ productCount$ | async }}"
+    ></components-dashboard-card>
+
+    <components-dashboard-card
+      title="Total Sales"
+      icon="dollar"
+      value="{{ totalSales$ | async }}"
+    ></components-dashboard-card>
+  </section>
+</ui-main-wrapper>

@@ -1,21 +1,20 @@
-import { Component, OnInit} from '@angular/core';
+import { Component } from '@angular/core';
 import { DashboardFacade } from '@esc/order/domain';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'order-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.less'],
 })
-export class DashboardComponent implements OnInit {
-    
+export class DashboardComponent {
+  constructor(private dashboardFacade: DashboardFacade) {}
 
+  ordersCount$ = this.dashboardFacade.ordersCount$.pipe(delay(400));
 
-    constructor(private dashboardFacade: DashboardFacade) {
-    }
+  productCount$ = this.dashboardFacade.productCount$.pipe(delay(400));
 
+  userCount$ = this.dashboardFacade.userCount$.pipe(delay(400));
 
-    ngOnInit() {
-    }
-
+  totalSales$ = this.dashboardFacade.totalSales$.pipe(delay(400));
 }
-

@@ -22,8 +22,7 @@ export class RegisterUserComponent {
   loading$ = merge(
     this.loadingAction$,
     this.registerUserFacade.registeredUser$.pipe(
-      tap((user) => {
-        console.log(user);
+      tap(() => {
         this.router.navigate(['login']);
       }),
       mapTo(false),

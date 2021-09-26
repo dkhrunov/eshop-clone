@@ -1,0 +1,11 @@
+<i nz-icon [nzType]="icon" nzTheme="outline"></i>
+
+<h2>{{ title }}</h2>
+
+<ng-container *ngIf="value; else loadingTpl">
+  <p>{{ icon === 'dollar' ? (value | currency) : value }}</p>
+</ng-container>
+
+<ng-template #loadingTpl>
+  <i class="loadingIcon" nz-icon [nzType]="'loading'" nzTheme="outline"></i>
+</ng-template>

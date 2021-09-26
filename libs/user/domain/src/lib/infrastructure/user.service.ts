@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { AbstractRestService } from '@esc/shared/util-models';
+import { AbstractRestService, CountResponse } from '@esc/shared/util-models';
 import {
   LoginResponse,
   LoginUserDto,
@@ -8,7 +8,7 @@ import {
 } from '@esc/user/models';
 import { HttpClient } from '@angular/common/http';
 import { USERS_URL } from './usersUrl.token';
-import { Observable, Subject, switchMap } from 'rxjs';
+import { Observable, pluck, Subject, switchMap } from 'rxjs';
 import { environment } from '@env/environment';
 
 @Injectable({
@@ -21,6 +21,10 @@ export class UserService extends AbstractRestService<
   constructor(http: HttpClient, @Inject(USERS_URL) url: string) {
     super(http, url);
   }
+
+  userCount$ = this.http
+    .get<CountResponse>(`${this.resourceUrl}/count`)
+    .pipe(pluck('user_count'));
 
   private loginUserSubject = new Subject<LoginUserDto>();
   loginUserAction$ = this.loginUserSubject.asObservable();
