@@ -39,9 +39,9 @@ export class ProductApiController {
     return this.productApiService.getProductCount();
   }
 
-  @Get('products/featured/:limit?')
+  @Get('products/featured')
   getFeaturedProducts(
-    @Param('limit') limit?: number
+    @Query('limit') limit?: number
   ): Promise<ProductEntity[]> {
     return this.productApiService.getFeaturedProducts(limit);
   }

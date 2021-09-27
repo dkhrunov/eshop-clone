@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { ListCategoriesFacade } from '@esc/product/domain';
+import { ListCategoriesFacade, ProductsService } from '@esc/product/domain';
 import { take, tap } from 'rxjs';
 
 @Component({
@@ -9,7 +9,16 @@ import { take, tap } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
-  constructor(private listCategoriesFacade: ListCategoriesFacade) {}
+  constructor(
+    private listCategoriesFacade: ListCategoriesFacade,
+    private productsService: ProductsService
+  ) {}
 
-  categories$ = this.listCategoriesFacade.categories$.pipe(take(6));
+  categoriesOnHomePageCount = 6;
+
+  categories$ = this.listCategoriesFacade.categories$.pipe(
+    take(this.categoriesOnHomePageCount)
+  );
+
+  featuredProducts$ = this.productsService.featuredProducts$;
 }

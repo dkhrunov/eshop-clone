@@ -1,16 +1,12 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ProductEntity } from '@esc/product/models';
 
 @Component({
-  selector: 'components-featured-products',
+  selector: 'ui-featured-products',
   templateUrl: './featured-products.component.html',
   styleUrls: ['./featured-products.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FeaturedProductsComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+export class FeaturedProductsComponent {
+  @Input() product!: ProductEntity;
 }

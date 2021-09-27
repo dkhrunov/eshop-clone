@@ -13,3 +13,12 @@
   >
   </ui-categories-banner>
 </section>
+
+<h1>Featured Products</h1>
+
+<section class="featured-products">
+  <ui-featured-products
+    *ngFor="let product of featuredProducts$ | async"
+    [product]="product"
+  ></ui-featured-products>
+</section>

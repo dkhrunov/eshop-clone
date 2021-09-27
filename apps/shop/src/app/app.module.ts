@@ -12,6 +12,7 @@ import { HomeComponent } from './home.component';
 import { BannerModule } from '@esc/shared/ui-components';
 import { CategoriesBannerModule } from '@esc/product/ui-components';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { FeaturedProductsModule } from '@esc/product/ui-components';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -22,6 +23,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     HeaderModule,
     FooterModule,
     BannerModule,
+    FeaturedProductsModule,
     NzIconModule,
     ProductFeatureShellModule,
     CategoriesBannerModule,

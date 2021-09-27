@@ -16,7 +16,13 @@ export class ProductsService extends AbstractRestService<
     super(http, url);
   }
 
+  featuredProductCount = 4;
+
   productCount$ = this.http
     .get<CountResponse>(`${this.resourceUrl}/count`)
     .pipe(pluck('product_count'));
+
+  featuredProducts$ = this.http.get<ProductEntity[]>(
+    `${this.resourceUrl}/featured?limit=${this.featuredProductCount}`
+  );
 }

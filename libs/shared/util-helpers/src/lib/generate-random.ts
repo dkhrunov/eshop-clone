@@ -19,7 +19,7 @@ export const generateProduct = () => {
     name: generateRandom().sentence({ words: 2, punctuation: false }),
     description: generateRandom().sentence(),
     richDescription: generateRandom().sentence(),
-    image: 'https://picsum.photos/500/300',
+    image: 'https://picsum.photos/500/500',
     brand: generateRandom().animal(),
     price: generateRandom().integer({ min: 1, max: 1000 }),
     countInStock: generateRandom().integer({ min: 1, max: 254 }),
