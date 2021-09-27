@@ -5,6 +5,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { FormsModule } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [HeaderComponent],
@@ -14,6 +15,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
     NzIconModule,
     FormsModule,
     NzFormModule,
+    RouterModule,
   ],
   exports: [HeaderComponent],
 })

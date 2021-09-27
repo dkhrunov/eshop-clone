@@ -4,7 +4,6 @@ import {
   ChangeDetectionStrategy,
   Input,
   HostBinding,
-  HostListener,
 } from '@angular/core';
 import {
   differenceInDays,

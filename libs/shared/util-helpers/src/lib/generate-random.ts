@@ -7,7 +7,9 @@ const categoriesMap = new Map([
   ['Computers', 'laptop'],
   ['Health', 'heart'],
   ['Electronics', 'camera'],
-  ['Beauty', 'woman'],
+  ['House', 'home'],
+  ['Games', 'gift'],
+  ['TV', 'video-camera'],
 ]);
 
 const newCategoryName = generateRandom().pickone([...categoriesMap.keys()]);

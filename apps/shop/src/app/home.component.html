@@ -1,0 +1,15 @@
+<ui-banner
+  title="The Best Products"
+  subtitle="in Every Category"
+  image="assets/banner-image.svg"
+></ui-banner>
+
+<h1>Categories</h1>
+
+<section class="categories">
+  <ui-categories-banner
+    *ngFor="let category of categories$ | async"
+    [category]="category"
+  >
+  </ui-categories-banner>
+</section>

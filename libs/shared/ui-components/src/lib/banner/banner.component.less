@@ -1,3 +1,22 @@
 :host {
-  display: block;
+  @apply grid items-center p-5 px-16 my-3 bg-blue-100 rounded-2xl;
+  grid-template-columns: auto max-content;
+
+  header {
+    h1 {
+      @apply text-3xl text-gray-700 font-semibold mb-0;
+    }
+    h2 {
+      @apply text-2xl text-gray-500 font-light;
+    }
+  }
+
+  button {
+    @apply rounded-lg grid grid-flow-col items-center font-medium text-yellow-500 mt-4 bg-white hover:border-yellow-500;
+  }
+
+  img {
+    @apply h-40;
+    animation: slideInLeft 1s;
+  }
 }
