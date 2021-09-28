@@ -5,6 +5,7 @@ import { ShopProductsComponent } from './shop-products.component';
 import { RouterModule } from '@angular/router';
 import { ProductItemModule } from '@esc/product/ui-components';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
     ProductItemModule,
     ProductDomainModule,
     NzCheckboxModule,
+    FormsModule,
     RouterModule.forChild([{ path: '', component: ShopProductsComponent }]),
   ],
   declarations: [ShopProductsComponent],

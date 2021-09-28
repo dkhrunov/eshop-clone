@@ -6,7 +6,7 @@
       nz-checkbox
       *ngFor="let category of categories$ | async"
       nzValue="{{ category.name }}"
-      [nzChecked]="(selectedCategoryFromUrl$ | async) === category.name"
+      [nzChecked]="(selectedCategoriesSet$ | async)?.has(category.name)"
       >{{ category.name }}</label
     >
   </nz-checkbox-wrapper>

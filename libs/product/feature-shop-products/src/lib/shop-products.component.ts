@@ -6,12 +6,10 @@ import { CategoryEntity } from '@esc/product/models';
 import {
   BehaviorSubject,
   combineLatest,
-  filter,
   map,
   merge,
   pluck,
   shareReplay,
-  tap,
 } from 'rxjs';
 
 @Component({
@@ -27,27 +25,23 @@ export class ShopProductsComponent {
   ) {}
 
   selectedCategoryFromUrl$ = this.route.queryParams.pipe(
-    tap((params) => {
-      const categories: string | undefined = params['categories'];
-
+    pluck('categories'),
+    map((categories) => {
       if (categories) {
         const categoriesList = categories.split(',');
-        this.selectedCategorySubject.next(categoriesList);
+        return new Set(categoriesList);
       }
-    }),
-    pluck('categories'),
-    filter(Boolean),
-    map((categories) => {
-      const categoriesList = categories.split(',');
-
-      if (categoriesList.length === 1) {
-        return categoriesList.join();
-      }
+      return new Set();
     })
   );
 
-  private selectedCategorySubject = new BehaviorSubject<string[]>([]);
-  selectedCategoriesAction$ = this.selectedCategorySubject.asObservable();
+  private selectedCategoriesSetSubject = new BehaviorSubject<Set<string>>(
+    new Set()
+  );
+  selectedCategoriesSet$ = merge(
+    this.selectedCategoriesSetSubject.asObservable(),
+    this.selectedCategoryFromUrl$
+  ).pipe(shareReplay());
 
   products$ = this.shopProductsFacade.products$.pipe(shareReplay());
 
@@ -55,14 +49,14 @@ export class ShopProductsComponent {
 
   filteredProducts$ = combineLatest([
     this.products$,
-    this.selectedCategoriesAction$,
+    this.selectedCategoriesSet$,
   ]).pipe(
     map(([products, categories]) => {
-      return categories.length
+      return categories.size
         ? products.filter((product) => {
             const category = product.category as unknown as CategoryEntity;
 
-            return categories.includes(category.name);
+            return categories.has(category.name);
           })
         : products;
     })
@@ -73,7 +67,6 @@ export class ShopProductsComponent {
   );
 
   toggleCategory(categories: string[]): void {
-    this.selectedCategorySubject.next([]);
     this.changeUrlCategories(categories);
   }
 
