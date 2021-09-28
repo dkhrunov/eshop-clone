@@ -15,4 +15,10 @@ export class ShopProductsFacade {
   );
 
   categories$ = this.categoryService.resources$;
+
+  productWithCategories$ = this.productsService.productsWithCategories$;
+
+  getProductsWithCategories(categories: string[]): void {
+    this.productsService.getProductWithCategories(categories);
+  }
 }
