@@ -73,12 +73,15 @@ export class ShopProductsComponent {
   );
 
   toggleCategory(categories: string[]): void {
+    this.selectedCategorySubject.next([]);
     this.changeUrlCategories(categories);
   }
 
   private changeUrlCategories(categories: string[]): void {
-    this.router.navigate(['products'], {
-      queryParams: { categories: categories.join(',') },
-    });
+    categories.length
+      ? this.router.navigate(['products'], {
+          queryParams: { categories: categories.join(',') },
+        })
+      : this.router.navigate(['products']);
   }
 }
