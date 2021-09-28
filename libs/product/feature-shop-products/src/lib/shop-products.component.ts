@@ -6,8 +6,10 @@ import { CategoryEntity } from '@esc/product/models';
 import {
   BehaviorSubject,
   combineLatest,
+  filter,
   map,
   merge,
+  pluck,
   shareReplay,
   tap,
 } from 'rxjs';
@@ -24,23 +26,28 @@ export class ShopProductsComponent {
     private router: Router
   ) {}
 
+  selectedCategoryFromUrl$ = this.route.queryParams.pipe(
+    tap((params) => {
+      const categories: string | undefined = params['categories'];
+
+      if (categories) {
+        const categoriesList = categories.split(',');
+        this.selectedCategorySubject.next(categoriesList);
+      }
+    }),
+    pluck('categories'),
+    filter(Boolean),
+    map((categories) => {
+      const categoriesList = categories.split(',');
+
+      if (categoriesList.length === 1) {
+        return categoriesList.join();
+      }
+    })
+  );
+
   private selectedCategorySubject = new BehaviorSubject<string[]>([]);
   selectedCategoriesAction$ = this.selectedCategorySubject.asObservable();
-
-  selectedCategories$ = merge(
-    this.selectedCategoriesAction$,
-    this.route.queryParams.pipe(
-      tap((params) => {
-        const categories: string | undefined = params['categories'];
-
-        console.log(categories);
-
-        if (categories) {
-          this.selectedCategorySubject.next(categories.split(','));
-        }
-      })
-    )
-  ).subscribe();
 
   products$ = this.shopProductsFacade.products$.pipe(shareReplay());
 
@@ -66,7 +73,6 @@ export class ShopProductsComponent {
   );
 
   toggleCategory(categories: string[]): void {
-    this.selectedCategorySubject.next(categories);
     this.changeUrlCategories(categories);
   }
 
