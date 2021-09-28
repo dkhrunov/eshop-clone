@@ -37,6 +37,9 @@
         "libs/product/feature-list-products/src/index.ts"
       ],
       "@esc/product/feature-shell": ["libs/product/feature-shell/src/index.ts"],
+      "@esc/product/feature-shop-products": [
+        "libs/product/feature-shop-products/src/index.ts"
+      ],
       "@esc/product/models": ["libs/product/models/src/index.ts"],
       "@esc/product/ui-components": ["libs/product/ui-components/src/index.ts"],
       "@esc/product/ui-pipes": ["libs/product/ui-pipes/src/index.ts"],

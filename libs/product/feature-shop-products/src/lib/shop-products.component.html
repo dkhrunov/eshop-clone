@@ -1,0 +1,21 @@
+<aside>
+  <h3>Categories</h3>
+
+  <nz-checkbox-wrapper (nzOnChange)="toggleCategory($event)">
+    <label
+      nz-checkbox
+      *ngFor="let category of categories$ | async"
+      nzValue="{{ category.name }}"
+      >{{ category.name }}</label
+    >
+  </nz-checkbox-wrapper>
+
+  <h3>Results found: {{ productsFound$ | async }}</h3>
+</aside>
+
+<main>
+  <ui-product-item
+    *ngFor="let product of filteredProducts$ | async"
+    [product]="product"
+  ></ui-product-item>
+</main>

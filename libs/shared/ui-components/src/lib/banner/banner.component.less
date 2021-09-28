@@ -1,22 +1,25 @@
 :host {
-  @apply grid items-center p-5 px-16 my-3 bg-blue-100 rounded-2xl hover:shadow-md transition-shadow duration-300;
-  grid-template-columns: auto max-content;
+  @apply grid gap-4 items-center p-5 my-3 bg-blue-100 rounded-2xl hover:shadow-md transition-shadow duration-300 grid-cols-1 md:grid-cols-2;
 
-  header {
-    h1 {
-      @apply text-3xl text-gray-700 font-semibold mb-0;
-    }
-    h2 {
-      @apply text-2xl text-gray-500 font-light;
-    }
-  }
+  .description {
+    @apply justify-self-center;
 
-  button {
-    @apply rounded-lg grid grid-flow-col items-center font-medium text-yellow-500 mt-4 bg-white;
+    header {
+      h1 {
+        @apply text-3xl text-gray-700 font-semibold mb-0;
+      }
+      h2 {
+        @apply text-2xl text-gray-500 font-light;
+      }
+    }
+
+    button {
+      @apply rounded-lg grid grid-flow-col items-center font-medium text-yellow-500 mt-4 bg-white;
+    }
   }
 
   img {
-    @apply h-40;
+    @apply h-40 justify-self-center;
     animation: slideInLeft 1s;
   }
 }

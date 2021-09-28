@@ -10,15 +10,17 @@
   <ui-categories-banner
     *ngFor="let category of categories$ | async"
     [category]="category"
+    [routerLink]="['products']"
+    [queryParams]="{ categories: category.name }"
   >
   </ui-categories-banner>
 </section>
 
 <h1>Featured Products</h1>
 
-<section class="featured-products">
-  <ui-featured-products
+<section class="product-item">
+  <ui-product-item
     *ngFor="let product of featuredProducts$ | async"
     [product]="product"
-  ></ui-featured-products>
+  ></ui-product-item>
 </section>

@@ -6,13 +6,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { CardModule } from '@esc/shared/ui-components';
 import { UserFeatureShellModule } from '@esc/user/feature-shell';
 import { RouterModule } from '@angular/router';
-import { ProductFeatureShellModule } from '@esc/product/feature-shell';
 import { HeaderModule, FooterModule } from '@esc/shared/ui-components';
 import { HomeComponent } from './home.component';
 import { BannerModule } from '@esc/shared/ui-components';
 import { CategoriesBannerModule } from '@esc/product/ui-components';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { FeaturedProductsModule } from '@esc/product/ui-components';
+import { ProductItemModule } from '@esc/product/ui-components';
+import { CATEGORIES_URL, PRODUCTS_URL } from '@esc/product/domain';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -23,9 +23,8 @@ import { FeaturedProductsModule } from '@esc/product/ui-components';
     HeaderModule,
     FooterModule,
     BannerModule,
-    FeaturedProductsModule,
+    ProductItemModule,
     NzIconModule,
-    ProductFeatureShellModule,
     CategoriesBannerModule,
     UserFeatureShellModule,
     RouterModule.forRoot([
@@ -33,9 +32,19 @@ import { FeaturedProductsModule } from '@esc/product/ui-components';
         path: '',
         component: HomeComponent,
       },
+      {
+        path: 'products',
+        loadChildren: () =>
+          import('@esc/product/feature-shop-products').then(
+            (m) => m.ProductFeatureShopProductsModule
+          ),
+      },
     ]),
   ],
-  providers: [],
+  providers: [
+    { provide: CATEGORIES_URL, useValue: 'categories' },
+    { provide: PRODUCTS_URL, useValue: 'products' },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

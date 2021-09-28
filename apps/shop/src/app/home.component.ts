@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ListCategoriesFacade, ProductsService } from '@esc/product/domain';
-import { take, tap } from 'rxjs';
+import { shareReplay, take, tap } from 'rxjs';
 
 @Component({
   selector: 'esc-home',
@@ -17,7 +17,8 @@ export class HomeComponent {
   categoriesOnHomePageCount = 6;
 
   categories$ = this.listCategoriesFacade.categories$.pipe(
-    take(this.categoriesOnHomePageCount)
+    take(this.categoriesOnHomePageCount),
+    shareReplay()
   );
 
   featuredProducts$ = this.productsService.featuredProducts$;

@@ -41,7 +41,7 @@ describe('Admin App', () => {
   });
 
   context('Users', () => {
-    it.only('Register / Login User', () => {
+    it('Register / Login User', () => {
       cy.visit('register');
 
       const newUser = generateUser();
@@ -144,7 +144,7 @@ describe('Admin App', () => {
       cy.get('button').contains('Yes').click().should('not.exist');
     });
 
-    it.only('Create category', () => {
+    it('Create category', () => {
       const category = generateCategory();
       const { name } = category;
 

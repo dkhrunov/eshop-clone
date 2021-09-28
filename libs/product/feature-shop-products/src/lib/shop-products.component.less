@@ -1,0 +1,19 @@
+:host {
+  @apply grid my-5;
+  grid-template-columns: 25% auto;
+
+  aside {
+    h3 {
+      @apply my-3 text-gray-500 font-semibold;
+    }
+
+    label {
+      @apply w-full ml-0;
+    }
+  }
+
+  main {
+    @apply grid gap-4;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

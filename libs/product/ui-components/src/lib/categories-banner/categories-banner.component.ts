@@ -18,6 +18,6 @@ export class CategoriesBannerComponent {
 
   @HostBinding('style.background-color')
   get color(): string {
-    return this.category ? `${this.category.color}50` : '';
+    return this.category ? `${this.category.color}30` : '';
   }
 }

@@ -73,6 +73,9 @@
     "product-feature-shell": {
       "tags": ["domain:product", "type:feature"]
     },
+    "product-feature-shop-products": {
+      "tags": ["domain:product", "type:feature"]
+    },
     "product-models": {
       "tags": []
     },

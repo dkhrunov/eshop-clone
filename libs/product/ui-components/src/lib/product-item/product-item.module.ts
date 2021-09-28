@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FeaturedProductsComponent } from './featured-products.component';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { ProductItemComponent } from './product-item.component';
 
 @NgModule({
-  declarations: [FeaturedProductsComponent],
+  declarations: [ProductItemComponent],
   imports: [CommonModule, NzButtonModule, NzIconModule],
-  exports: [FeaturedProductsComponent],
+  exports: [ProductItemComponent],
 })
-export class FeaturedProductsModule {}
+export class ProductItemModule {}

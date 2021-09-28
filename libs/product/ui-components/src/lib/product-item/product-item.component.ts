@@ -2,11 +2,11 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { ProductEntity } from '@esc/product/models';
 
 @Component({
-  selector: 'ui-featured-products',
-  templateUrl: './featured-products.component.html',
-  styleUrls: ['./featured-products.component.less'],
+  selector: 'ui-product-item',
+  templateUrl: './product-item.component.html',
+  styleUrls: ['./product-item.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FeaturedProductsComponent {
+export class ProductItemComponent {
   @Input() product!: ProductEntity;
 }

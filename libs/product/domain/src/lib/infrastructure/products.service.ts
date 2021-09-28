@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { CreateProductDto, ProductEntity } from '@esc/product/models';
 import { AbstractRestService, CountResponse } from '@esc/shared/util-models';
-import { pluck } from 'rxjs';
+import { pluck, shareReplay } from 'rxjs';
 import { PRODUCTS_URL } from './productsUrl.token';
 
 @Injectable({
@@ -22,7 +22,9 @@ export class ProductsService extends AbstractRestService<
     .get<CountResponse>(`${this.resourceUrl}/count`)
     .pipe(pluck('product_count'));
 
-  featuredProducts$ = this.http.get<ProductEntity[]>(
-    `${this.resourceUrl}/featured?limit=${this.featuredProductCount}`
-  );
+  featuredProducts$ = this.http
+    .get<ProductEntity[]>(
+      `${this.resourceUrl}/featured?limit=${this.featuredProductCount}`
+    )
+    .pipe(shareReplay());
 }
