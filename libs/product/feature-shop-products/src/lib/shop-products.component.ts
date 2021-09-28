@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ShopProductsFacade } from '@esc/product/domain';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
@@ -16,6 +16,7 @@ import {
   selector: 'product-shop-products',
   templateUrl: './shop-products.component.html',
   styleUrls: ['./shop-products.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShopProductsComponent {
   constructor(
@@ -24,14 +25,14 @@ export class ShopProductsComponent {
     private router: Router
   ) {}
 
-  selectedCategoryFromUrl$ = this.route.queryParams.pipe(
+  selectedCategoriesFromUrl$ = this.route.queryParams.pipe(
     pluck('categories'),
     map((categories) => {
       if (categories) {
         const categoriesList = categories.split(',');
-        return new Set(categoriesList);
+        return new Set<string>(categoriesList);
       }
-      return new Set();
+      return new Set<string>();
     })
   );
 
@@ -40,7 +41,7 @@ export class ShopProductsComponent {
   );
   selectedCategoriesSet$ = merge(
     this.selectedCategoriesSetSubject.asObservable(),
-    this.selectedCategoryFromUrl$
+    this.selectedCategoriesFromUrl$
   ).pipe(shareReplay());
 
   products$ = this.shopProductsFacade.products$.pipe(shareReplay());
