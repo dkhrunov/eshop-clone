@@ -70,6 +70,9 @@
     "product-feature-list-products": {
       "tags": ["domain:product", "type:feature"]
     },
+    "product-feature-product-details": {
+      "tags": ["domain:product", "type:feature"]
+    },
     "product-feature-shell": {
       "tags": ["domain:product", "type:feature"]
     },
@@ -93,6 +96,9 @@
     },
     "shared-ui-pipes": {
       "tags": ["domain:shared", "type:ui"]
+    },
+    "shared-util-animations": {
+      "tags": ["domain:shared", "type:util"]
     },
     "shared-util-guards": {
       "tags": ["domain:shared", "type:util"]

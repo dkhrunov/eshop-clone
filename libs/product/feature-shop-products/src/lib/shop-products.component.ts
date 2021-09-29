@@ -3,14 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ShopProductsFacade } from '@esc/product/domain';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { CategoryEntity } from '@esc/product/models';
-import {
-  BehaviorSubject,
-  combineLatest,
-  map,
-  merge,
-  pluck,
-  shareReplay,
-} from 'rxjs';
+import { combineLatest, map, pluck, shareReplay } from 'rxjs';
 
 @Component({
   selector: 'product-shop-products',
@@ -36,13 +29,7 @@ export class ShopProductsComponent {
     })
   );
 
-  private selectedCategoriesSetSubject = new BehaviorSubject<Set<string>>(
-    new Set()
-  );
-  selectedCategoriesSet$ = merge(
-    this.selectedCategoriesSetSubject.asObservable(),
-    this.selectedCategoriesFromUrl$
-  ).pipe(shareReplay());
+  selectedCategoriesSet$ = this.selectedCategoriesFromUrl$.pipe(shareReplay());
 
   products$ = this.shopProductsFacade.products$.pipe(shareReplay());
 

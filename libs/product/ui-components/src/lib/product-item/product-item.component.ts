@@ -1,4 +1,12 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import { Router } from '@angular/router';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { ProductEntity } from '@esc/product/models';
 
 @Component({
@@ -8,5 +16,15 @@ import { ProductEntity } from '@esc/product/models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductItemComponent {
+  constructor(private router: Router) {}
+
   @Input() product!: ProductEntity;
+
+  addToCart(id: string): void {
+    console.log(id);
+  }
+
+  goToProductPage(id: string): void {
+    this.router.navigate(['products', id]);
+  }
 }

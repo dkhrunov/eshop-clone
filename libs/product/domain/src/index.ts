@@ -9,3 +9,5 @@ export * from './lib/application/shop-products.facade';
 
 export * from './lib/infrastructure/categoriesUrl.token';
 export * from './lib/infrastructure/productsUrl.token';
+
+export * from './lib/application/product-details.facade';

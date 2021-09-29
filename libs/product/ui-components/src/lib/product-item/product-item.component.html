@@ -1,11 +1,17 @@
-<section>
+<section data-cy="productItem" (click)="goToProductPage(product.id)">
   <img src="{{ product.image }}" alt="" />
 
   <h3>{{ product.name }}</h3>
 
   <span>{{ product.price | currency }}</span>
 
-  <button nzSize="small" nz-button nzType="primary" nzDanger>
+  <button
+    (click)="addToCart(product.id); $event.stopPropagation()"
+    nzSize="small"
+    nz-button
+    nzType="primary"
+    nzDanger
+  >
     <i nz-icon nzType="shopping-cart"></i>Add to Cart
   </button>
 </section>

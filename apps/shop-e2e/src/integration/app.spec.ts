@@ -46,6 +46,11 @@ import { ProductEntity } from '@esc/product/models';
 import { OrderEntity, OrderItem } from '@esc/order/models';
 import { UserFromServer } from '@esc/user/models';
 import { environment } from '@env/environment';
+import {
+  categoriesFilters,
+  isNumberCategoriesEqualFoundResults,
+  listProducts,
+} from '../support/shop-product';
 
 describe('Eshop Clone', () => {
   const randomNumberOfProducts = generateRandom().integer({ min: 1, max: 3 });
@@ -648,6 +653,63 @@ describe('Eshop Clone', () => {
   context.only('Shop', () => {
     it('Show main page', () => {
       cy.visit(`${environment.baseUrlFrontShop}`);
+      cy.get('[data-cy=header]').should('be.visible');
+      cy.get('[data-cy=productsBanner]').should('be.visible');
+      cy.get('[data-cy=categoryItems]').should('be.visible');
+      cy.get('[data-cy=productItems]').should('be.visible');
+      cy.get('[data-cy=footer]').should('be.visible');
+    });
+
+    it('Home banner shows all products', () => {
+      cy.visit(`${environment.baseUrlFrontShop}`);
+      cy.get('[data-cy=productsBanner]').click();
+      cy.url().should('eq', `${environment.baseUrlFrontShop}/products`);
+    });
+    it('Category item shows product with category', () => {
+      cy.visit(`${environment.baseUrlFrontShop}`);
+
+      cy.get('[data-cy=categoryItems]')
+        .children()
+        .first()
+        .find('h3')
+        .then((el) => {
+          const categoryName = el.text();
+
+          cy.wrap(el).parent().click();
+
+          cy.url().should(
+            'eq',
+            `${environment.baseUrlFrontShop}/products?categories=${categoryName}`
+          );
+        });
+    });
+
+    it('Categories filter shows filtered products', () => {
+      cy.visit(`${environment.baseUrlFrontShop}/products`);
+
+      isNumberCategoriesEqualFoundResults();
+
+      categoriesFilters()
+        .first()
+        .click()
+        .then((name) => {
+          const categoryName = name.text().trim();
+
+          cy.url().should('contain', categoryName);
+
+          isNumberCategoriesEqualFoundResults();
+        });
+
+      categoriesFilters()
+        .eq(1)
+        .click()
+        .then((name) => {
+          const categoryName = name.text().trim();
+
+          cy.url().should('contain', categoryName);
+
+          isNumberCategoriesEqualFoundResults();
+        });
     });
   });
 });

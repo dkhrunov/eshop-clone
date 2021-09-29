@@ -643,6 +643,51 @@
         }
       }
     },
+    "product-feature-product-details": {
+      "projectType": "library",
+      "root": "libs/product/feature-product-details",
+      "sourceRoot": "libs/product/feature-product-details/src",
+      "prefix": "product",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:ng-packagr-lite",
+          "outputs": [
+            "dist/libs/product/feature-product-details"
+          ],
+          "options": {
+            "project": "libs/product/feature-product-details/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/product/feature-product-details/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/product/feature-product-details/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/product/feature-product-details"
+          ],
+          "options": {
+            "jestConfig": "libs/product/feature-product-details/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/product/feature-product-details/src/**/*.ts",
+              "libs/product/feature-product-details/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "product-feature-shell": {
       "projectType": "library",
       "root": "libs/product/feature-shell",
@@ -1005,6 +1050,51 @@
           "outputs": [
             "{options.outputFile}"
           ]
+        }
+      }
+    },
+    "shared-util-animations": {
+      "projectType": "library",
+      "root": "libs/shared/util-animations",
+      "sourceRoot": "libs/shared/util-animations/src",
+      "prefix": "animations",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:ng-packagr-lite",
+          "outputs": [
+            "dist/libs/shared/util-animations"
+          ],
+          "options": {
+            "project": "libs/shared/util-animations/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/shared/util-animations/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/shared/util-animations/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/shared/util-animations"
+          ],
+          "options": {
+            "jestConfig": "libs/shared/util-animations/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/util-animations/src/**/*.ts",
+              "libs/shared/util-animations/src/**/*.html"
+            ]
+          }
         }
       }
     },

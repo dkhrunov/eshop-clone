@@ -39,6 +39,13 @@ import { CATEGORIES_URL, PRODUCTS_URL } from '@esc/product/domain';
             (m) => m.ProductFeatureShopProductsModule
           ),
       },
+      {
+        path: 'products/:id',
+        loadChildren: () =>
+          import('@esc/product/feature-product-details').then(
+            (m) => m.ProductFeatureProductDetailsModule
+          ),
+      },
     ]),
   ],
   providers: [

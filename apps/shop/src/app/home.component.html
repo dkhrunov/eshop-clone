@@ -2,11 +2,13 @@
   title="The Best Products"
   subtitle="in Every Category"
   image="assets/banner-image.svg"
+  routerLink="products"
+  data-cy="productsBanner"
 ></ui-banner>
 
 <h1>Categories</h1>
 
-<section class="categories">
+<section data-cy="categoryItems" class="categories">
   <ui-categories-banner
     *ngFor="let category of categories$ | async"
     [category]="category"
@@ -18,7 +20,7 @@
 
 <h1>Featured Products</h1>
 
-<section class="product-item">
+<section data-cy="productItems" class="productItems">
   <ui-product-item
     *ngFor="let product of featuredProducts$ | async"
     [product]="product"

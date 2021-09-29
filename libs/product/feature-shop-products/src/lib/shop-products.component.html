@@ -4,14 +4,21 @@
   <nz-checkbox-wrapper (nzOnChange)="toggleCategory($event)">
     <label
       nz-checkbox
+      data-cy="categoryCheckbox"
       *ngFor="let category of categories$ | async"
       nzValue="{{ category.name }}"
       [nzChecked]="(selectedCategoriesSet$ | async)?.has(category.name)"
-      >{{ category.name }}</label
     >
+      <span data-cy="categoryName">
+        {{ category.name }}
+      </span>
+    </label>
   </nz-checkbox-wrapper>
 
-  <h3>Results found: {{ productsFound$ | async }}</h3>
+  <h3>
+    Results found:
+    <span data-cy="numberOfProducts">{{ productsFound$ | async }}</span>
+  </h3>
 </aside>
 
 <main>
