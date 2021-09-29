@@ -392,7 +392,7 @@ describe('Eshop Clone', () => {
       });
     });
 
-    it('Delete Category', () => {
+    it.skip('Delete Category', () => {
       const [{ id }] = createdUsersOnServer;
       const token = userTokensMap.get(id) as string;
 
@@ -487,7 +487,7 @@ describe('Eshop Clone', () => {
           });
       });
     });
-    it.skip('Upload gallery images', () => {
+    it('Upload gallery images', () => {
       const [{ id: userId }] = createdUsersOnServer;
       const token = userTokensMap.get(userId) as string;
       const [{ id: productId }] = createdProductsOnServer;
@@ -650,7 +650,7 @@ describe('Eshop Clone', () => {
     });
   });
 
-  context.only('Shop', () => {
+  context('Shop', () => {
     it('Show main page', () => {
       cy.visit(`${environment.baseUrlFrontShop}`);
       cy.get('[data-cy=header]').should('be.visible');
@@ -711,5 +711,10 @@ describe('Eshop Clone', () => {
           isNumberCategoriesEqualFoundResults();
         });
     });
+  });
+
+  it.only('Show product details', () => {
+    cy.visit(`${environment.baseUrlFrontShop}/products`);
+    listProducts().last().click();
   });
 });

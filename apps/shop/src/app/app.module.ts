@@ -13,6 +13,7 @@ import { CategoriesBannerModule } from '@esc/product/ui-components';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { ProductItemModule } from '@esc/product/ui-components';
 import { CATEGORIES_URL, PRODUCTS_URL } from '@esc/product/domain';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -25,6 +26,7 @@ import { CATEGORIES_URL, PRODUCTS_URL } from '@esc/product/domain';
     BannerModule,
     ProductItemModule,
     NzIconModule,
+    BrowserAnimationsModule,
     CategoriesBannerModule,
     UserFeatureShellModule,
     RouterModule.forRoot([

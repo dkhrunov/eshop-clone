@@ -18,12 +18,13 @@ export const generateProduct = () => {
   return {
     name: generateRandom().sentence({ words: 2, punctuation: false }),
     description: generateRandom().sentence(),
-    richDescription: generateRandom().sentence(),
+    richDescription: generateRandom().sentence({ words: 100 }),
     image: `https://source.unsplash.com/500x500/?electronics&v=${generateRandom().integer()}`,
     brand: generateRandom().animal(),
     price: generateRandom().integer({ min: 1, max: 1000 }),
     countInStock: generateRandom().integer({ min: 1, max: 254 }),
     isFeatured: generateRandom().bool(),
+    rating: generateRandom().integer({ min: 4, max: 5 }),
   };
 };
 

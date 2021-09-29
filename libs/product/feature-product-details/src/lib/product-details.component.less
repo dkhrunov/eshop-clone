@@ -1,4 +1,77 @@
-.table td {
-  border: 1px solid;
-  padding: 10px;
+article {
+  @apply p-3 mt-2 grid gap-3;
+
+  .productCard {
+    @apply grid gap-4;
+    grid-template-columns: 1fr 1fr;
+
+    .images {
+      @apply grid gap-2;
+
+      .mainImage {
+        @apply rounded-md w-full transition-all duration-300;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+      }
+
+      .imgPreviews {
+        @apply grid gap-2 grid-flow-col justify-items-center self-end;
+
+        img {
+          @apply w-full rounded-md;
+          object-fit: cover;
+          aspect-ratio: 4 / 3;
+        }
+      }
+    }
+
+    .productInfo {
+      @apply grid justify-between;
+
+      h1 {
+        @apply text-xl font-semibold;
+      }
+
+      .prices {
+        @apply grid gap-2 grid-flow-col text-xl font-bold mt-4 items-baseline;
+        justify-content: start;
+
+        .oldPrice {
+          @apply text-base font-normal text-gray-400 line-through;
+        }
+      }
+
+      .cartActions {
+        @apply grid grid-flow-col justify-start gap-2;
+
+        .quantity {
+          nz-select {
+            @apply w-16 mb-2;
+          }
+        }
+
+        .buttons {
+          @apply ml-3;
+
+          button[nz-button] {
+            @apply mr-2 rounded-md;
+          }
+        }
+
+        h3 {
+          @apply text-base font-semibold;
+
+          &.green {
+            @apply text-green-600;
+          }
+        }
+      }
+    }
+  }
+
+  .productDescription {
+    h1 {
+      @apply text-xl font-semibold;
+    }
+  }
 }

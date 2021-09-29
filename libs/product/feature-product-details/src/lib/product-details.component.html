@@ -1,2 +1,68 @@
-<h1>product-product-details</h1>
+<article *ngIf="product$ | async as product">
+  <section class="productCard">
+    <div class="images">
+      <img class="mainImage" src="{{ activeImage || product.image }}" alt="" />
 
+      <div class="imgPreviews">
+        <img
+          (mouseenter)="activeImage = image"
+          *ngFor="let image of product.images"
+          [src]="image"
+        />
+        <img
+          (mouseenter)="activeImage = product.image"
+          *ngIf="product.images.length"
+          [src]="product.image"
+        />
+      </div>
+    </div>
+
+    <div class="productInfo">
+      <div>
+        <h1>{{ product.name }}</h1>
+        <p>{{ product.description }}</p>
+
+        <nz-rate [ngModel]="product.rating"></nz-rate>
+
+        <div class="prices">
+          <span class="price">{{ product.price | currency }}</span>
+          <span class="oldPrice">{{
+            (product.price / 100) * 70 | currency
+          }}</span>
+        </div>
+
+        <nz-divider></nz-divider>
+
+        <div class="cartActions">
+          <div class="quantity">
+            <h3>Quantity</h3>
+
+            <nz-select nzPlaceHolder="Quantity" [(ngModel)]="quantity">
+              <nz-option
+                *ngFor="
+                  let quantity of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+                  index as i
+                "
+                nzLabel="{{ i + 1 }}"
+                nzValue="{{ i + 1 }}"
+                [nzValue]="quantity"
+              ></nz-option>
+            </nz-select>
+          </div>
+
+          <div class="buttons">
+            <h3 class="green">Free Shipping</h3>
+
+            <button nz-button nzDanger nzType="primary">Add to Cart</button>
+            <button nz-button nzDanger nzType="primary">Buy Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="productDescription">
+    <h1>Description</h1>
+    <div [innerHTML]="product.richDescription"></div>
+  </section>
+</article>
