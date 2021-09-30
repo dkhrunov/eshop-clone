@@ -47,6 +47,7 @@ import { OrderEntity, OrderItem } from '@esc/order/models';
 import { UserFromServer } from '@esc/user/models';
 import { environment } from '@env/environment';
 import {
+  addToCartButtons,
   categoriesFilters,
   isNumberCategoriesEqualFoundResults,
   listProducts,
@@ -712,9 +713,59 @@ describe('Eshop Clone', () => {
         });
     });
 
-    it.only('Show product details', () => {
+    it('Show product details', () => {
       cy.visit(`${environment.baseUrlFrontShop}/products`);
-      listProducts().last().click();
+      listProducts()
+        .first()
+        .find('h3')
+        .then((name) => {
+          const productName = name.text();
+
+          cy.wrap(name).parent().click();
+
+          cy.get('.productInfo').contains(productName);
+          cy.get('.productDescription').should('exist');
+        });
+    });
+
+    it('Show items in cart', () => {
+      cy.visit(`${environment.baseUrlFrontShop}`);
+
+      cy.get('[data-cy=countBadge]').should('not.exist');
+
+      addToCartButtons().first().click();
+
+      cy.get('[data-cy=countBadge]').should('exist').and('contain', 1);
+
+      addToCartButtons().first().click();
+
+      cy.get('[data-cy=countBadge]').should('exist');
+
+      cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${2}`);
+
+      addToCartButtons().first().click();
+
+      cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${3}`);
+
+      addToCartButtons().first().parent().click();
+
+      cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${3}`);
+
+      addToCartButtons().first().click();
+
+      cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${4}`);
+
+      addToCartButtons().first().click();
+
+      cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${5}`);
+
+      cy.visit(`${environment.baseUrlFrontShop}/products`);
+
+      cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${5}`);
+
+      addToCartButtons().first().click();
+
+      cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${6}`);
     });
   });
 });

@@ -47,7 +47,7 @@
     <i nz-icon nzType="user" nzTheme="outline"></i>
 
     <ng-container *ngIf="cartCount$ | async as count; else cartTpl">
-      <nz-badge [nzCount]="count">
+      <nz-badge data-cy="countBadge" [nzCount]="count">
         <i nz-icon nzType="shopping-cart" nzTheme="outline"></i>
       </nz-badge>
     </ng-container>

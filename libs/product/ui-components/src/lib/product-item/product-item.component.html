@@ -6,6 +6,7 @@
   <span>{{ product.price | currency }}</span>
 
   <button
+    data-cy="addToCartButton"
     (click)="addToCart(product.id); $event.stopPropagation()"
     nzSize="small"
     nz-button
