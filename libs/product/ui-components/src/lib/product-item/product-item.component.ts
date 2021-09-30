@@ -8,6 +8,8 @@ import {
 import { Router } from '@angular/router';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { ProductEntity } from '@esc/product/models';
+import { CartStorageService } from '@esc/shared/util-services';
+import { CartItem } from '@esc/order/models';
 
 @Component({
   selector: 'ui-product-item',
@@ -16,12 +18,19 @@ import { ProductEntity } from '@esc/product/models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductItemComponent {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private cartStorageService: CartStorageService
+  ) {}
 
   @Input() product!: ProductEntity;
 
   addToCart(id: string): void {
-    console.log(id);
+    const cartItem: CartItem = {
+      productId: id,
+      quantity: 1,
+    };
+    this.cartStorageService.setCartItem(cartItem);
   }
 
   goToProductPage(id: string): void {

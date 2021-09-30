@@ -14,6 +14,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { ProductItemModule } from '@esc/product/ui-components';
 import { CATEGORIES_URL, PRODUCTS_URL } from '@esc/product/domain';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CartStorageService } from '@esc/shared/util-services';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -56,4 +57,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(cartStorageService: CartStorageService) {
+    cartStorageService.initCartLocalStorage();
+  }
+}

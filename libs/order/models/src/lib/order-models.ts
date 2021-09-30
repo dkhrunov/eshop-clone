@@ -108,3 +108,12 @@ export class UpdateOrderStatus {
 }
 
 export type OrderItem = Omit<OrderItemEntity, 'id' | 'dateCreated' | 'order'>;
+
+export interface Cart {
+  items: CartItem[];
+}
+
+export interface CartItem {
+  productId: string;
+  quantity: number;
+}

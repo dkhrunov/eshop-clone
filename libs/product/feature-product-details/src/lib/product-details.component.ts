@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ProductDetailsFacade } from '@esc/product/domain';
 import {
   combineLatest,
@@ -10,6 +10,7 @@ import {
   take,
   tap,
 } from 'rxjs';
+import { CartStorageService } from '@esc/shared/util-services';
 @Component({
   selector: 'product-product-details',
   templateUrl: './product-details.component.html',
@@ -19,7 +20,7 @@ export class ProductDetailsComponent {
   constructor(
     private productDetailsFacade: ProductDetailsFacade,
     private route: ActivatedRoute,
-    private router: Router
+    private cartStorageService: CartStorageService
   ) {}
 
   quantity = 1;
@@ -39,4 +40,8 @@ export class ProductDetailsComponent {
     take(1),
     shareReplay(1)
   );
+
+  addItemToCart(productId: string, quantity: number): void {
+    this.cartStorageService.setCartItem({ productId, quantity });
+  }
 }

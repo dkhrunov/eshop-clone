@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { InjectionToken } from '@angular/core';
 
-export const LOCALSTORAGE_SERVICE = new InjectionToken<string>(
-  'LocalStorageService'
+export const TOKENSTORAGE_SERVICE = new InjectionToken<string>(
+  'TokenStorageService'
 );
 
 const TOKEN = 'token';
@@ -10,7 +10,7 @@ const TOKEN = 'token';
 @Injectable({
   providedIn: 'root',
 })
-export class LocalStorageService {
+export class TokenStorageService {
   setToken(value: string): void {
     localStorage.setItem(TOKEN, value);
   }

@@ -650,7 +650,7 @@ describe('Eshop Clone', () => {
     });
   });
 
-  context('Shop', () => {
+  context.only('Shop', () => {
     it('Show main page', () => {
       cy.visit(`${environment.baseUrlFrontShop}`);
       cy.get('[data-cy=header]').should('be.visible');
@@ -711,10 +711,10 @@ describe('Eshop Clone', () => {
           isNumberCategoriesEqualFoundResults();
         });
     });
-  });
 
-  it.only('Show product details', () => {
-    cy.visit(`${environment.baseUrlFrontShop}/products`);
-    listProducts().last().click();
+    it.only('Show product details', () => {
+      cy.visit(`${environment.baseUrlFrontShop}/products`);
+      listProducts().last().click();
+    });
   });
 });

@@ -45,6 +45,15 @@
 
   <div class="cart">
     <i nz-icon nzType="user" nzTheme="outline"></i>
-    <i nz-icon nzType="shopping-cart" nzTheme="outline"></i>
+
+    <ng-container *ngIf="cartCount$ | async as count; else cartTpl">
+      <nz-badge [nzCount]="count">
+        <i nz-icon nzType="shopping-cart" nzTheme="outline"></i>
+      </nz-badge>
+    </ng-container>
+
+    <ng-template #cartTpl>
+      <i nz-icon nzType="shopping-cart" nzTheme="outline"></i>
+    </ng-template>
   </div>
 </header>

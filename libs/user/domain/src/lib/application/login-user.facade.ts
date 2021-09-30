@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@angular/core';
 import { LoginUserDto } from '@esc/user/models';
 import { UserService } from '../..';
 import {
-  LocalStorageService,
-  LOCALSTORAGE_SERVICE,
+  TokenStorageService,
+  TOKENSTORAGE_SERVICE,
 } from '@esc/shared/util-services';
 import { pluck, tap } from 'rxjs';
 
@@ -11,13 +11,13 @@ import { pluck, tap } from 'rxjs';
 export class LoginUserFacade {
   constructor(
     private userService: UserService,
-    @Inject(LOCALSTORAGE_SERVICE)
-    private localStorageService: LocalStorageService
+    @Inject(TOKENSTORAGE_SERVICE)
+    private tokenStorageService: TokenStorageService
   ) {}
 
   loggedInUser$ = this.userService.loggedInUser$.pipe(
     pluck('token'),
-    tap(this.localStorageService.setToken)
+    tap(this.tokenStorageService.setToken)
   );
 
   loginUser(user: LoginUserDto): void {
@@ -25,6 +25,6 @@ export class LoginUserFacade {
   }
 
   logout(): void {
-    this.localStorageService.clearToken();
+    this.tokenStorageService.clearToken();
   }
 }

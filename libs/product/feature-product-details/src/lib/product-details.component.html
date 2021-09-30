@@ -53,7 +53,14 @@
           <div class="buttons">
             <h3 class="green">Free Shipping</h3>
 
-            <button nz-button nzDanger nzType="primary">Add to Cart</button>
+            <button
+              nz-button
+              nzDanger
+              nzType="primary"
+              (click)="addItemToCart(product.id, quantity)"
+            >
+              Add to Cart
+            </button>
             <button nz-button nzDanger nzType="primary">Buy Now</button>
           </div>
         </div>

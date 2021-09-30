@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import {
-  LocalStorageService,
-  LOCALSTORAGE_SERVICE,
+  TokenStorageService,
+  TOKENSTORAGE_SERVICE,
 } from '@esc/shared/util-services';
 import { JwtUserPayload } from '@esc/user/models';
 @Injectable({
@@ -10,13 +10,13 @@ import { JwtUserPayload } from '@esc/user/models';
 })
 export class AuthGuard implements CanActivate {
   constructor(
-    @Inject(LOCALSTORAGE_SERVICE)
-    private localStorageService: LocalStorageService,
+    @Inject(TOKENSTORAGE_SERVICE)
+    private tokenStorageService: TokenStorageService,
     private router: Router
   ) {}
 
   canActivate(): boolean {
-    const token = this.localStorageService.getToken();
+    const token = this.tokenStorageService.getToken();
 
     if (token) {
       const [, tokenPayload] = token.split('.');

@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { USERS_URL } from './infrastructure/usersUrl.token';
 import {
-  LocalStorageService,
-  LOCALSTORAGE_SERVICE,
+  TokenStorageService,
+  TOKENSTORAGE_SERVICE,
 } from '@esc/shared/util-services';
 
 @NgModule({
@@ -14,8 +14,8 @@ import {
       useValue: 'users',
     },
     {
-      provide: LOCALSTORAGE_SERVICE,
-      useClass: LocalStorageService,
+      provide: TOKENSTORAGE_SERVICE,
+      useClass: TokenStorageService,
     },
   ],
 })
