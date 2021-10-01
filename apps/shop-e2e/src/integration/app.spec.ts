@@ -43,12 +43,18 @@ import {
   updateOrderStatus,
 } from '../support/order.po';
 import { ProductEntity } from '@esc/product/models';
-import { OrderEntity, OrderItem } from '@esc/order/models';
+import {
+  Cart,
+  CartItemWithProduct,
+  OrderEntity,
+  OrderItem,
+} from '@esc/order/models';
 import { UserFromServer } from '@esc/user/models';
 import { environment } from '@env/environment';
 import {
   addToCartButtons,
   categoriesFilters,
+  deleteItemButtons,
   isNumberCategoriesEqualFoundResults,
   listProducts,
 } from '../support/shop-product';
@@ -728,7 +734,7 @@ describe('Eshop Clone', () => {
         });
     });
 
-    it('Show count items in cart', () => {
+    it.only('Show count items in cart', () => {
       cy.visit(`${environment.baseUrlFrontShop}`);
 
       cy.get('[data-cy=countBadge]').should('not.exist');
@@ -749,27 +755,47 @@ describe('Eshop Clone', () => {
 
       addToCartButtons().first().parent().click();
 
-      cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${3}`);
+      cy.get('[data-cy="quantitySelector"]').click();
 
-      addToCartButtons().first().click();
-
-      cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${4}`);
-
-      addToCartButtons().first().click();
-
-      cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${5}`);
-
-      cy.visit(`${environment.baseUrlFrontShop}/products`);
-
-      cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${5}`);
+      cy.get('nz-option-item').eq(2).click();
 
       addToCartButtons().first().click();
 
       cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${6}`);
+
+      cy.visit(`${environment.baseUrlFrontShop}/products`);
+
+      addToCartButtons().first().click();
+
+      cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${7}`);
     });
 
     it('Cart page', () => {
-      cy.visit(`${environment.baseUrlFrontShop}/cart`);
+      cy.visit(`${environment.baseUrlFrontShop}`);
+      cy.clearLocalStorage();
+      cy.get('[data-cy=countBadge]').should('not.exist');
+      addToCartButtons().click({ multiple: true });
+      cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${4}`);
+
+      cy.get('[data-cy="countBadge"]').click();
+
+      cy.get('[data-cy="itemsCount"]').should('contain', 4);
+
+      cy.get('[data-cy=deleteItemButton]').first().click();
+
+      cy.get('[data-cy="itemsCount"]').should('contain', 3);
+
+      cy.get('[data-cy=deleteItemButton]').first().click({ force: true });
+
+      cy.get('[data-cy="itemsCount"]').should('contain', 2);
+
+      cy.get('[data-cy=deleteItemButton]').first().click({ force: true });
+
+      cy.get('[data-cy="itemsCount"]').should('contain', 1);
+
+      cy.get('[data-cy=deleteItemButton]').first().click({ force: true });
+
+      cy.get('[data-cy="itemsCount"]').should('contain', 'No items');
     });
   });
 });

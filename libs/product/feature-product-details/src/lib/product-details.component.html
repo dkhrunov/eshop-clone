@@ -37,7 +37,11 @@
           <div class="quantity">
             <h3>Quantity</h3>
 
-            <nz-select nzPlaceHolder="Quantity" [(ngModel)]="quantity">
+            <nz-select
+              data-cy="quantitySelector"
+              nzPlaceHolder="Quantity"
+              [(ngModel)]="quantity"
+            >
               <nz-option
                 *ngFor="
                   let quantity of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];

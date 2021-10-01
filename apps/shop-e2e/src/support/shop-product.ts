@@ -6,6 +6,10 @@ export const addToCartButtons = () => {
   return cy.get('[data-cy=addToCartButton]');
 };
 
+export const deleteItemButtons = () => {
+  return cy.get('[data-cy=deleteItemButton]');
+};
+
 export const categoriesFilters = () => {
   return cy.get('[data-cy=categoryName]');
 };

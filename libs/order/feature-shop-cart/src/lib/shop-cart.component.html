@@ -6,7 +6,10 @@
 <article>
   <div class="items">
     <h3>
-      My Cart: {{ itemsInCartCount$ | async | i18nPlural: itemsPluralMapping }}
+      My Cart:
+      <span data-cy="itemsCount">{{
+        itemsInCartCount$ | async | i18nPlural: itemsPluralMapping
+      }}</span>
     </h3>
     <h4>Shipping after the payment, Delivery time: 1 to 4 working days</h4>
 
