@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Cart, CartItem } from '@esc/order/models';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map, pluck } from 'rxjs';
 
 export const CART_KEY = 'cart';
 
@@ -10,6 +10,11 @@ export const CART_KEY = 'cart';
 export class CartStorageService {
   private cartSubject = new BehaviorSubject<Cart>(this.getCart());
   cart$ = this.cartSubject.asObservable();
+
+  itemsInCartCount$ = this.cart$.pipe(
+    pluck('items'),
+    map((items) => items.reduce((acc, item) => acc + item.quantity, 0))
+  );
 
   initialCart = {
     items: [],
@@ -24,20 +29,31 @@ export class CartStorageService {
     this.cartSubject.next(cart);
   }
 
-  setCartItem(cartItem: CartItem): Cart {
+  setCartItem(cartItem: CartItem, update?: boolean): void {
     const cart: Cart = this.getCart();
     const foundItem = cart.items?.find(
       (item) => item.productId === cartItem.productId
     );
 
     foundItem
-      ? this.increaseItemInCart(cart, cartItem)
+      ? this.setOrderItems(cart, cartItem, update)
       : cart.items.push(cartItem);
 
     localStorage.setItem(CART_KEY, JSON.stringify(cart));
 
     this.cartSubject.next(cart);
-    return cart;
+  }
+
+  removeCartItem(id: string): void {
+    const cart = this.getCart();
+
+    const newCartItems = cart.items.filter((item) => item.productId !== id);
+
+    cart.items = newCartItems;
+
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+
+    this.cartSubject.next(cart);
   }
 
   private getCart(): Cart {
@@ -46,12 +62,15 @@ export class CartStorageService {
     return cart;
   }
 
-  private increaseItemInCart(cart: Cart, newItem: CartItem): void {
+  private setOrderItems(cart: Cart, newItem: CartItem, update?: boolean): void {
     cart.items.map((itemInCart) => {
       if (itemInCart.productId === newItem.productId) {
-        itemInCart.quantity += newItem.quantity;
+        update
+          ? (itemInCart.quantity = newItem.quantity)
+          : (itemInCart.quantity += newItem.quantity);
       }
       return itemInCart;
     });
+    return;
   }
 }

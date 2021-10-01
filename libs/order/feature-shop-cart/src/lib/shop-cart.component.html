@@ -1,0 +1,26 @@
+<button routerLink="../products" class="goBackButton" nz-button nzType="text">
+  <i nz-icon nzType="arrow-left"></i>
+  Continue shopping
+</button>
+
+<article>
+  <div class="items">
+    <h3>
+      My Cart: {{ itemsInCartCount$ | async | i18nPlural: itemsPluralMapping }}
+    </h3>
+    <h4>Shipping after the payment, Delivery time: 1 to 4 working days</h4>
+
+    <ui-order-item
+      (changeQuantity)="changeItemQuantity($event)"
+      (deleteItem)="deleteOrderItem($event)"
+      *ngFor="let item of cartWithProducts$ | async"
+      [item]="item"
+    >
+    </ui-order-item>
+  </div>
+
+  <ui-order-summary
+    *ngIf="totalItemsPrice$ | async as totalPrice"
+    [totalPrice]="totalPrice"
+  ></ui-order-summary>
+</article>

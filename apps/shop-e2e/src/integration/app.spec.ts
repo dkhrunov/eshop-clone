@@ -728,7 +728,7 @@ describe('Eshop Clone', () => {
         });
     });
 
-    it('Show items in cart', () => {
+    it('Show count items in cart', () => {
       cy.visit(`${environment.baseUrlFrontShop}`);
 
       cy.get('[data-cy=countBadge]').should('not.exist');
@@ -766,6 +766,10 @@ describe('Eshop Clone', () => {
       addToCartButtons().first().click();
 
       cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${6}`);
+    });
+
+    it('Cart page', () => {
+      cy.visit(`${environment.baseUrlFrontShop}/cart`);
     });
   });
 });

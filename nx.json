@@ -52,6 +52,9 @@
     "order-feature-shell": {
       "tags": ["domain:order", "type:feature"]
     },
+    "order-feature-shop-cart": {
+      "tags": ["domain:order", "type:feature"]
+    },
     "order-models": {
       "tags": ["domain:shared"]
     },

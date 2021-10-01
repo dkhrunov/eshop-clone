@@ -43,6 +43,13 @@ import { CartStorageService } from '@esc/shared/util-services';
           ),
       },
       {
+        path: 'cart',
+        loadChildren: () =>
+          import('@esc/order/feature-shop-cart').then(
+            (m) => m.OrderFeatureShopCartModule
+          ),
+      },
+      {
         path: 'products/:id',
         loadChildren: () =>
           import('@esc/product/feature-product-details').then(

@@ -48,12 +48,17 @@
 
     <ng-container *ngIf="cartCount$ | async as count; else cartTpl">
       <nz-badge data-cy="countBadge" [nzCount]="count">
-        <i nz-icon nzType="shopping-cart" nzTheme="outline"></i>
+        <i
+          routerLink="cart"
+          nz-icon
+          nzType="shopping-cart"
+          nzTheme="outline"
+        ></i>
       </nz-badge>
     </ng-container>
 
     <ng-template #cartTpl>
-      <i nz-icon nzType="shopping-cart" nzTheme="outline"></i>
+      <i routerLink="cart" nz-icon nzType="shopping-cart" nzTheme="outline"></i>
     </ng-template>
   </div>
 </header>

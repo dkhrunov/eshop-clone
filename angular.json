@@ -404,6 +404,51 @@
         }
       }
     },
+    "order-feature-shop-cart": {
+      "projectType": "library",
+      "root": "libs/order/feature-shop-cart",
+      "sourceRoot": "libs/order/feature-shop-cart/src",
+      "prefix": "order",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:ng-packagr-lite",
+          "outputs": [
+            "dist/libs/order/feature-shop-cart"
+          ],
+          "options": {
+            "project": "libs/order/feature-shop-cart/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/order/feature-shop-cart/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/order/feature-shop-cart/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/order/feature-shop-cart"
+          ],
+          "options": {
+            "jestConfig": "libs/order/feature-shop-cart/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/order/feature-shop-cart/src/**/*.ts",
+              "libs/order/feature-shop-cart/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "order-models": {
       "root": "libs/order/models",
       "sourceRoot": "libs/order/models/src",

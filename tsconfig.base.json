@@ -26,6 +26,9 @@
         "libs/order/feature-list-orders/src/index.ts"
       ],
       "@esc/order/feature-shell": ["libs/order/feature-shell/src/index.ts"],
+      "@esc/order/feature-shop-cart": [
+        "libs/order/feature-shop-cart/src/index.ts"
+      ],
       "@esc/order/models": ["libs/order/models/src/index.ts"],
       "@esc/order/ui-components": ["libs/order/ui-components/src/index.ts"],
       "@esc/product/api": ["libs/product/api/src/index.ts"],

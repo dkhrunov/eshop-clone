@@ -1,0 +1,37 @@
+:host {
+  @apply grid bg-gray-100 rounded-md p-2 gap-2;
+
+  grid: 'image description price' / 1fr 2fr 2fr;
+
+  img {
+    @apply rounded-md;
+  }
+
+  .description {
+    @apply ml-2;
+
+    h2 {
+      @apply text-lg;
+    }
+
+    p {
+      @apply text-red-600;
+    }
+
+    button {
+      @apply grid items-center;
+    }
+  }
+
+  .price {
+    @apply grid grid-flow-row content-around justify-start mr-4;
+
+    p {
+      @apply mb-0 text-sm leading-tight;
+    }
+
+    .subTotalPrice {
+      @apply text-green-600;
+    }
+  }
+}

@@ -1,0 +1,20 @@
+<aside>
+  <h2>Order Summary</h2>
+
+  <div class="summaryItem">
+    <h3 class="title">Items Price</h3>
+    <p class="itemsPrice">{{ totalPrice | currency }}</p>
+  </div>
+
+  <div class="summaryItem">
+    <h3 class="title">Packaging & Shipping</h3>
+    <p class="packaging">Free</p>
+  </div>
+
+  <div class="summaryItem">
+    <h3 class="title">Total Price</h3>
+    <p class="totalPrice">{{ (totalPrice / 100) * 80 | currency }}</p>
+  </div>
+
+  <button nz-button nzDanger nzBlock nzType="primary">Checkout</button>
+</aside>

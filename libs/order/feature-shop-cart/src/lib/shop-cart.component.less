@@ -1,0 +1,24 @@
+:host {
+  @apply grid gap-3 mt-5;
+
+  button.goBackButton {
+    @apply justify-self-start bg-yellow-100 text-gray-500 grid grid-flow-col items-center rounded-md;
+  }
+
+  article {
+    @apply grid gap-4;
+    grid: 'items aside' / 2fr 1fr;
+
+    .items {
+      @apply grid gap-2;
+
+      h3 {
+        @apply text-base text-gray-700 font-semibold;
+      }
+
+      h4 {
+        @apply text-green-600;
+      }
+    }
+  }
+}

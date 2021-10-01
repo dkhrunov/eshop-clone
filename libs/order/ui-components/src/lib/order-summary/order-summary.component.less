@@ -1,0 +1,35 @@
+:host {
+  @apply bg-yellow-100 rounded-md p-3 self-start;
+
+  aside {
+    @apply grid grid-flow-row gap-2;
+
+    h2 {
+      @apply text-lg font-bold text-gray-700;
+    }
+
+    .summaryItem {
+      @apply grid grid-flow-col justify-between;
+
+      h3 {
+        @apply mb-0;
+      }
+
+      p {
+        @apply mb-0 font-semibold;
+
+        &.packaging {
+          @apply text-green-600;
+        }
+
+        &.itemsPrice {
+          @apply line-through text-gray-400;
+        }
+      }
+    }
+
+    button {
+      @apply mt-3;
+    }
+  }
+}

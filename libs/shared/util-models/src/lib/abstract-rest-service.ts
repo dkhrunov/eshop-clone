@@ -98,7 +98,7 @@ export abstract class AbstractRestService<E extends CoreEntity, D> {
     return this.http.put<E>(`${this.resourceUrl}/${id}`, entity);
   }
 
-  private getResourceFromServer(id: string): Observable<E> {
+  getResourceFromServer(id: string): Observable<E> {
     return this.http.get<E>(`${this.resourceUrl}/${id}`);
   }
 
