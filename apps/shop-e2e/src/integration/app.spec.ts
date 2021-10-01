@@ -763,6 +763,9 @@ describe('Eshop Clone', () => {
 
       cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${6}`);
 
+      cy.get('nz-rate li').first().click();
+      cy.get('nz-rate li').last().prev().click();
+
       cy.visit(`${environment.baseUrlFrontShop}/products`);
 
       addToCartButtons().first().click();
