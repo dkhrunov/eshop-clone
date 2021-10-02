@@ -44,7 +44,43 @@
   </nav>
 
   <div class="cart">
-    <i nz-icon nzType="user" nzTheme="outline"></i>
+    <a
+      nz-dropdown
+      nzOverlayClassName="dropdownMenu"
+      nzTrigger="click"
+      [nzPlacement]="'bottomRight'"
+      [nzDropdownMenu]="menu"
+    >
+      <i
+        data-cy="userIcon"
+        nz-icon
+        nzType="user"
+        nzTheme="outline"
+        [ngClass]="{ isLoggedIn: isLoggedIn$ | async }"
+      ></i>
+    </a>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+      <ul nz-menu nzSelectable>
+        <li
+          routerLink="profile"
+          nz-menu-item
+          *ngIf="(isLoggedIn$ | async) === true"
+        >
+          Profile
+        </li>
+        <li nz-menu-item *ngIf="isLoggedIn$ | async" (click)="logOut()">
+          Logout
+        </li>
+        <li
+          [routerLink]="['auth']"
+          fragment="login"
+          *ngIf="(isLoggedIn$ | async) === false"
+          nz-menu-item
+        >
+          Login
+        </li>
+      </ul>
+    </nz-dropdown-menu>
 
     <ng-container *ngIf="cartCount$ | async as count; else cartTpl">
       <nz-badge data-cy="countBadge" [nzCount]="count">

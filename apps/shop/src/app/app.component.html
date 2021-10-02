@@ -1,4 +1,9 @@
-<ui-header [cartCount$]="itemsInCartCount$" data-cy="header"></ui-header>
+<ui-header
+  [isLoggedIn$]="isUserLoggedIn$"
+  [cartCount$]="itemsInCartCount$"
+  (logOutUser)="logOut()"
+  data-cy="header"
+></ui-header>
 
 <main>
   <router-outlet></router-outlet>

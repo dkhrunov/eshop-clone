@@ -734,7 +734,7 @@ describe('Eshop Clone', () => {
         });
     });
 
-    it.only('Show count items in cart', () => {
+    it('Show count items in cart', () => {
       cy.visit(`${environment.baseUrlFrontShop}`);
 
       cy.get('[data-cy=countBadge]').should('not.exist');
@@ -799,6 +799,31 @@ describe('Eshop Clone', () => {
       cy.get('[data-cy=deleteItemButton]').first().click({ force: true });
 
       cy.get('[data-cy="itemsCount"]').should('contain', 'No items');
+    });
+    it('Register and Login user', () => {
+      const { name, email, password } = generateUser();
+
+      cy.get('[data-cy=userIcon]').should('not.have.class', 'isLoggedIn');
+
+      cy.get('[data-cy=userIcon]').click();
+      cy.get('.ant-dropdown-menu-item').contains('Login').click();
+      cy.url().should('contain', 'auth#login');
+      cy.get('[data-cy=registerMode]').click();
+      cy.get('h1').contains('Register User');
+
+      cy.get('[data-cy=registerUserName]').type(name);
+      cy.get('[data-cy=registerUserEmail]').type(email);
+      cy.get('[data-cy=registerUserPassword]').type(password);
+      cy.get('[data-cy=registerUserPasswordConfirmation]').type(password);
+      cy.get('[data-cy=registerUserSubmit]').click();
+
+      cy.get('[data-cy=loginUserEmail]').type(email);
+      cy.get('[data-cy=loginUserPassword]').type(password);
+      cy.get('[data-cy=loginUserSubmit]').click();
+
+      cy.url().should('contain', 'profile');
+      cy.get('h1').contains('User Profile');
+      cy.get('[data-cy=userIcon]').should('have.class', 'isLoggedIn');
     });
   });
 });

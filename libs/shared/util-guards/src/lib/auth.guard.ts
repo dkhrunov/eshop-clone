@@ -4,7 +4,7 @@ import {
   TokenStorageService,
   TOKENSTORAGE_SERVICE,
 } from '@esc/shared/util-services';
-import { JwtUserPayload } from '@esc/user/models';
+import { isTokenExpired } from '@esc/shared/util-helpers';
 @Injectable({
   providedIn: 'root',
 })
@@ -19,19 +19,10 @@ export class AuthGuard implements CanActivate {
     const token = this.tokenStorageService.getToken();
 
     if (token) {
-      const [, tokenPayload] = token.split('.');
-      const { isAdmin, exp } = JSON.parse(atob(tokenPayload)) as JwtUserPayload;
-
-      if (exp) {
-        if (isAdmin && !this.isTokenExpired(exp)) return true;
-      }
+      return isTokenExpired(token);
     }
 
     this.router.navigate(['login']);
     return false;
-  }
-
-  isTokenExpired(exp: number): boolean {
-    return Math.floor(new Date().getTime() / 1000) >= exp;
   }
 }

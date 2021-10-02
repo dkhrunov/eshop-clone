@@ -15,6 +15,7 @@ import { ProductItemModule } from '@esc/product/ui-components';
 import { CATEGORIES_URL, PRODUCTS_URL } from '@esc/product/domain';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CartStorageService } from '@esc/shared/util-services';
+import { AuthGuard } from '@esc/shared/util-guards';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -43,10 +44,32 @@ import { CartStorageService } from '@esc/shared/util-services';
           ),
       },
       {
+        path: 'profile',
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('@esc/user/feature-shop-user-profile').then(
+            (m) => m.UserFeatureShopUserProfileModule
+          ),
+      },
+      {
+        path: 'auth',
+        loadChildren: () =>
+          import('@esc/user/feature-shop-auth').then(
+            (m) => m.UserFeatureShopAuthModule
+          ),
+      },
+      {
         path: 'cart',
         loadChildren: () =>
           import('@esc/order/feature-shop-cart').then(
             (m) => m.OrderFeatureShopCartModule
+          ),
+      },
+      {
+        path: 'checkout',
+        loadChildren: () =>
+          import('@esc/order/feature-shop-checkout').then(
+            (m) => m.OrderFeatureShopCheckoutModule
           ),
       },
       {

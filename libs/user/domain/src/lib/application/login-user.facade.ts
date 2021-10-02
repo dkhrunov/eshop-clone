@@ -26,5 +26,6 @@ export class LoginUserFacade {
 
   logout(): void {
     this.tokenStorageService.clearToken();
+    this.userService.logoutUser();
   }
 }

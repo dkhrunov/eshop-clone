@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { RouterModule } from '@angular/router';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 @NgModule({
   declarations: [HeaderComponent],
@@ -18,6 +19,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
     NzFormModule,
     NzBadgeModule,
     RouterModule,
+    NzDropDownModule,
   ],
   exports: [HeaderComponent],
 })

@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ListCategoriesFacade, ProductsService } from '@esc/product/domain';
-import { shareReplay, take, tap } from 'rxjs';
+import { shareReplay, take } from 'rxjs';
 
 @Component({
   selector: 'esc-home',

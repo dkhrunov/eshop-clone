@@ -17,6 +17,7 @@
     "**/*.spec.ts"
   ],
   "include": [
-    "**/*.ts"
+    "**/*.ts",
+    "../../shared/util-services/src/lib/countries.service.ts"
   ]
 }

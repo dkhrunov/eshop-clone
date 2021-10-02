@@ -27,5 +27,15 @@
   <ui-order-summary
     *ngIf="totalItemsPrice$ | async as totalPrice"
     [totalPrice]="totalPrice"
-  ></ui-order-summary>
+  >
+    <button
+      [routerLink]="['/checkout']"
+      nz-button
+      nzDanger
+      nzBlock
+      nzType="primary"
+    >
+      Checkout
+    </button>
+  </ui-order-summary>
 </article>

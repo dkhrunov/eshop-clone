@@ -8,8 +8,21 @@ import {
 } from '@esc/user/models';
 import { HttpClient } from '@angular/common/http';
 import { USERS_URL } from './usersUrl.token';
-import { Observable, pluck, Subject, switchMap } from 'rxjs';
+import {
+  iif,
+  map,
+  mapTo,
+  merge,
+  Observable,
+  of,
+  pluck,
+  shareReplay,
+  Subject,
+  switchMap,
+} from 'rxjs';
 import { environment } from '@env/environment';
+import { TokenStorageService } from '@esc/shared/util-services';
+import { isTokenExpired } from '@esc/shared/util-helpers';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +31,11 @@ export class UserService extends AbstractRestService<
   UserEntity,
   RegisterUserDto
 > {
-  constructor(http: HttpClient, @Inject(USERS_URL) url: string) {
+  constructor(
+    http: HttpClient,
+    @Inject(USERS_URL) url: string,
+    private tokenStorageService: TokenStorageService
+  ) {
     super(http, url);
   }
 
@@ -32,6 +49,27 @@ export class UserService extends AbstractRestService<
   loggedInUser$ = this.loginUserAction$.pipe(
     switchMap((user) => this.loginUserOnServer(user))
   );
+
+  private logOutUserSubject = new Subject();
+  logoutUserAction$ = this.logOutUserSubject.asObservable();
+
+  isUserLoggedIn$ = merge(
+    of(this.tokenStorageService.getToken()).pipe(
+      map((token) => {
+        if (token) {
+          return isTokenExpired(token);
+        } else {
+          return false;
+        }
+      })
+    ),
+    this.logoutUserAction$.pipe(mapTo(false)),
+    this.loggedInUser$.pipe(mapTo(true))
+  );
+
+  logoutUser(): void {
+    this.logOutUserSubject.next(null);
+  }
 
   loginUser(user: LoginUserDto): void {
     this.loginUserSubject.next(user);

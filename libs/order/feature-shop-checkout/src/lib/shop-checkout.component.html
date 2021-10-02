@@ -1,0 +1,87 @@
+<button routerLink="../cart" class="goBackButton" nz-button nzType="text">
+  <i nz-icon nzType="arrow-left"></i>
+  Back to Cart
+</button>
+
+<article>
+  <form
+    *ngIf="cartWithProducts$ | async"
+    nz-form
+    [nzLayout]="'horizontal'"
+    [formGroup]="checkoutForm"
+    (ngSubmit)="({})"
+  >
+    <nz-form-item [nzJustify]="'space-between'">
+      <nz-form-label nzRequired>Name</nz-form-label>
+      <nz-form-control [nzSpan]="19">
+        <input nz-input formControlName="name" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item [nzJustify]="'space-between'">
+      <nz-form-label nzRequired>Email</nz-form-label>
+      <nz-form-control [nzSpan]="19">
+        <input nz-input formControlName="email" type="email" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item [nzJustify]="'space-between'">
+      <nz-form-label nzRequired>Phone</nz-form-label>
+      <nz-form-control [nzSpan]="19">
+        <input nz-input formControlName="phone" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item [nzJustify]="'space-between'">
+      <nz-form-label nzRequired>Street</nz-form-label>
+      <nz-form-control [nzSpan]="19">
+        <input nz-input type="text" formControlName="street" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item [nzJustify]="'space-between'">
+      <nz-form-label nzRequired>Apartment</nz-form-label>
+      <nz-form-control [nzSpan]="19">
+        <input nz-input type="text" formControlName="apartment" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item [nzJustify]="'space-between'">
+      <nz-form-label nzRequired>Zip Code</nz-form-label>
+      <nz-form-control [nzSpan]="19">
+        <input nz-input type="text" formControlName="zip" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item [nzJustify]="'space-between'">
+      <nz-form-label nzRequired>City</nz-form-label>
+      <nz-form-control [nzSpan]="19">
+        <input nz-input type="text" formControlName="city" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item [nzJustify]="'space-between'">
+      <nz-form-label nzRequired nzFor="country">Country</nz-form-label>
+      <nz-form-control [nzSpan]="19">
+        <nz-select
+          data-cy="registerUserCountry"
+          formControlName="country"
+          nzShowSearch
+          nzAllowClear
+          nzPlaceHolder="Select a country"
+        >
+          <nz-option
+            *ngFor="let country of countries$ | async | keyvalue"
+            nzLabel="{{ country.value }}"
+            nzValue="{{ country.value }}"
+          ></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+
+  <ui-order-summary
+    *ngIf="totalItemsPrice$ | async as price"
+    [totalPrice]="price"
+  >
+    <button class="checkoutButton" nz-button nzType="text">Place Order</button>
+  </ui-order-summary>
+</article>

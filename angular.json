@@ -449,6 +449,51 @@
         }
       }
     },
+    "order-feature-shop-checkout": {
+      "projectType": "library",
+      "root": "libs/order/feature-shop-checkout",
+      "sourceRoot": "libs/order/feature-shop-checkout/src",
+      "prefix": "order",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:ng-packagr-lite",
+          "outputs": [
+            "dist/libs/order/feature-shop-checkout"
+          ],
+          "options": {
+            "project": "libs/order/feature-shop-checkout/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/order/feature-shop-checkout/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/order/feature-shop-checkout/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/order/feature-shop-checkout"
+          ],
+          "options": {
+            "jestConfig": "libs/order/feature-shop-checkout/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/order/feature-shop-checkout/src/**/*.ts",
+              "libs/order/feature-shop-checkout/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "order-models": {
       "root": "libs/order/models",
       "sourceRoot": "libs/order/models/src",
@@ -1779,6 +1824,96 @@
           "outputs": [
             "{options.outputFile}"
           ]
+        }
+      }
+    },
+    "user-feature-shop-auth": {
+      "projectType": "library",
+      "root": "libs/user/feature-shop-auth",
+      "sourceRoot": "libs/user/feature-shop-auth/src",
+      "prefix": "user",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:ng-packagr-lite",
+          "outputs": [
+            "dist/libs/user/feature-shop-auth"
+          ],
+          "options": {
+            "project": "libs/user/feature-shop-auth/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/user/feature-shop-auth/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/user/feature-shop-auth/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/user/feature-shop-auth"
+          ],
+          "options": {
+            "jestConfig": "libs/user/feature-shop-auth/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/user/feature-shop-auth/src/**/*.ts",
+              "libs/user/feature-shop-auth/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "user-feature-shop-user-profile": {
+      "projectType": "library",
+      "root": "libs/user/feature-shop-user-profile",
+      "sourceRoot": "libs/user/feature-shop-user-profile/src",
+      "prefix": "user",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:ng-packagr-lite",
+          "outputs": [
+            "dist/libs/user/feature-shop-user-profile"
+          ],
+          "options": {
+            "project": "libs/user/feature-shop-user-profile/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/user/feature-shop-user-profile/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/user/feature-shop-user-profile/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/user/feature-shop-user-profile"
+          ],
+          "options": {
+            "jestConfig": "libs/user/feature-shop-user-profile/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/user/feature-shop-user-profile/src/**/*.ts",
+              "libs/user/feature-shop-user-profile/src/**/*.html"
+            ]
+          }
         }
       }
     },

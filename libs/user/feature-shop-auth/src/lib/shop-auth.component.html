@@ -1,0 +1,136 @@
+<form
+  *ngIf="(authMode$ | async) === 'login'"
+  nz-form
+  [formGroup]="loginForm"
+  (ngSubmit)="loginUser()"
+>
+  <header>
+    <h1>Login User</h1>
+  </header>
+
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Please input your email!">
+      <nz-input-group nzPrefixIcon="user">
+        <input
+          type="text"
+          data-cy="loginUserEmail"
+          nz-input
+          formControlName="email"
+          placeholder="Email"
+        />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Please input your Password!">
+      <nz-input-group nzPrefixIcon="lock">
+        <input
+          type="password"
+          data-cy="loginUserPassword"
+          nz-input
+          formControlName="password"
+          placeholder="Password"
+        />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <button
+    [nzLoading]="loading$ | async"
+    nz-button
+    data-cy="loginUserSubmit"
+    nzBlock
+    [nzType]="'text'"
+  >
+    Log in
+  </button>
+
+  <p>
+    New user?
+
+    <a data-cy="registerMode" (click)="toggleAuthMode()">Register</a>
+  </p>
+</form>
+
+<form
+  *ngIf="(authMode$ | async) === 'register'"
+  nz-form
+  [formGroup]="registerForm"
+  (ngSubmit)="registerUser()"
+>
+  <header>
+    <h1>Register User</h1>
+  </header>
+
+  <nz-form-item>
+    <nz-form-control nzHasFeedback nzErrorTip="Please input your Name!">
+      <nz-input-group nzPrefixIcon="user">
+        <input
+          type="text"
+          nz-input
+          data-cy="registerUserName"
+          formControlName="name"
+          placeholder="Name"
+        />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-control nzHasFeedback nzErrorTip="Please input your email!">
+      <nz-input-group nzPrefixIcon="user">
+        <input
+          type="text"
+          nz-input
+          data-cy="registerUserEmail"
+          formControlName="email"
+          placeholder="Email"
+        />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-control nzHasFeedback nzErrorTip="Please input your Password!">
+      <nz-input-group nzPrefixIcon="lock">
+        <input
+          type="password"
+          nz-input
+          data-cy="registerUserPassword"
+          formControlName="password"
+          placeholder="Password"
+        />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-control nzHasFeedback nzErrorTip="Passwords do not match!">
+      <nz-input-group nzPrefixIcon="lock">
+        <input
+          type="password"
+          nz-input
+          data-cy="registerUserPasswordConfirmation"
+          formControlName="passwordConfirmation"
+          placeholder="Confirm Password"
+        />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <button
+    [nzLoading]="loading$ | async"
+    nz-button
+    nzBlock
+    data-cy="registerUserSubmit"
+    [nzType]="'text'"
+  >
+    Register
+  </button>
+
+  <p>
+    Already registered?
+
+    <a data-cy="loginMode" (click)="toggleAuthMode()">Login</a>
+  </p>
+</form>

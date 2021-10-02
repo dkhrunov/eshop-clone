@@ -7,3 +7,5 @@ export * from './lib/application/dashboard.facade';
 export * from './lib/infrastructure/orders.service';
 
 export * from './lib/application/shop-cart.facade';
+
+export * from './lib/application/shop-checkout.facade';

@@ -55,6 +55,9 @@
     "order-feature-shop-cart": {
       "tags": ["domain:order", "type:feature"]
     },
+    "order-feature-shop-checkout": {
+      "tags": ["domain:order", "type:feature"]
+    },
     "order-models": {
       "tags": ["domain:shared"]
     },
@@ -141,6 +144,12 @@
       "tags": ["domain:user", "type:feature"]
     },
     "user-feature-shell": {
+      "tags": ["domain:user", "type:feature"]
+    },
+    "user-feature-shop-auth": {
+      "tags": ["domain:user", "type:feature"]
+    },
+    "user-feature-shop-user-profile": {
       "tags": ["domain:user", "type:feature"]
     },
     "user-models": {

@@ -29,6 +29,9 @@
       "@esc/order/feature-shop-cart": [
         "libs/order/feature-shop-cart/src/index.ts"
       ],
+      "@esc/order/feature-shop-checkout": [
+        "libs/order/feature-shop-checkout/src/index.ts"
+      ],
       "@esc/order/models": ["libs/order/models/src/index.ts"],
       "@esc/order/ui-components": ["libs/order/ui-components/src/index.ts"],
       "@esc/product/api": ["libs/product/api/src/index.ts"],
@@ -74,6 +77,12 @@
         "libs/user/feature-register-user/src/index.ts"
       ],
       "@esc/user/feature-shell": ["libs/user/feature-shell/src/index.ts"],
+      "@esc/user/feature-shop-auth": [
+        "libs/user/feature-shop-auth/src/index.ts"
+      ],
+      "@esc/user/feature-shop-user-profile": [
+        "libs/user/feature-shop-user-profile/src/index.ts"
+      ],
       "@esc/user/models": ["libs/user/models/src/index.ts"],
       "@esc/user/util-helpers": ["libs/user/util-helpers/src/index.ts"],
       "path": ["./node_modules/path-browserify"]

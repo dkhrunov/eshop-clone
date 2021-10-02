@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RegisterUserDto, UpdateUserDto } from '@esc/user/models';
-import { CountriesService } from '../infrastructure/countries.service';
+import { CountriesService } from '@esc/shared/util-services';
 import { UserService } from '../infrastructure/user.service';
 
 @Injectable({ providedIn: 'root' })

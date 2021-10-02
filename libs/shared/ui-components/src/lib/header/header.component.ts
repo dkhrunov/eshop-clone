@@ -1,4 +1,10 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -9,6 +15,12 @@ import { Observable } from 'rxjs';
 })
 export class HeaderComponent {
   @Input() cartCount$!: Observable<number>;
+  @Input() isLoggedIn$!: Observable<boolean>;
+  @Output() logOutUser = new EventEmitter();
 
   inputValue: string | null = null;
+
+  logOut(): void {
+    this.logOutUser.emit();
+  }
 }
