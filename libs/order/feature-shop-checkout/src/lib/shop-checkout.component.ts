@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ShopCheckoutFacade } from '@esc/order/domain';
 import { FormBuilder, Validators } from '@angular/forms';
+import { UserService } from '@esc/user/domain';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'order-shop-checkout',
@@ -10,8 +12,13 @@ import { FormBuilder, Validators } from '@angular/forms';
 export class ShopCheckoutComponent {
   constructor(
     private shopCheckoutFacade: ShopCheckoutFacade,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private userService: UserService
   ) {}
+
+  currentUserInfo$ = this.userService.currentUserInfo$.pipe(
+    tap((userInfo) => this.checkoutForm.patchValue({ ...userInfo }))
+  );
 
   checkoutForm = this.fb.group({
     name: ['', [Validators.required]],

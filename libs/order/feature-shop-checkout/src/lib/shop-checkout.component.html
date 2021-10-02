@@ -5,7 +5,7 @@
 
 <article>
   <form
-    *ngIf="cartWithProducts$ | async"
+    *ngIf="currentUserInfo$ | async"
     nz-form
     [nzLayout]="'horizontal'"
     [formGroup]="checkoutForm"

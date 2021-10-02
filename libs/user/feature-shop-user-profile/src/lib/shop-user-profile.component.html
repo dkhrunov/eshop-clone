@@ -1,78 +1,111 @@
 <article>
   <h1>User Profile</h1>
 
-  <form
-    nz-form
-    [nzLayout]="'horizontal'"
-    [formGroup]="userForm"
-    (ngSubmit)="({})"
+  <nz-spin [nzSpinning]="formIsUpdating$ | async">
+    <form
+      *ngIf="currentUserInfo$ | async"
+      nz-form
+      [nzLayout]="'horizontal'"
+      [formGroup]="userForm"
+    >
+      <nz-form-item [nzJustify]="'space-between'">
+        <nz-form-label>Name</nz-form-label>
+        <nz-form-control [nzSpan]="19">
+          <input data-cy="userProfileName" nz-input formControlName="name" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item [nzJustify]="'space-between'">
+        <nz-form-label>Email</nz-form-label>
+        <nz-form-control [nzSpan]="19">
+          <input
+            data-cy="userProfileEmail"
+            nz-input
+            formControlName="email"
+            type="email"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item [nzJustify]="'space-between'">
+        <nz-form-label>Phone</nz-form-label>
+        <nz-form-control [nzSpan]="19">
+          <input data-cy="userProfilePhone" nz-input formControlName="phone" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item [nzJustify]="'space-between'">
+        <nz-form-label>Street</nz-form-label>
+        <nz-form-control [nzSpan]="19">
+          <input
+            data-cy="userProfileStreet"
+            nz-input
+            type="text"
+            formControlName="street"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item [nzJustify]="'space-between'">
+        <nz-form-label>Apartment</nz-form-label>
+        <nz-form-control [nzSpan]="19">
+          <input
+            data-cy="userProfileApartment"
+            nz-input
+            type="text"
+            formControlName="apartment"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item [nzJustify]="'space-between'">
+        <nz-form-label>Zip Code</nz-form-label>
+        <nz-form-control [nzSpan]="19">
+          <input
+            data-cy="userProfileZip"
+            nz-input
+            type="text"
+            formControlName="zip"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item [nzJustify]="'space-between'">
+        <nz-form-label>City</nz-form-label>
+        <nz-form-control [nzSpan]="19">
+          <input
+            data-cy="userProfileCity"
+            nz-input
+            type="text"
+            formControlName="city"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item [nzJustify]="'space-between'">
+        <nz-form-label nzFor="country">Country</nz-form-label>
+        <nz-form-control [nzSpan]="19" data-cy="profileUserCountry">
+          <nz-select
+            formControlName="country"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Select a country"
+          >
+            <nz-option
+              *ngFor="let country of countries$ | async | keyvalue"
+              nzLabel="{{ country.value }}"
+              nzValue="{{ country.value }}"
+            ></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </nz-spin>
+
+  <button
+    data-cy="profileUserUpdateSubmit"
+    nz-button
+    nzType="text"
+    (click)="updateUser()"
   >
-    <nz-form-item [nzJustify]="'space-between'">
-      <nz-form-label>Name</nz-form-label>
-      <nz-form-control [nzSpan]="19">
-        <input nz-input formControlName="name" />
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item [nzJustify]="'space-between'">
-      <nz-form-label>Email</nz-form-label>
-      <nz-form-control [nzSpan]="19">
-        <input nz-input formControlName="email" type="email" />
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item [nzJustify]="'space-between'">
-      <nz-form-label>Phone</nz-form-label>
-      <nz-form-control [nzSpan]="19">
-        <input nz-input formControlName="phone" />
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item [nzJustify]="'space-between'">
-      <nz-form-label>Street</nz-form-label>
-      <nz-form-control [nzSpan]="19">
-        <input nz-input type="text" formControlName="street" />
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item [nzJustify]="'space-between'">
-      <nz-form-label>Apartment</nz-form-label>
-      <nz-form-control [nzSpan]="19">
-        <input nz-input type="text" formControlName="apartment" />
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item [nzJustify]="'space-between'">
-      <nz-form-label>Zip Code</nz-form-label>
-      <nz-form-control [nzSpan]="19">
-        <input nz-input type="text" formControlName="zip" />
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item [nzJustify]="'space-between'">
-      <nz-form-label>City</nz-form-label>
-      <nz-form-control [nzSpan]="19">
-        <input nz-input type="text" formControlName="city" />
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item [nzJustify]="'space-between'">
-      <nz-form-label nzFor="country">Country</nz-form-label>
-      <nz-form-control [nzSpan]="19">
-        <nz-select
-          data-cy="registerUserCountry"
-          formControlName="country"
-          nzShowSearch
-          nzAllowClear
-          nzPlaceHolder="Select a country"
-        >
-          <nz-option
-            *ngFor="let country of countries$ | async | keyvalue"
-            nzLabel="{{ country.value }}"
-            nzValue="{{ country.value }}"
-          ></nz-option>
-        </nz-select>
-      </nz-form-control>
-    </nz-form-item>
-  </form>
-
-  <button nz-button nzType="text">Update Profile</button>
+    Update Profile
+  </button>
 </article>

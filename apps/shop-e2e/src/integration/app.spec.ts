@@ -43,20 +43,16 @@ import {
   updateOrderStatus,
 } from '../support/order.po';
 import { ProductEntity } from '@esc/product/models';
-import {
-  Cart,
-  CartItemWithProduct,
-  OrderEntity,
-  OrderItem,
-} from '@esc/order/models';
+import { OrderEntity, OrderItem } from '@esc/order/models';
 import { UserFromServer } from '@esc/user/models';
 import { environment } from '@env/environment';
 import {
+  addFeaturedProductsToCart,
   addToCartButtons,
   categoriesFilters,
-  deleteItemButtons,
   isNumberCategoriesEqualFoundResults,
   listProducts,
+  registerAndLoginUser,
 } from '../support/shop-product';
 
 describe('Eshop Clone', () => {
@@ -84,6 +80,7 @@ describe('Eshop Clone', () => {
 
   before(() => {
     cy.visit('/');
+    cy.clearLocalStorageSnapshot();
 
     for (const user of generatedUsers) {
       registerUserOnServer(user).then(({ body: newUser }) => {
@@ -119,6 +116,14 @@ describe('Eshop Clone', () => {
         );
       });
     }
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
   });
 
   context('Users API', () => {
@@ -773,11 +778,12 @@ describe('Eshop Clone', () => {
       cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${7}`);
     });
 
-    it('Cart page', () => {
-      cy.visit(`${environment.baseUrlFrontShop}`);
+    it('Add product to cart and checkout', () => {
       cy.clearLocalStorage();
       cy.get('[data-cy=countBadge]').should('not.exist');
-      addToCartButtons().click({ multiple: true });
+
+      addFeaturedProductsToCart();
+
       cy.get('.ant-scroll-number').invoke('attr', 'title').should('eq', `${4}`);
 
       cy.get('[data-cy="countBadge"]').click();
@@ -800,30 +806,15 @@ describe('Eshop Clone', () => {
 
       cy.get('[data-cy="itemsCount"]').should('contain', 'No items');
     });
+
+    it.only('Checkout cart items', () => {
+      registerAndLoginUser();
+      addFeaturedProductsToCart();
+      cy.get('[data-cy="countBadge"]').click();
+    });
+
     it('Register and Login user', () => {
-      const { name, email, password } = generateUser();
-
-      cy.get('[data-cy=userIcon]').should('not.have.class', 'isLoggedIn');
-
-      cy.get('[data-cy=userIcon]').click();
-      cy.get('.ant-dropdown-menu-item').contains('Login').click();
-      cy.url().should('contain', 'auth#login');
-      cy.get('[data-cy=registerMode]').click();
-      cy.get('h1').contains('Register User');
-
-      cy.get('[data-cy=registerUserName]').type(name);
-      cy.get('[data-cy=registerUserEmail]').type(email);
-      cy.get('[data-cy=registerUserPassword]').type(password);
-      cy.get('[data-cy=registerUserPasswordConfirmation]').type(password);
-      cy.get('[data-cy=registerUserSubmit]').click();
-
-      cy.get('[data-cy=loginUserEmail]').type(email);
-      cy.get('[data-cy=loginUserPassword]').type(password);
-      cy.get('[data-cy=loginUserSubmit]').click();
-
-      cy.url().should('contain', 'profile');
-      cy.get('h1').contains('User Profile');
-      cy.get('[data-cy=userIcon]').should('have.class', 'isLoggedIn');
+      registerAndLoginUser();
     });
   });
 });

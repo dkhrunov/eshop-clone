@@ -1,22 +1,22 @@
 import { Inject, Injectable } from '@angular/core';
 import { AbstractRestService, CountResponse } from '@esc/shared/util-models';
 import {
+  JwtUserPayload,
   LoginResponse,
   LoginUserDto,
   RegisterUserDto,
   UserEntity,
+  UserFromServer,
 } from '@esc/user/models';
 import { HttpClient } from '@angular/common/http';
 import { USERS_URL } from './usersUrl.token';
 import {
-  iif,
   map,
   mapTo,
   merge,
   Observable,
   of,
   pluck,
-  shareReplay,
   Subject,
   switchMap,
 } from 'rxjs';
@@ -50,11 +50,13 @@ export class UserService extends AbstractRestService<
     switchMap((user) => this.loginUserOnServer(user))
   );
 
+  currentUserToken$ = of(this.tokenStorageService.getToken());
+
   private logOutUserSubject = new Subject();
   logoutUserAction$ = this.logOutUserSubject.asObservable();
 
   isUserLoggedIn$ = merge(
-    of(this.tokenStorageService.getToken()).pipe(
+    this.currentUserToken$.pipe(
       map((token) => {
         if (token) {
           return isTokenExpired(token);
@@ -65,6 +67,23 @@ export class UserService extends AbstractRestService<
     ),
     this.logoutUserAction$.pipe(mapTo(false)),
     this.loggedInUser$.pipe(mapTo(true))
+  );
+
+  currentUserInfo$ = this.currentUserToken$.pipe(
+    switchMap((token) => {
+      if (token) {
+        const [, tokenPayload] = token.split('.');
+        const { userId } = JSON.parse(atob(tokenPayload)) as JwtUserPayload;
+
+        console.log(userId);
+
+        return this.http.get<UserFromServer>(
+          `${environment.baseUrlApi}/users/${userId}`
+        );
+      } else {
+        return of({} as UserFromServer);
+      }
+    })
   );
 
   logoutUser(): void {

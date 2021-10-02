@@ -3,7 +3,7 @@ import { CartItem, CartItemWithProduct } from '@esc/order/models';
 import { ProductsService } from '@esc/product/domain';
 import { ProductEntity } from '@esc/product/models';
 import { CartStorageService } from '@esc/shared/util-services';
-import { combineLatest, map, mergeAll, pluck } from 'rxjs';
+import { combineLatest, map, mergeAll, pluck, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ShopCartFacade {

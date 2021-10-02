@@ -35,7 +35,7 @@ export class ShopAuthComponent {
   authMode$ = merge(
     this.route.fragment.pipe(shareReplay()),
     this.authModeAction$
-  ).pipe();
+  );
 
   private loadingSubject = new BehaviorSubject<boolean>(false);
   loadingAction$ = this.loadingSubject.asObservable();

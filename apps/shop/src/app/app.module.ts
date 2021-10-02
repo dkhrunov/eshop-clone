@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CardModule } from '@esc/shared/ui-components';
 import { UserFeatureShellModule } from '@esc/user/feature-shell';
 import { RouterModule } from '@angular/router';
@@ -16,6 +16,7 @@ import { CATEGORIES_URL, PRODUCTS_URL } from '@esc/product/domain';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CartStorageService } from '@esc/shared/util-services';
 import { AuthGuard } from '@esc/shared/util-guards';
+import { AuthInterceptor } from '@esc/shared/util-interceptors';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -84,6 +85,7 @@ import { AuthGuard } from '@esc/shared/util-guards';
   providers: [
     { provide: CATEGORIES_URL, useValue: 'categories' },
     { provide: PRODUCTS_URL, useValue: 'products' },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })
