@@ -8,4 +8,4 @@
 - Nest
 - k8s
 
-[![Cypress Test](https://raw.githubusercontent.com/iromashko/material-ui-clone/master/screenshot.jpg)](https://www.youtube.com/embed/6L_VuhRTfFo)
+[![Cypress Test](https://raw.githubusercontent.com/iromashko/eshop-clone/master/eshop.png)](https://www.youtube.com/embed/6L_VuhRTfFo)
