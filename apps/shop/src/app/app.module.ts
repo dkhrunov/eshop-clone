@@ -17,6 +17,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CartStorageService } from '@esc/shared/util-services';
 import { AuthGuard } from '@esc/shared/util-guards';
 import { AuthInterceptor } from '@esc/shared/util-interceptors';
+import { ORDERS_URL } from '@esc/order/domain';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -86,6 +87,10 @@ import { AuthInterceptor } from '@esc/shared/util-interceptors';
     { provide: CATEGORIES_URL, useValue: 'categories' },
     { provide: PRODUCTS_URL, useValue: 'products' },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    {
+      provide: ORDERS_URL,
+      useValue: 'orders',
+    },
   ],
   bootstrap: [AppComponent],
 })

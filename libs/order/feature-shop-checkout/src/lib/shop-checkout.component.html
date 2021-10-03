@@ -3,14 +3,27 @@
   Back to Cart
 </button>
 
-<article>
-  <form
-    *ngIf="currentUserInfo$ | async"
-    nz-form
-    [nzLayout]="'horizontal'"
-    [formGroup]="checkoutForm"
-    (ngSubmit)="({})"
-  >
+<nz-result
+  *ngIf="createdOrder$ | async as createdOrder"
+  nzStatus="success"
+  nzTitle="Your order is created!"
+  nzSubTitle="Order number: {{ createdOrder.id }}"
+>
+  <div nz-result-extra>
+    <button routerLink="../profile" nz-button>Go to profile</button>
+    <button
+      class="continueShopping"
+      routerLink="../products"
+      nz-button
+      nzType="text"
+    >
+      Continue shopping
+    </button>
+  </div>
+</nz-result>
+
+<article *ngIf="editMode$ | async">
+  <form nz-form [nzLayout]="'horizontal'" [formGroup]="checkoutForm">
     <nz-form-item [nzJustify]="'space-between'">
       <nz-form-label nzRequired>Name</nz-form-label>
       <nz-form-control [nzSpan]="19">
@@ -82,6 +95,29 @@
     *ngIf="totalItemsPrice$ | async as price"
     [totalPrice]="price"
   >
-    <button class="checkoutButton" nz-button nzType="text">Place Order</button>
+    <button
+      class="checkoutButton"
+      (click)="placeOrder()"
+      nz-button
+      nzType="text"
+    >
+      Place Order
+    </button>
+
+    <ng-container *ngIf="cartWithProducts$ | async as cartWithProducts">
+      <div class="productItems">
+        <h2 class="itemsTitle">Order items:</h2>
+
+        <div *ngFor="let item of cartWithProducts" class="itemDescription">
+          <h3>
+            {{ item.product.name }}
+          </h3>
+
+          <h3>
+            {{ item.quantity }}
+          </h3>
+        </div>
+      </div>
+    </ng-container>
   </ui-order-summary>
 </article>

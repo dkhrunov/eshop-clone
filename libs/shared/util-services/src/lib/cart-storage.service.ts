@@ -20,11 +20,13 @@ export class CartStorageService {
     items: [],
   };
 
-  initCartLocalStorage() {
+  initCartLocalStorage(clear?: boolean) {
     const cart: Cart = this.getCart();
 
-    !cart.items.length &&
+    if (!cart.items.length || clear) {
       localStorage.setItem(CART_KEY, JSON.stringify(this.initialCart));
+      return this.cartSubject.next({ items: [] });
+    }
 
     this.cartSubject.next(cart);
   }

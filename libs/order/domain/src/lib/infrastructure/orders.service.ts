@@ -23,4 +23,8 @@ export class OrdersService extends AbstractRestService<
   totalSales$ = this.http
     .get<CountResponse>(`${this.resourceUrl}/totalsales`)
     .pipe(pluck('total_sales'));
+
+  placeOrder(order: CreateOrderDto): void {
+    this.create(order);
+  }
 }

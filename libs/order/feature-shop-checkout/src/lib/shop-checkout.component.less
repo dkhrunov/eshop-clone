@@ -17,8 +17,27 @@
       @apply grid gap-2 p-2;
     }
 
-    button.checkoutButton {
-      @apply bg-green-500 text-white hover:bg-green-400;
+    button {
+      &.checkoutButton,
+      &.continueShopping {
+        @apply bg-green-500 text-white hover:bg-green-400;
+      }
     }
   }
+}
+
+.productItems {
+  @apply mt-3;
+
+  .itemsTitle {
+    @apply font-bold;
+  }
+
+  .itemDescription {
+    @apply grid grid-flow-col justify-between;
+  }
+}
+
+button.continueShopping {
+  @apply bg-green-500 text-white hover:bg-green-400;
 }

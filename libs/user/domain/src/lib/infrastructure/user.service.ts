@@ -75,8 +75,6 @@ export class UserService extends AbstractRestService<
         const [, tokenPayload] = token.split('.');
         const { userId } = JSON.parse(atob(tokenPayload)) as JwtUserPayload;
 
-        console.log(userId);
-
         return this.http.get<UserFromServer>(
           `${environment.baseUrlApi}/users/${userId}`
         );

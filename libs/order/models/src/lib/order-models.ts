@@ -90,7 +90,7 @@ export class CreateOrderDto {
   shippingAddressOne!: string;
   @IsOptional()
   @IsString()
-  shippingAddressTwo!: string;
+  shippingAddressTwo?: string;
   @IsString()
   city!: string;
   @IsString()

@@ -10,6 +10,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzResultModule } from 'ng-zorro-antd/result';
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
     ReactiveFormsModule,
     NzInputModule,
     NzSelectModule,
+    NzResultModule,
     RouterModule.forChild([{ path: '', component: ShopCheckoutComponent }]),
   ],
   declarations: [ShopCheckoutComponent],
