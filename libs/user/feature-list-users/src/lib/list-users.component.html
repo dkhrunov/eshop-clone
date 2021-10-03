@@ -15,7 +15,7 @@
   <ng-container *ngIf="users$ | async as users">
     <nz-table
       [nzBordered]="true"
-      [nzShowPagination]="true"
+      [nzShowPagination]="false"
       #basicTable
       [nzData]="users"
     >

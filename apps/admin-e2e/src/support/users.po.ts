@@ -1,4 +1,4 @@
-import { LoginUserDto, RegisterUserDto, UpdateUserDto } from '@esc/user/models';
+import { LoginUserDto, RegisterUserDto } from '@esc/user/models';
 
 export const createUser = (user: RegisterUserDto) => {
   cy.visit('users');

@@ -2,7 +2,7 @@
   <ng-container *ngIf="orders$ | async as orders">
     <nz-table
       [nzBordered]="true"
-      [nzShowPagination]="true"
+      [nzShowPagination]="false"
       #basicTable
       [nzData]="orders"
     >

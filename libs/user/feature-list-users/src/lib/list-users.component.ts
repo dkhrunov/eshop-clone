@@ -41,7 +41,7 @@ export class ListUsersComponent {
 
   showDeleteConfirm(id: string): void {
     this.modalService.confirm({
-      nzTitle: 'Are you sure delete this task?',
+      nzTitle: 'Are you sure delete this user?',
       nzOkText: 'Yes',
       nzOkType: 'primary',
       nzOkDanger: true,
