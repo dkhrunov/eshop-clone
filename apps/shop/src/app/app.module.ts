@@ -69,6 +69,7 @@ import { ORDERS_URL } from '@esc/order/domain';
       },
       {
         path: 'checkout',
+        canActivate: [AuthGuard],
         loadChildren: () =>
           import('@esc/order/feature-shop-checkout').then(
             (m) => m.OrderFeatureShopCheckoutModule

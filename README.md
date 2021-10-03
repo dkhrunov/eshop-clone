@@ -1,17 +1,17 @@
 # Eshop Clone
 
-- Angular
-- NX + DDD plugin
+- Angular / Declarative RXJS
+- NX / DDD plugin
 - Tailwind
 - Ant Design
 - Cypress
 - Nest
 - k8s
 
-# Frontend App
+## Frontend App
 
 [![Cypress Test](https://raw.githubusercontent.com/iromashko/eshop-clone/master/eshop.png)]()
 
-# Admin App
+## Admin App
 
 [![Cypress Test](https://raw.githubusercontent.com/iromashko/eshop-clone/master/eshop-admin.png)]()

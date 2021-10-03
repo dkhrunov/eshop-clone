@@ -3,7 +3,7 @@ import { CartItem, CartItemWithProduct } from '@esc/order/models';
 import { ProductsService } from '@esc/product/domain';
 import { ProductEntity } from '@esc/product/models';
 import { CartStorageService } from '@esc/shared/util-services';
-import { combineLatest, map, mergeAll, pluck, tap } from 'rxjs';
+import { combineLatest, map, mergeAll, pluck } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ShopCartFacade {
@@ -30,31 +30,25 @@ export class ShopCartFacade {
   cartWithProducts$ = combineLatest([
     this.cartItems$,
     this.productsInCart$,
-  ]).pipe(
-    map(([ids, products]) => {
-      return this.mapProductsToIds(products, ids);
-    })
-  );
+  ]).pipe(map(([ids, products]) => this.mapProductsToIds(products, ids)));
 
   totalItemsPrice$ = this.cartWithProducts$.pipe(
-    map((prices) => {
-      return prices
+    map((prices) =>
+      prices
         .map(({ product: { price }, quantity }) => price * quantity)
-        .reduce((acc, price) => (acc += price), 0);
-    })
+        .reduce((acc, price) => (acc += price), 0)
+    )
   );
 
   private mapProductsToIds(
     products: ProductEntity[],
     items: CartItem[]
   ): CartItemWithProduct[] {
-    return items.map(({ productId, quantity }) => {
-      return {
-        product: products.find(
-          (product) => product.id === productId
-        ) as ProductEntity,
-        quantity,
-      };
-    });
+    return items.map(({ productId, quantity }) => ({
+      product: products.find(
+        (product) => product.id === productId
+      ) as ProductEntity,
+      quantity,
+    }));
   }
 }

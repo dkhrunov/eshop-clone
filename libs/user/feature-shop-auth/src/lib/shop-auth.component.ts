@@ -10,7 +10,6 @@ import {
   of,
   delay,
   shareReplay,
-  Subject,
 } from 'rxjs';
 import { RegisterUserFacade } from '@esc/user/domain';
 import { LoginUserFacade } from '@esc/user/domain';
