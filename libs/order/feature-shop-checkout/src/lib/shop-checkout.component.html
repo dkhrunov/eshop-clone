@@ -6,10 +6,10 @@
 <nz-result
   *ngIf="createdOrder$ | async as createdOrder"
   nzStatus="success"
-  nzTitle="Your order is created!"
+  nzTitle="Thank you! Your order is created!"
   nzSubTitle="Order number: {{ createdOrder.id }}"
 >
-  <div nz-result-extra>
+  <div nz-result-extra data-cy="checkoutResult">
     <button routerLink="../profile" nz-button>Go to profile</button>
     <button
       class="continueShopping"
@@ -23,7 +23,12 @@
 </nz-result>
 
 <article *ngIf="editMode$ | async">
-  <form nz-form [nzLayout]="'horizontal'" [formGroup]="checkoutForm">
+  <form
+    data-cy="checkoutForm"
+    nz-form
+    [nzLayout]="'horizontal'"
+    [formGroup]="checkoutForm"
+  >
     <nz-form-item [nzJustify]="'space-between'">
       <nz-form-label nzRequired>Name</nz-form-label>
       <nz-form-control [nzSpan]="19">
@@ -95,16 +100,17 @@
     *ngIf="totalItemsPrice$ | async as price"
     [totalPrice]="price"
   >
-    <button
-      class="checkoutButton"
-      (click)="placeOrder()"
-      nz-button
-      nzType="text"
-    >
-      Place Order
-    </button>
-
     <ng-container *ngIf="cartWithProducts$ | async as cartWithProducts">
+      <button
+        data-cy="placeOrderButton"
+        class="checkoutButton"
+        (click)="placeOrder()"
+        nz-button
+        nzType="text"
+      >
+        Place Order
+      </button>
+
       <div class="productItems">
         <h2 class="itemsTitle">Order items:</h2>
 

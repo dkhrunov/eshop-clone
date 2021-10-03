@@ -662,7 +662,7 @@ describe('Eshop Clone', () => {
     });
   });
 
-  context.only('Shop', () => {
+  context('Shop', () => {
     it('Show main page', () => {
       cy.visit(`${environment.baseUrlFrontShop}`);
       cy.get('[data-cy=header]').should('be.visible');
@@ -780,6 +780,7 @@ describe('Eshop Clone', () => {
 
     it('Add product to cart and checkout', () => {
       cy.clearLocalStorage();
+      cy.reload();
       cy.get('[data-cy=countBadge]').should('not.exist');
 
       addFeaturedProductsToCart();
@@ -807,14 +808,19 @@ describe('Eshop Clone', () => {
       cy.get('[data-cy="itemsCount"]').should('contain', 'No items');
     });
 
-    it.only('Checkout cart items', () => {
+    it('Checkout cart items', () => {
       registerAndLoginUser();
       addFeaturedProductsToCart();
       cy.get('[data-cy="countBadge"]').click();
-    });
 
-    it('Register and Login user', () => {
-      registerAndLoginUser();
+      cy.get('[data-cy="orderItem"]').its('length').should('eq', 4);
+
+      cy.get('[data-cy=checkoutButton]').click();
+
+      cy.get('[data-cy=checkoutForm]').should('be.visible');
+      cy.get('[data-cy=checkoutResult]').should('not.exist');
+      cy.get('[data-cy=placeOrderButton]').click();
+      cy.get('.ant-result-title').contains('Thank you! Your order is created!');
     });
   });
 });

@@ -16,6 +16,7 @@
     </header>
 
     <ui-order-item
+      data-cy="orderItem"
       (changeQuantity)="changeItemQuantity($event)"
       (deleteItem)="deleteOrderItem($event)"
       *ngFor="let item of cartWithProducts$ | async"
@@ -29,6 +30,7 @@
     [totalPrice]="totalPrice"
   >
     <button
+      data-cy="checkoutButton"
       [routerLink]="['/checkout']"
       nz-button
       nzDanger

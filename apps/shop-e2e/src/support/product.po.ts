@@ -170,9 +170,8 @@ export const getProductsCount = () => {
 };
 
 export const getFeaturedProducts = (limit?: number) => {
-  cy.log('Get featured products');
   return cy.request<ProductEntity[]>({
-    url: `${baseUrlProducts}/featured/${limit ?? ''}`,
+    url: `${baseUrlProducts}/featured?limit=${limit ?? ''}`,
     method: 'GET',
     failOnStatusCode: false,
   });
