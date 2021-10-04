@@ -14,6 +14,9 @@ spec:
       containers:
         - name: postgres
           image: postgres
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-pvc
           resources:
             limits:
               memory: "256Mi"
@@ -21,6 +24,10 @@ spec:
           env:
             - name: POSTGRES_PASSWORD
               value: "123456"
+      volumes:
+        - name: postgres-pvc
+          persistentVolumeClaim:
+            claimName: postgres-pvc
 
 ---
 apiVersion: v1

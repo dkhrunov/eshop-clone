@@ -14,15 +14,22 @@ spec:
       containers:
         - name: pgadmin
           image: dpage/pgadmin4
+          volumeMounts:
+            - mountPath: /var/lib/pgadmin
+              name: pgadmin-pvc
           resources:
             limits:
-              memory: "256Mi"
+              memory: "512Mi"
               cpu: "500m"
           env:
             - name: PGADMIN_DEFAULT_EMAIL
               value: "postgres@email.com"
             - name: PGADMIN_DEFAULT_PASSWORD
               value: "123456"
+      volumes:
+        - name: pgadmin-pvc
+          persistentVolumeClaim:
+            claimName: pgadmin-pvc
 
 ---
 apiVersion: v1
