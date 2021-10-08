@@ -2,10 +2,10 @@
 
 - Angular / Declarative RXJS
 - NX / DDD
-- Tailwind / LESS / CSS GRID
+- Tailwind / Less / CSS Grid
 - Ant Design
 - Cypress
-- Nest / TYPEORM / POSTGRES
+- Nest / Typeorm / Postgres
 - k8s / Skaffold
 
 ## Frontend App
