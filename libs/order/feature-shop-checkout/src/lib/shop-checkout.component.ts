@@ -76,6 +76,6 @@ export class ShopCheckoutComponent {
       shippingAddressTwo: `None`,
     };
 
-    this.orderService.placeOrder(newOrder);
+    this.checkoutForm.valid && this.orderService.placeOrder(newOrder);
   }
 }

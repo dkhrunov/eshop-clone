@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -14,12 +14,16 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { ProductItemModule } from '@esc/product/ui-components';
 import { CATEGORIES_URL, PRODUCTS_URL } from '@esc/product/domain';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CartStorageService } from '@esc/shared/util-services';
+import {
+  CartStorageService,
+  EshopErrorHandlerService,
+} from '@esc/shared/util-services';
 import { AuthGuard } from '@esc/shared/util-guards';
 import { AuthInterceptor } from '@esc/shared/util-interceptors';
 import { ORDERS_URL } from '@esc/order/domain';
 import { NgProgressModule } from 'ngx-progressbar';
 import { NgProgressHttpModule } from 'ngx-progressbar/http';
+import { NzNotificationModule } from 'ng-zorro-antd/notification';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -34,6 +38,7 @@ import { NgProgressHttpModule } from 'ngx-progressbar/http';
     NzIconModule,
     NgProgressModule.withConfig({ spinner: false }),
     NgProgressHttpModule,
+    NzNotificationModule,
     BrowserAnimationsModule,
     CategoriesBannerModule,
     UserFeatureShellModule,
@@ -92,6 +97,7 @@ import { NgProgressHttpModule } from 'ngx-progressbar/http';
     { provide: CATEGORIES_URL, useValue: 'categories' },
     { provide: PRODUCTS_URL, useValue: 'products' },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: ErrorHandler, useClass: EshopErrorHandlerService },
     {
       provide: ORDERS_URL,
       useValue: 'orders',
