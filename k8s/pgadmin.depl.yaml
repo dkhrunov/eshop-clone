@@ -16,7 +16,7 @@ spec:
           image: dpage/pgadmin4
           volumeMounts:
             - mountPath: /var/lib/pgadmin
-              name: pgadmin-pvc
+              name: pgadmin-storage
           resources:
             limits:
               memory: "512Mi"
@@ -26,8 +26,9 @@ spec:
               value: "postgres@email.com"
             - name: PGADMIN_DEFAULT_PASSWORD
               value: "123456"
+
       volumes:
-        - name: pgadmin-pvc
+        - name: pgadmin-storage
           persistentVolumeClaim:
             claimName: pgadmin-pvc
 

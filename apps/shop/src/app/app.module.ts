@@ -18,6 +18,8 @@ import { CartStorageService } from '@esc/shared/util-services';
 import { AuthGuard } from '@esc/shared/util-guards';
 import { AuthInterceptor } from '@esc/shared/util-interceptors';
 import { ORDERS_URL } from '@esc/order/domain';
+import { NgProgressModule } from 'ngx-progressbar';
+import { NgProgressHttpModule } from 'ngx-progressbar/http';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -30,6 +32,8 @@ import { ORDERS_URL } from '@esc/order/domain';
     BannerModule,
     ProductItemModule,
     NzIconModule,
+    NgProgressModule.withConfig({ spinner: false }),
+    NgProgressHttpModule,
     BrowserAnimationsModule,
     CategoriesBannerModule,
     UserFeatureShellModule,

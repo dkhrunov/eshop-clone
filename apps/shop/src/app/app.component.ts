@@ -3,7 +3,7 @@ import { CartStorageService } from '@esc/shared/util-services';
 import { UserService } from '@esc/user/domain';
 import { LoginUserFacade } from '@esc/user/domain';
 import { Router } from '@angular/router';
-import { shareReplay, tap } from 'rxjs';
+import { shareReplay } from 'rxjs';
 
 @Component({
   selector: 'esc-root',
