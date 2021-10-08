@@ -1,12 +1,12 @@
 # Eshop Clone
 
 - Angular / Declarative RXJS
-- NX / DDD plugin
-- Tailwind
+- NX / DDD
+- Tailwind / LESS / CSS GRID
 - Ant Design
 - Cypress
-- Nest
-- k8s
+- Nest / TYPEORM / POSTGRES
+- k8s / Skaffold
 
 ## Frontend App
 
