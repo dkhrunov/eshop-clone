@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ListProductsFacade } from '@esc/product/domain';
+import { ProductEntity } from '@esc/product/models';
 import { sortByDateFn } from '@esc/shared/util-helpers';
 
 @Component({
@@ -25,5 +26,9 @@ export class ListProductsComponent {
 
   editProduct(id: string): void {
     this.router.navigate(['products', 'form', id]);
+  }
+
+  trackByFn(_: number, item: ProductEntity) {
+    return item.id;
   }
 }

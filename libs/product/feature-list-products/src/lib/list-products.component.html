@@ -17,6 +17,7 @@
       [nzBordered]="true"
       [nzShowPagination]="false"
       #basicTable
+      [nzVirtualForTrackBy]="trackByFn"
       [nzData]="products"
     >
       <thead>
